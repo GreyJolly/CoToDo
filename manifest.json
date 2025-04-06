@@ -1,0 +1,22 @@
+{
+	"name": "CoToDo",
+	"short_name": "CoToDo",
+	"start_url": "/",
+	"display": "standalone",
+	"scope": "/",
+	"orientation": "portrait",
+	"background_color": "#ffffff",
+	"theme_color": "#000000",
+	"icons": [
+		{
+			"src": "/icon-500.png",
+			"type": "image/png",
+			"sizes": "500x500"
+		}
+	],
+	"prefer_related_applications": false,
+	"categories": [
+		"productivity",
+		"utilities"
+	]
+}
