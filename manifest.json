@@ -1,7 +1,7 @@
 {
 	"name": "CoToDo",
 	"short_name": "CoToDo",
-	"start_url": "./",
+	"start_url": "./index.html",
 	"display": "standalone",
 	"scope": "./",
 	"orientation": "portrait",
@@ -9,9 +9,16 @@
 	"theme_color": "#000000",
 	"icons": [
 		{
-			"src": "./icon-500.png",
-			"type": "image/png",
-			"sizes": "500x500"
+		  "src": "./icon-192.png",
+		  "type": "image/png", 
+		  "sizes": "192x192",
+		  "purpose": "any maskable"
+		},
+		{
+		  "src": "./icon-512.png",
+		  "type": "image/png",
+		  "sizes": "512x512",
+		  "purpose": "any maskable"
 		}
 	],
 	"prefer_related_applications": false,
