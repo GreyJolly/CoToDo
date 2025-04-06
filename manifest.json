@@ -1,15 +1,15 @@
 {
 	"name": "CoToDo",
 	"short_name": "CoToDo",
-	"start_url": "/",
+	"start_url": "./",
 	"display": "standalone",
-	"scope": "/",
+	"scope": "./",
 	"orientation": "portrait",
 	"background_color": "#ffffff",
 	"theme_color": "#000000",
 	"icons": [
 		{
-			"src": "/icon-500.png",
+			"src": "./icon-500.png",
 			"type": "image/png",
 			"sizes": "500x500"
 		}
