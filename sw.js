@@ -1,10 +1,11 @@
-const CACHE_NAME = 'cotodo-cache-v1';
+const CACHE_NAME = 'cotodo-cache-v2';
 
 const urlsToCache = [
   './',
   './stylesheets/styles.css',
   './scripts/index.js',
-  './images/icon-500.png'
+  './images/icon-512.png',
+  './images/icon-192.png'
 ];
 self.addEventListener('install', (event) => {
   event.waitUntil(
