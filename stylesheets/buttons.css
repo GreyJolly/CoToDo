@@ -1,0 +1,19 @@
+.button, 
+#add-user-button,
+#calendar-button,
+#plus-button{
+    background: linear-gradient(135deg, #0077cc, #205e8b);
+    border: none;
+    border-radius: 10px;
+    color: white !important;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    max-height: 50px;
+}

@@ -4,6 +4,9 @@
 <head>
 	<link rel="icon" href="./images/icon-512.png" type="image/png">
 	<link rel="manifest" href="./manifest.json">
+	<link rel="stylesheet" href="stylesheets/index.css">
+	<link rel="stylesheet" href="stylesheets/buttons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/index.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
@@ -14,8 +17,104 @@
 </head>
 
 <body>
-	<h1>CoToDo</h1>
-	<p>You are currently on the homepage.</p>
+	<div class="wrapper">
+		<div class="searchbar">
+			<i class="fa-solid fa-bars"></i>
+			<span class="search-text">Search your notes</span>
+			<div class="account">
+				<div class="account-avatar">G</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="main-content">
+		<div class="notes-container">
+			<div class="note-card">
+				<h2>Shopping list</h2>
+				<div class="task-item">
+					<input type="checkbox" id="task1">
+					<label for="task1">Meat</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task2">
+					<label for="task2">T-shirt</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task3">
+					<label for="task3">Apples</label>
+				</div>
+				<div class="collaborator">
+					<div class="collaborator-avatar">E</div>
+				</div>
+			</div>
+			
+			<div class="note-card">
+				<h2>To do list</h2>
+				<div class="task-item">
+					<input type="checkbox" id="task4">
+					<label for="task4">Pay the bill</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task5">
+					<label for="task5">Clean the house</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task6">
+					<label for="task6">Descale the coffee pot</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task7">
+					<label for="task7">Change alarm clock batteries</label>
+				</div>
+			</div>
+
+			<div class="note-card">
+				<h2>University project list</h2>
+				<div class="task-item">
+					<input type="checkbox" id="task8">
+					<label for="task8">User stories</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task9">
+					<label for="task9">Sketches</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task10">
+					<label for="task10">Programming</label>
+				</div>
+			</div>
+
+			<div class="note-card">
+				<h2>Travel list</h2>
+				<div class="task-item">
+					<input type="checkbox" id="task11">
+					<label for="task11">Research restaurants in Taranto</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task12">
+					<label for="task12">Buy tickets for MArTA</label>
+				</div>
+			</div>
+
+			<div class="note-card">
+				<h2>Wish list</h2>
+				<div class="task-item">
+					<input type="checkbox" id="task13">
+					<label for="task13">Learn to play piano</label>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task14">
+					<label for="task14">Write a book</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="footer">
+		<button id="add-user-button"><i class="fas fa-user-plus"></i></button>
+		<button id="calendar-button"><i class="fas fa-calendar-plus"></i></button>
+		<button id="plus-button"><i class="fas fa-plus"></i></button>
+	</footer>
 </body>
 
 </html>
