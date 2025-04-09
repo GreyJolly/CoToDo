@@ -1,0 +1,106 @@
+html, body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    position: relative;
+    padding-bottom: 10px;
+}
+  
+.backto-index i {
+    font-size: 30px;
+    color: #000000;
+    margin-left: 25px;
+    cursor: pointer;
+}
+  
+.profile-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 26px;
+}
+
+.logout i {
+    font-size: 30px;
+    color: #ff0000;
+    margin-right: 25px;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.account-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ee7300; 
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.profile-name {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.account-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+}
+
+.profile-options {
+    width: 80%;
+    max-width: 300px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.option-item i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.delete-option i {
+    color: #ff0000;
+}

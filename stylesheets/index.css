@@ -11,7 +11,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 60px; 
+    padding-top: 10px; 
 }
   
 .searchbar {
@@ -161,9 +161,9 @@ html, body {
     margin-right: 10px; 
   }
   
-  .button-container {
+.button-container {
     display: flex;
-  }
+}
 
 input[type="checkbox"] {
     appearance: none;
