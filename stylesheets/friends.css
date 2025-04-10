@@ -1,0 +1,125 @@
+html, body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    position: relative;
+    padding-bottom: 10px;
+}
+  
+.backto-index i {
+    font-size: 30px;
+    color: #000000;
+    margin-left: 25px;
+    cursor: pointer;
+}
+  
+.friends-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 26px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+  
+.searchbar {
+    width: 80%;
+    height: 50px;
+    background-color: #f0f0f0;
+    border-radius: 25px;
+    border: 1px solid #515CC6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    margin-top: 0; 
+    margin-bottom: 20px;
+}
+  
+.searchbar i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #515CC6;
+}
+  
+.searchbar span {
+    flex-grow: 1;
+    text-align: left;
+    color: #888;
+    font-size: 16px;
+}
+
+.account {
+    position: right;
+}
+
+.friend-list {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.friend-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.friend-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+}
+
+.footer {
+    background-color: #d0deed;
+    color: white;
+    text-align: center;
+    padding-top: 5px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    flex-shrink: 0;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    gap: 180px;
+}

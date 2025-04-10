@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="icon" href="./images/icon-512.png" type="image/png">
+	<link rel="manifest" href="./manifest.json">
+	<link rel="stylesheet" href="./stylesheets/pending_requests.css">
+	<link rel="stylesheet" href="./stylesheets/buttons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<script src="./scripts/index.js"></script>
+	<title>CoToDo</title>
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="theme-color" content="#000000">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+
+<body>
+    <div class="wrapper">
+		<div class="backto-index" onclick="window.location.href='friends.html'"><i class="fa-solid fa-arrow-left"></i></div>
+		<span class="friends-text">Pending requests</span>
+    </div>
+
+    <div class="main-content">
+        <div class="searchbar">
+			<span class="search-friends-text">Search pending requests</span>
+			<div class="search-button"><i class="fa-solid fa-magnifying-glass"></i></div>
+		</div>
+        <div class="friend-list">
+            <div class="friend-item">
+                <div class="friend-avatar" style="background-color: #b89aff;">T</div>
+                <div class="friend-name">Ted</div>
+            </div>
+            <div class="friend-item">
+                <div class="friend-avatar" style="background-color: #92c1ff;">J</div>
+                <div class="friend-name">John</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

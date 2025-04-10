@@ -40,9 +40,11 @@ html, body {
 
 .main-content {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding-top: 20px;
+    flex: 1; 
+    min-height: 0;
 }
 
 .profile-section {
@@ -50,8 +52,11 @@ html, body {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    min-height: 100%;
     padding: 20px 0;
     text-align: center;
+    margin-top: 0;
+    background-color: #515CC6;
 }
 
 .account-avatar {
@@ -90,17 +95,72 @@ html, body {
     max-width: 300px;
 }
 
-.option-item {
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 90%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.option-text{
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    margin-left: -15px;
+}
+
+.profile-section .options button,
+#modify-mail-button,
+#modify-password-button,
+#support-button{
+    background-color: #515CC6;
+    border: 2px solid #ffffff; 
+    border-radius: 25px;
+    color: white !important;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    max-height: 50px;
+    width: 100%; 
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
 }
 
-.option-item i {
-    margin-right: 10px;
-    font-size: 18px;
+.profile-section .options button,
+#delete-button {
+    background-color: #E35452;
+    border: 2px solid #ffffff; 
+    border-radius: 25px;
+    color: white !important;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    max-height: 50px;
+    width: 100%; 
+    margin-bottom: 5px; 
+    display: flex;
+    align-items: center;
 }
 
-.delete-option i {
-    color: #ff0000;
+.option-text {
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
 }
