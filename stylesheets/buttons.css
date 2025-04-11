@@ -3,7 +3,8 @@
 #calendar-button,
 #plus-button,
 #clock-button,
-#inbox-button{
+#inbox-button,
+#contributors-button{
     background-color: #515CC6;
     border: none;
     border-radius: 10px;

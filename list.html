@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="icon" href="./images/icon-512.png" type="image/png">
+	<link rel="manifest" href="./manifest.json">
+	<link rel="stylesheet" href="./stylesheets/list.css">
+	<link rel="stylesheet" href="./stylesheets/buttons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<script src="./scripts/index.js"></script>
+	<title>CoToDo</title>
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="theme-color" content="#000000">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+
+<body>
+    <div class="wrapper">
+		<div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></div>
+		<span class="list-text">Shopping list</span>
+    </div>
+
+    <div class="main-content">
+        <div class="incomplete-container">
+            <h3>Incomplete:</h3>
+            <div class="todo-list">
+                <div class="task-item">
+					<input type="checkbox" id="task1">
+					<label for="task1">Meat</label>
+                    <span class="task-date">May 30 - June 5</span>
+                    <div class="task-avatar" style="background-color: #ff89d8;">G</div>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task2">
+					<label for="task2">T-shirt</label>
+                    <span class="task-date"></span>
+                    <div class="task-avatar" style="background-color: #FFC107;">W</div>
+				</div>
+				<div class="task-item">
+					<input type="checkbox" id="task3">
+					<label for="task3">Apples</label>
+                    <span class="task-date">May 30 - June 5</span>
+                    <div class="task-avatar" style="background-color: #ff89d8;">G</div>
+				</div>
+            </div>
+        </div>
+        <div class="complete-container">
+            <h3>Complete:</h3>
+            <div class="todo-list">
+                <div class="task-item">
+                        <input type="checkbox" id="task4" checked>
+                        <label for="task4">Eggs</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+		<button id="contributors-button" onclick="window.location.href='contributors.html'"><i class="fa-solid fa-users"></i></button>
+		<button id="plus-button"><i class="fa-solid fa-plus"></i></button>
+	</footer>
+</body>
+
+</html>
