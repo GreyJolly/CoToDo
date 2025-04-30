@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="icon" href="./images/icon-512.png" type="image/png">
+	<link rel="manifest" href="./manifest.json">
+	<link rel="stylesheet" href="./stylesheets/task.css">
+	<link rel="stylesheet" href="./stylesheets/buttons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<script src="./scripts/task.js"></script>
+	<title>CoToDo</title>
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="theme-color" content="#000000">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+
+<body>
+    <div class="wrapper">
+		<div class="backto-list" onclick="window.location.href='list.html'"><i class="fa-solid fa-arrow-left"></i></div>
+		<span class="list-text">Shopping list</span>
+    </div>
+
+    <div class="main-content">
+        <div class="task-detail">
+            <div class="task-header">
+                <input type="checkbox" id="task-complete">
+                <span class="task-date">Date</span>
+                <i class="fa-regular fa-flag flag-icon" onclick="openPriorityPopup()"></i>
+            </div>
+            <div class="priority-popup" id="priorityPopup" hidden>
+                <div class="priority-option" data-priority="high" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: red;"></i> High priority</div>
+                <div class="priority-option" data-priority="medium" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: orange;"></i> Medium priority</div>
+                <div class="priority-option" data-priority="low" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: limegreen;"></i> Low priority</div>
+                <div class="priority-option" data-priority="none" onclick="closePriorityPopup()"><i class="fa-regular fa-flag" style="color: white;"></i> No priority</div>
+            </div>            
+            <input type="text" class="task-title" placeholder="What would you like to do?">
+            <input type="text" class="task-description" placeholder="Description">
+            
+            <div class="enter-hint-container" id="enterHintContainer" hidden>
+                <input type="checkbox" class="enter-hint-checkbox" disabled>
+                <span class="enter-hint-text">Tap “enter” to create an item</span>
+            </div>
+            <div class="assign-members-popup" id="assignMembersPopup" hidden>
+                <div class="assign-to-header">Assign to:</div>
+                <div class="member-option" onclick="selectMember('bob')">
+                    <div class="member-avatar" style="background-color: #ff7675;">B</div>
+                    <span class="member-name">Bob</span>
+                </div>
+                <div class="member-option" onclick="selectMember('mary')">
+                    <div class="member-avatar" style="background-color: #74b9ff;">M</div>
+                    <span class="member-name">Mary</span>
+                </div>
+                <div class="member-option" onclick="selectMember('me')">
+                    <div class="member-avatar" style="background-color: #55efc4;">Y</div>
+                    <span class="member-name">Me</span>
+                </div>
+                <div class="member-option" onclick="selectMember('none')">
+                    <div class="member-avatar" style="background-color: #a29bfe;">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                    <span class="member-name">None</span>
+                </div>
+            </div>                       
+        </div>
+        
+    </div>
+
+    <footer class="footer">
+		<button id="bullet-list-button" onclick="openSublist()"><i class="fa-solid fa-list"></i></button>
+		<button id="user-list-button" onclick="openAssignMembers()"><i class="fa-solid fa-users"></i></button>
+	</footer>
+</body>
+
+</html>

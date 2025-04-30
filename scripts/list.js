@@ -31,7 +31,7 @@ function renderListPage(listId) {
 
 		let html = `
 		<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}>
-		<label for="${task.id}">${task.text}</label>
+  		<span class="task-label" data-task-id="${task.id}">${task.text}</span>
 	  `;
 
 		if (task.date) {
@@ -96,4 +96,13 @@ function setupListPageEvents(listId) {
 
 		renderListPage(listId);
 	});
+
+	// Click on task label opens task.html
+	document.querySelectorAll('.task-label').forEach(label => {
+		label.addEventListener('click', function (e) {
+			const taskId = e.target.getAttribute('data-task-id');
+			window.location.href = `task.html?id=${taskId}`;
+		});
+	});
+
 }
