@@ -7,7 +7,6 @@ function getAppData() {
 document.addEventListener('DOMContentLoaded', function () {
 	const listId = getCurrentListId();
 	renderListPage(listId);
-	setupListPageEvents(listId);
 });
 
 function getCurrentListId() {
@@ -54,6 +53,7 @@ function renderListPage(listId) {
 			incompleteContainer.appendChild(taskItem);
 		}
 	});
+	setupListPageEvents(listId);
 }
 
 function setupListPageEvents(listId) {
@@ -95,6 +95,5 @@ function setupListPageEvents(listId) {
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 
 		renderListPage(listId);
-		setupListPageEvents(listId);
 	});
 }

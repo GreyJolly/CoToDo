@@ -57,6 +57,10 @@ const defaultData = {
 	]
 };
 
+function saveAppData() {
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
+}
+
 // Initialize or load data
 function initializeAppData() {
 	const savedData = localStorage.getItem('todoAppData');
@@ -64,12 +68,7 @@ function initializeAppData() {
 }
 
 let appData = initializeAppData();
-
-// Helper function to save data
-function saveAppData() {
-	localStorage.setItem('todoAppData', JSON.stringify(appData));
-}
-
+saveAppData();
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
