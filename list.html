@@ -17,27 +17,29 @@
 </head>
 
 <body>
-    <div class="wrapper">
-		<div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></div>
-		<span class="list-text"></span>
-    </div>
+	<div class="wrapper">
+		<div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i>
+		</div>
+		<span class="list-text" contenteditable="true"></span>
+	</div>
 
-    <div class="main-content">
-        <div class="incomplete-container">
-            <h3>Incomplete:</h3>
-            <div class="todo-list">
-            </div>
-        </div>
-        <div class="complete-container">
-            <h3>Complete:</h3>
-            <div class="todo-list">
-            </div>
-        </div>
-    </div>
+	<div class="main-content">
+		<div class="incomplete-container">
+			<h3>Incomplete:</h3>
+			<div class="todo-list">
+			</div>
+		</div>
+		<div class="complete-container">
+			<h3>Complete:</h3>
+			<div class="todo-list">
+			</div>
+		</div>
+	</div>
 
-    <footer class="footer">
-		<button id="contributors-button" onclick="window.location.href='contributors.html'"><i class="fa-solid fa-users"></i></button>
-		<button id="plus-button"><i class="fa-solid fa-plus"></i></button>
+	<footer class="footer">
+		<button id="contributors-button" onclick="window.location.href='contributors.html'"><i
+				class="fa-solid fa-users"></i></button>
+		<button id="plus-button" onclick="newTask()"><i class="fa-solid fa-plus"></i></button>
 	</footer>
 </body>
 
