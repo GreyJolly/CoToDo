@@ -13,9 +13,9 @@ const defaultData = {
 			title: 'Shopping list',
 			collaborators: ['E'],
 			tasks: [
-				{ id: 'task1', text: 'Meat', completed: false, date: 'May 30 - June 5', assignee: 'G', priority: 'high' },
+				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'June 5 2025', assignee: 'G', priority: 'high' },
 				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
-				{ id: 'task3', text: 'Apples', completed: false, date: 'May 30 - June 5', assignee: 'G' },
+				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30 2025', dueDate: 'June 5 2025', assignee: 'G' },
 				{ id: 'task4', text: 'Eggs', completed: true, priority: 'high' }
 			]
 		},
@@ -85,7 +85,7 @@ function renderHomepage() {
 		noteCard.className = 'note-card';
 		noteCard.dataset.listId = list.id;
 
-		let html = `<h2>${list.title}</h2>`;
+		let html = `<h2>${list.title|| 'New List'}</h2>`;
 
 		// Show first few incomplete tasks
 		const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
@@ -99,7 +99,7 @@ function renderHomepage() {
 			html += `
 		  <div class="task-item">
 			<input type="checkbox" id="${task.id}" class="${priorityClass}">
-			<label for="${task.id}">${task.text}</label>
+			<label for="${task.id}">${task.text || "New Task"}</label>
 		  </div>
 		`;
 		});
@@ -144,16 +144,14 @@ function setupHomepageEvents() {
 
 	// Plus button to add new list
 	document.getElementById('plus-button')?.addEventListener('click', function (e) {
-		e.preventDefault();
-		const newListId = 'list' + (appData.lists.length + 1);
+		const newListId = 'list' + Date.now(); 
 		const newList = {
 			id: newListId,
-			title: 'New List',
+			title: '', 
 			tasks: []
 		};
 		appData.lists.push(newList);
 		saveAppData();
-		renderHomepage();
-		setupHomepageEvents();
+		window.location.href = `list.html?id=${newListId}`; // Navigate to new list
 	});
 }

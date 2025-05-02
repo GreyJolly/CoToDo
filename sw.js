@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cotodo-cache-v4';
+const CACHE_NAME = 'cotodo-cache-v5';
 
 const urlsToCache = [
 	'./',

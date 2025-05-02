@@ -17,57 +17,92 @@
 </head>
 
 <body>
-    <div class="wrapper">
+	<div class="wrapper">
 		<div class="backto-list" onclick="window.location.href='list.html'"><i class="fa-solid fa-arrow-left"></i></div>
 		<span class="list-text"></span>
-    </div>
+	</div>
 
-    <div class="main-content">
-        <div class="task-detail">
-            <div class="task-header">
-                <input type="checkbox" id="task-complete">
-                <span class="task-date">Date</span>
-                <i class="fa-regular fa-flag" id = "flag-icon"></i>
-            </div>
+	<div class="main-content">
+		<div class="task-detail">
+			<div class="task-header">
+				<input type="checkbox" id="task-complete">
+				<div class="task-dates" onclick="openCalendar()">
+					<div class="task-date-item">
+						<span>Start:</span>
+						<span class="task-start-date">No date</span>
+					</div>
+					<div class="task-date-item">
+						<span>Due:</span>
+						<span class="task-due-date">No date</span>
+					</div>
+				</div> <i class="fa-regular fa-flag" id="flag-icon"></i>
+			</div>
 			<div class="priority-popup" id="priorityPopup" hidden>
-				<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i> High priority</div>
-				<div class="priority-option" data-priority="medium"><i class="fa-solid fa-flag" style="color: orange;"></i> Medium priority</div>
-				<div class="priority-option" data-priority="low"><i class="fa-solid fa-flag" style="color: limegreen;"></i> Low priority</div>
-				<div class="priority-option" data-priority="none"><i class="fa-regular fa-flag" style="color: white;"></i> No priority</div>
-			</div>          
-            <input type="text" class="task-title" placeholder="What would you like to do?">
-            <input type="text" class="task-description" placeholder="Description">
-            
-            <div class="enter-hint-container" id="enterHintContainer" hidden>
-                <input type="checkbox" class="enter-hint-checkbox" disabled>
-                <span class="enter-hint-text">Tap “enter” to create an item</span>
-            </div>
-            <div class="assign-members-popup" id="assignMembersPopup" hidden>
-                <div class="assign-to-header">Assign to:</div>
-                <div class="member-option" onclick="selectMember('bob')">
-                    <div class="member-avatar" style="background-color: #ff7675;">B</div>
-                    <span class="member-name">Bob</span>
-                </div>
-                <div class="member-option" onclick="selectMember('mary')">
-                    <div class="member-avatar" style="background-color: #74b9ff;">M</div>
-                    <span class="member-name">Mary</span>
-                </div>
-                <div class="member-option" onclick="selectMember('me')">
-                    <div class="member-avatar" style="background-color: #55efc4;">Y</div>
-                    <span class="member-name">Me</span>
-                </div>
-                <div class="member-option" onclick="selectMember('none')">
-                    <div class="member-avatar" style="background-color: #a29bfe;">
-                        <i class="fa-solid fa-ban"></i>
-                    </div>
-                    <span class="member-name">None</span>
-                </div>
-            </div>                       
-        </div>
-        
-    </div>
+				<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i>
+					High priority</div>
+				<div class="priority-option" data-priority="medium"><i class="fa-solid fa-flag"
+						style="color: orange;"></i> Medium priority</div>
+				<div class="priority-option" data-priority="low"><i class="fa-solid fa-flag"
+						style="color: limegreen;"></i> Low priority</div>
+				<div class="priority-option" data-priority="none"><i class="fa-regular fa-flag"
+						style="color: white;"></i> No priority</div>
+			</div>
+			<input type="text" class="task-title" placeholder="What would you like to do?">
+			<input type="text" class="task-description" placeholder="Description">
 
-    <footer class="footer">
+			<div class="calendar-popup" id="calendarPopup" hidden>
+				<div class="calendar-header">
+					<div class="calendar-nav">
+						<button class="calendar-prev" onclick="navigateCalendar(-1)"><i
+								class="fa-solid fa-chevron-left"></i></button>
+						<span class="calendar-month-year">May 2025</span>
+						<button class="calendar-next" onclick="navigateCalendar(1)"><i
+								class="fa-solid fa-chevron-right"></i></button>
+					</div>
+					<div class="calendar-divider"></div>
+				</div>
+				<div class="calendar-days"></div>
+				<div class="calendar-bottom-bar"></div>
+				<div class="date-selection-mode">
+					<label>
+						<input type="radio" name="dateType" value="start"> Start Date
+					</label>
+					<label>
+						<input type="radio" name="dateType" value="due" checked="checked"> Due Date
+					</label>
+				</div>
+			</div>
+
+			<div class="enter-hint-container" id="enterHintContainer" hidden>
+				<input type="checkbox" class="enter-hint-checkbox" disabled>
+				<span class="enter-hint-text">Tap “enter” to create an item</span>
+			</div>
+			<div class="assign-members-popup" id="assignMembersPopup" hidden>
+				<div class="assign-to-header">Assign to:</div>
+				<div class="member-option" onclick="selectMember('bob')">
+					<div class="member-avatar" style="background-color: #ff7675;">B</div>
+					<span class="member-name">Bob</span>
+				</div>
+				<div class="member-option" onclick="selectMember('mary')">
+					<div class="member-avatar" style="background-color: #74b9ff;">M</div>
+					<span class="member-name">Mary</span>
+				</div>
+				<div class="member-option" onclick="selectMember('me')">
+					<div class="member-avatar" style="background-color: #55efc4;">Y</div>
+					<span class="member-name">Me</span>
+				</div>
+				<div class="member-option" onclick="selectMember('none')">
+					<div class="member-avatar" style="background-color: #a29bfe;">
+						<i class="fa-solid fa-ban"></i>
+					</div>
+					<span class="member-name">None</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<footer class="footer">
 		<button id="bullet-list-button" onclick="openSublist()"><i class="fa-solid fa-list"></i></button>
 		<button id="user-list-button" onclick="openAssignMembers()"><i class="fa-solid fa-users"></i></button>
 	</footer>

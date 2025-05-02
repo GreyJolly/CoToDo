@@ -17,7 +17,16 @@ function getCurrentListId() {
 function renderListPage(listId) {
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
-	document.querySelector('.list-text').textContent = list.title;
+
+	// If list doesn't exist (shouldn't happen), redirect to homepage
+	if (!list) {
+		window.location.href = 'index.html';
+		return;
+	}
+
+	const listTitleElement = document.querySelector('.list-text');
+	listTitleElement.textContent = list.title || "New List";
+	listTitleElement.classList.toggle('placeholder', !list.title);
 
 	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
 	const completeContainer = document.querySelector('.complete-container .todo-list');
@@ -36,12 +45,16 @@ function renderListPage(listId) {
 		}
 
 		let html = `
-		<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
-		<span class="task-label" data-task-id="${task.id}">${task.text}</span>
-		`;
+        <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
+        <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
+        `;
 
-		if (task.date) {
-			html += `<span class="task-date">${task.date}</span>`;
+		if (task.dueDate) {
+			if (task.startDate) {
+				html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+			} else {
+				html += `<span class="task-date">${task.dueDate}</span>`;
+			}
 		} else {
 			html += '<span class="task-date"></span>';
 		}
@@ -63,6 +76,7 @@ function renderListPage(listId) {
 }
 
 function setupListPageEvents(listId) {
+
 	// Checkbox functionality
 	document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
 		checkbox.addEventListener('change', function () {
@@ -73,37 +87,43 @@ function setupListPageEvents(listId) {
 
 			if (task) {
 				task.completed = this.checked;
-				renderListPage(listId); // Re-render to move task between complete/incomplete
+				localStorage.setItem('todoAppData', JSON.stringify(appData));
+				renderListPage(listId);
 			}
-			localStorage.setItem('todoAppData', JSON.stringify(appData));
-			renderListPage(listId);
 		});
 	});
 
-	// Back button
-	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
-		e.preventDefault();
-		window.location.href = 'index.html';
+	const listTitleElement = document.querySelector('.list-text');
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+
+	// List name editing
+	listTitleElement.addEventListener('focus', function () {
+		if (this.classList.contains('placeholder')) {
+			this.textContent = '';
+			this.classList.remove('placeholder');
+		}
 	});
 
-	// Plus button to add new task
-	document.getElementById('plus-button')?.addEventListener('click', function (e) {
-		const appData = getAppData();
-		e.preventDefault();
-		const list = appData.lists.find(l => l.id === listId);
-		const newTaskId = 'task' + (list.tasks.length + 16);
-
-		list.tasks.push({
-			id: newTaskId,
-			text: 'New Task',
-			completed: false
-		});
+	listTitleElement.addEventListener('blur', function () {
+		const newTitle = this.textContent.trim();
+		list.title = newTitle;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 
-		renderListPage(listId);
+		if (!newTitle) {
+			this.textContent = "New List";
+			this.classList.add('placeholder');
+		}
 	});
 
-	// Click on task label opens task.html
+	listTitleElement.addEventListener('keydown', function (e) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			this.blur();
+		}
+	});
+
+	// Task label click - just navigate to task editor
 	document.querySelectorAll('.task-label').forEach(label => {
 		label.addEventListener('click', function (e) {
 			const taskId = e.target.getAttribute('data-task-id');
@@ -112,4 +132,30 @@ function setupListPageEvents(listId) {
 		});
 	});
 
+	// Back button
+	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
+		e.preventDefault();
+		window.location.href = 'index.html';
+	});
+}
+
+function newTask() {
+	const appData = getAppData();
+	const listId = getCurrentListId();
+	const list = appData.lists.find(l => l.id === listId);
+	const newTaskId = 'task' + (list.tasks.length + 16);
+
+	// Create a new empty task
+	const newTask = {
+		id: newTaskId,
+		text: '',
+		completed: false
+	};
+
+	// Add to the list and save
+	list.tasks.push(newTask);
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
+
+	// Navigate to the task editor
+	window.location.href = `task.html?listId=${listId}&taskId=${newTaskId}`;
 }
