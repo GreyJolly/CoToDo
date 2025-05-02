@@ -49,8 +49,12 @@ function renderListPage(listId) {
         <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
         `;
 
-		if (task.date) {
-			html += `<span class="task-date">${task.date}</span>`;
+		if (task.dueDate) {
+			if (task.startDate) {
+				html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+			} else {
+				html += `<span class="task-date">${task.dueDate}</span>`;
+			}
 		} else {
 			html += '<span class="task-date"></span>';
 		}

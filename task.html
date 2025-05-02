@@ -53,14 +53,24 @@
 			<div class="calendar-popup" id="calendarPopup" hidden>
 				<div class="calendar-header">
 					<div class="calendar-nav">
-						<button class="calendar-prev" onclick="navigateCalendar(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+						<button class="calendar-prev" onclick="navigateCalendar(-1)"><i
+								class="fa-solid fa-chevron-left"></i></button>
 						<span class="calendar-month-year">May 2025</span>
-						<button class="calendar-next" onclick="navigateCalendar(1)"><i class="fa-solid fa-chevron-right"></i></button>
+						<button class="calendar-next" onclick="navigateCalendar(1)"><i
+								class="fa-solid fa-chevron-right"></i></button>
 					</div>
 					<div class="calendar-divider"></div>
 				</div>
 				<div class="calendar-days"></div>
 				<div class="calendar-bottom-bar"></div>
+				<div class="date-selection-mode">
+					<label>
+						<input type="radio" name="dateType" value="start"> Start Date
+					</label>
+					<label>
+						<input type="radio" name="dateType" value="due" checked="checked"> Due Date
+					</label>
+				</div>
 			</div>
 
 			<div class="enter-hint-container" id="enterHintContainer" hidden>

@@ -13,9 +13,9 @@ const defaultData = {
 			title: 'Shopping list',
 			collaborators: ['E'],
 			tasks: [
-				{ id: 'task1', text: 'Meat', completed: false, date: 'May 30 - June 5', assignee: 'G', priority: 'high' },
+				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'June 5 2025', assignee: 'G', priority: 'high' },
 				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
-				{ id: 'task3', text: 'Apples', completed: false, date: 'May 30 - June 5', assignee: 'G' },
+				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30 2025', dueDate: 'June 5 2025', assignee: 'G' },
 				{ id: 'task4', text: 'Eggs', completed: true, priority: 'high' }
 			]
 		},

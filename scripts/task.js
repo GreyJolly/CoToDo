@@ -56,16 +56,16 @@ function renderTaskPage() {
 	const completeCheckbox = document.getElementById('task-complete');
 	completeCheckbox.checked = task.completed || false;
 
-    // Set dates if they exist
-    const startDateElement = document.querySelector('.task-start-date');
-    const dueDateElement = document.querySelector('.task-due-date');
-    
-    if (task.startDate) {
-        startDateElement.textContent = task.startDate;
-    }
-    if (task.dueDate) {
-        dueDateElement.textContent = task.dueDate;
-    }
+	// Set dates if they exist
+	const startDateElement = document.querySelector('.task-start-date');
+	const dueDateElement = document.querySelector('.task-due-date');
+
+	if (task.startDate) {
+		startDateElement.textContent = task.startDate;
+	}
+	if (task.dueDate) {
+		dueDateElement.textContent = task.dueDate;
+	}
 
 	// Set priority if exists
 	if (task.priority) {
@@ -132,7 +132,6 @@ function setupTaskEvents() {
 			selectPriority(this.getAttribute('data-priority'));
 		});
 	});
-
 }
 
 function saveTaskChanges() {
@@ -152,7 +151,6 @@ function saveTaskChanges() {
 
 // Popup handling functions
 function openPriorityPopup() {
-	console.log("AH")
 	const popup = document.getElementById("priorityPopup");
 	popup.classList.toggle("visible");
 	popup.hidden = false;
@@ -222,7 +220,12 @@ let currentCalendarYear = new Date().getFullYear();
 let tempStartDate = null; // Temporary storage for start date selection
 let tempDueDate = null; // Temporary storage for due date selection
 
+function getDateSelectionMode() {
+		return document.querySelector('input[name="dateType"]:checked').value;
+}
+
 function generateCalendar() {
+	loadExistingDates();
 	const calendarDays = document.querySelector('.calendar-days');
 	if (!calendarDays) return;
 
@@ -356,13 +359,16 @@ function navigateCalendar(direction) {
 
 function selectDate(date) {
 
-	if (tempStartDate && tempStartDate > date) {
-		tempDueDate = tempStartDate;
+	if (getDateSelectionMode() == 'start') {
 		tempStartDate = date;
 	} else {
 		tempDueDate = date;
 	}
-
+	if (tempStartDate && tempDueDate && tempStartDate > tempDueDate) {
+		date = tempDueDate
+		tempDueDate = tempStartDate;
+		tempStartDate = date;
+	}
 	// Regenerate calendar to update highlights
 	generateCalendar();
 }
@@ -451,15 +457,6 @@ function loadExistingDates() {
 
 			tempDueDate = new Date(selectedYear, selectedMonth, selectedDay);
 		}
-	}
-
-	// If we have both dates, set selection mode to start date for next selection
-	if (tempStartDate && tempDueDate) {
-		selectingStartDate = true;
-	}
-	// If we only have a start date, we should be selecting due date next
-	else if (tempStartDate) {
-		selectingStartDate = false;
 	}
 
 	// Update calendar view to show the month of the start date or due date if available
