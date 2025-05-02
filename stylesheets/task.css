@@ -60,7 +60,7 @@ html, body {
     margin-right: 10px;
 }
 
-.task-date {
+.task-dates {
     color: #aaa;
     font-size: 18px;
     flex-grow: 1;
@@ -211,17 +211,45 @@ html, body {
     align-items: center;
     height: 36px;
     font-size: 14px;
-    border-radius: 50%;
     cursor: pointer;
+}
+
+.calendar-day.selected-start {
+    background-color: #4CAF50;
+    color: white;
+    border-bottom-left-radius: 20%;
+	border-top-left-radius: 20%;	
+}
+
+.calendar-day.selected-due {
+    background-color: #F44336;
+    color: white;
+    border-bottom-right-radius: 20%;
+	border-top-right-radius: 20%;	
+}
+
+.calendar-day.in-range {
+    background-color: #E1F5FE;
+}
+
+.calendar-day.potential-range {
+    background-color: #FFF9C4;
+}
+
+.calendar-day.today {
+	background-color: #5a5fd2;
+    color: white;
+	border: 2px solid #2196F3;
+}
+
+.calendar-selection-mode {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .calendar-day:hover {
     background-color: #f0f0f0;
-}
-
-.calendar-day.today {
-    background-color: #5a5fd2;
-    color: white;
 }
 
 .calendar-day.selected {

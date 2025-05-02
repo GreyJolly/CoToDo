@@ -99,7 +99,7 @@ function renderHomepage() {
 			html += `
 		  <div class="task-item">
 			<input type="checkbox" id="${task.id}" class="${priorityClass}">
-			<label for="${task.id}">${task.text}</label>
+			<label for="${task.id}">${task.text || "New Task"}</label>
 		  </div>
 		`;
 		});
