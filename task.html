@@ -19,7 +19,7 @@
 <body>
     <div class="wrapper">
 		<div class="backto-list" onclick="window.location.href='list.html'"><i class="fa-solid fa-arrow-left"></i></div>
-		<span class="list-text">Shopping list</span>
+		<span class="list-text"></span>
     </div>
 
     <div class="main-content">
@@ -27,14 +27,14 @@
             <div class="task-header">
                 <input type="checkbox" id="task-complete">
                 <span class="task-date">Date</span>
-                <i class="fa-regular fa-flag flag-icon" onclick="openPriorityPopup()"></i>
+                <i class="fa-regular fa-flag" id = "flag-icon"></i>
             </div>
-            <div class="priority-popup" id="priorityPopup" hidden>
-                <div class="priority-option" data-priority="high" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: red;"></i> High priority</div>
-                <div class="priority-option" data-priority="medium" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: orange;"></i> Medium priority</div>
-                <div class="priority-option" data-priority="low" onclick="closePriorityPopup()"><i class="fa-solid fa-flag" style="color: limegreen;"></i> Low priority</div>
-                <div class="priority-option" data-priority="none" onclick="closePriorityPopup()"><i class="fa-regular fa-flag" style="color: white;"></i> No priority</div>
-            </div>            
+			<div class="priority-popup" id="priorityPopup" hidden>
+				<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i> High priority</div>
+				<div class="priority-option" data-priority="medium"><i class="fa-solid fa-flag" style="color: orange;"></i> Medium priority</div>
+				<div class="priority-option" data-priority="low"><i class="fa-solid fa-flag" style="color: limegreen;"></i> Low priority</div>
+				<div class="priority-option" data-priority="none"><i class="fa-regular fa-flag" style="color: white;"></i> No priority</div>
+			</div>          
             <input type="text" class="task-title" placeholder="What would you like to do?">
             <input type="text" class="task-description" placeholder="Description">
             

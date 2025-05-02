@@ -29,10 +29,16 @@ function renderListPage(listId) {
 		const taskItem = document.createElement('div');
 		taskItem.className = 'task-item';
 
+		// Determine priority class
+		let priorityClass = '';
+		if (task.priority) {
+			priorityClass = `priority-${task.priority.toLowerCase()}`;
+		}
+
 		let html = `
-		<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}>
-  		<span class="task-label" data-task-id="${task.id}">${task.text}</span>
-	  `;
+		<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
+		<span class="task-label" data-task-id="${task.id}">${task.text}</span>
+		`;
 
 		if (task.date) {
 			html += `<span class="task-date">${task.date}</span>`;
@@ -101,7 +107,8 @@ function setupListPageEvents(listId) {
 	document.querySelectorAll('.task-label').forEach(label => {
 		label.addEventListener('click', function (e) {
 			const taskId = e.target.getAttribute('data-task-id');
-			window.location.href = `task.html?id=${taskId}`;
+			const listId = getCurrentListId();
+			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
 		});
 	});
 

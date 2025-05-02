@@ -13,10 +13,10 @@ const defaultData = {
 			title: 'Shopping list',
 			collaborators: ['E'],
 			tasks: [
-				{ id: 'task1', text: 'Meat', completed: false, date: 'May 30 - June 5', assignee: 'G' },
-				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W' },
+				{ id: 'task1', text: 'Meat', completed: false, date: 'May 30 - June 5', assignee: 'G', priority: 'high' },
+				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
 				{ id: 'task3', text: 'Apples', completed: false, date: 'May 30 - June 5', assignee: 'G' },
-				{ id: 'task4', text: 'Eggs', completed: true }
+				{ id: 'task4', text: 'Eggs', completed: true, priority: 'high' }
 			]
 		},
 		{
@@ -90,9 +90,15 @@ function renderHomepage() {
 		// Show first few incomplete tasks
 		const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
 		incompleteTasks.forEach(task => {
+			// Determine priority class
+			let priorityClass = '';
+			if (task.priority) {
+				priorityClass = `priority-${task.priority.toLowerCase()}`;
+			}
+
 			html += `
 		  <div class="task-item">
-			<input type="checkbox" id="${task.id}">
+			<input type="checkbox" id="${task.id}" class="${priorityClass}">
 			<label for="${task.id}">${task.text}</label>
 		  </div>
 		`;

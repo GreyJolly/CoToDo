@@ -165,6 +165,18 @@ html, body {
     display: flex;
 }
 
+input[type="checkbox"].priority-high {
+    border: 2px solid red !important;
+}
+
+input[type="checkbox"].priority-medium {
+    border: 2px solid orange !important;
+}
+
+input[type="checkbox"].priority-low {
+    border: 2px solid limegreen !important;
+}
+
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
@@ -175,14 +187,6 @@ input[type="checkbox"] {
     outline: none;
     cursor: pointer;
     position: relative;
-}
-
-#task1, #task4 {
-    border-color: #e53935; 
-}
-
-#task2 {
-    border-color: #3ee535; 
 }
 
 .footer {

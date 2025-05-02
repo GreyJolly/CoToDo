@@ -75,6 +75,18 @@ html, body {
     margin-bottom: 5px;
 }
 
+input[type="checkbox"].priority-high {
+    border: 2px solid red !important;
+}
+
+input[type="checkbox"].priority-medium {
+    border: 2px solid orange !important;
+}
+
+input[type="checkbox"].priority-low {
+    border: 2px solid limegreen !important;
+}
+
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
@@ -87,11 +99,6 @@ input[type="checkbox"] {
     position: relative;
 }
 
-input[type="checkbox"]:checked {
-    background-color: #4285f4; /* Colore di sfondo quando selezionato */
-    border-color: #4285f4;     /* Colore del bordo quando selezionato */
-}
-
 input[type="checkbox"]:checked::after {
     content: '✓';
     position: absolute;
@@ -100,19 +107,6 @@ input[type="checkbox"]:checked::after {
     transform: translate(-50%, -50%);
     color: rgb(0, 0, 0);
     font-size: 14px;
-}
-
-#task1 {
-    border-color: #e53935; 
-}
-
-#task2 {
-    border-color: #38e535; 
-}
-
-#task4:checked {
-    background-color: #ddd;
-    border-color: #999;
 }
 
 .task-date {

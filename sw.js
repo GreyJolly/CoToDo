@@ -10,6 +10,7 @@ const urlsToCache = [
 	'./friends.html',
 	'./friend_requests.html',
 	'./pending_requests.html',
+	',/task.html',
 	'./stylesheets/index.css',
 	'./stylesheets/buttons.css',
 	'./stylesheets/profile.css',
@@ -19,6 +20,7 @@ const urlsToCache = [
 	'./stylesheets/friends.css',
 	'./stylesheets/list.css',
 	'./stylesheets/pending_requests.css',
+	'./stylesheets/task.js',
 	'./scripts/index.js',
 	'./scripts/calendar.js',
 	'./scripts/contributors.js',
@@ -28,6 +30,7 @@ const urlsToCache = [
 	'./scripts/list.js',
 	'./scripts/pending_requests.js',
 	'./scripts/profile.js',
+	'./scripts/task.js',
 	'./images/icon-512.png',
 	'./images/icon-192.png'
 ];
