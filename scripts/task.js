@@ -175,6 +175,28 @@ function openAssignMembers() {
     closeOtherPopups(assign);
 }
 
+function openCalendar() {
+    const calendarPopup = document.getElementById("calendarPopup");
+    if (!calendarPopup) return;
+    
+    calendarPopup.classList.toggle("visible");
+    calendarPopup.hidden = false;
+    closeOtherPopups(calendarPopup);
+    
+    // Generate the calendar if it's opened
+    if (!calendarPopup.hidden) {
+        generateCalendar();
+    }
+}
+
+function closeCalendar() {
+    const calendarPopup = document.getElementById("calendarPopup");
+    if (calendarPopup) {
+        calendarPopup.classList.remove("visible");
+        calendarPopup.hidden = true;
+    }
+}
+
 function closeOtherPopups(currentPopup) {
     const popups = [
         document.getElementById("priorityPopup"),
@@ -188,6 +210,166 @@ function closeOtherPopups(currentPopup) {
             popup.hidden = true;
         }
     });
+}
+
+// Month and year to track current calendar view
+let currentCalendarMonth = new Date().getMonth();
+let currentCalendarYear = new Date().getFullYear();
+
+function generateCalendar() {
+    const calendarDays = document.querySelector('.calendar-days');
+    if (!calendarDays) return;
+    
+    // Clear previous calendar days
+    calendarDays.innerHTML = '';
+    
+    // Set the month and year display
+    const monthYearText = document.querySelector('.calendar-month-year');
+    if (monthYearText) {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        monthYearText.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+    }
+    
+    // Get the first day of the month and the number of days
+    const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+    const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+    
+    // Get previous month's last days
+    const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
+    
+    // Add day headers (Mon, Tue, etc.)
+    const dayHeaders = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    const headerRow = document.createElement('div');
+    headerRow.className = 'calendar-header-row';
+    
+    dayHeaders.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        headerRow.appendChild(dayHeader);
+    });
+    
+    calendarDays.appendChild(headerRow);
+    
+    // Create calendar grid
+    let dayCount = 1;
+    let nextMonthDay = 1;
+    
+    // Adjust firstDay to start from Monday (0) instead of Sunday (0)
+    let adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+    
+    for (let i = 0; i < 6; i++) { // 6 weeks max in a month view
+        const weekRow = document.createElement('div');
+        weekRow.className = 'calendar-week-row';
+        
+        for (let j = 0; j < 7; j++) { // 7 days in a week
+            const dayCell = document.createElement('div');
+            dayCell.className = 'calendar-day';
+            
+            if (i === 0 && j < adjustedFirstDay) {
+                // Previous month days
+                const prevDay = prevMonthLastDay - adjustedFirstDay + j + 1;
+                dayCell.textContent = prevDay;
+                dayCell.classList.add('prev-month-day');
+            } else if (dayCount > daysInMonth) {
+                // Next month days
+                dayCell.textContent = nextMonthDay;
+                dayCell.classList.add('next-month-day');
+                nextMonthDay++;
+            } else {
+                // Current month days
+                dayCell.textContent = dayCount;
+                
+                // We're not highlighting today's date anymore
+                // Only highlight if it's the selected date from the task
+                const taskData = loadTaskData();
+                if (taskData && taskData.task && taskData.task.date) {
+                    const dateStr = taskData.task.date;
+                    const dateMatch = dateStr.match(/(\w+) (\d+), (\d+)/);
+                    if (dateMatch) {
+                        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                          'July', 'August', 'September', 'October', 'November', 'December'];
+                        const selectedMonth = monthNames.indexOf(dateMatch[1]);
+                        const selectedDay = parseInt(dateMatch[2]);
+                        const selectedYear = parseInt(dateMatch[3]);
+                        
+                        if (dayCount === selectedDay && 
+                            currentCalendarMonth === selectedMonth && 
+                            currentCalendarYear === selectedYear) {
+                            dayCell.classList.add('selected');
+                        }
+                    }
+                }
+                
+                // Add click event to select a date
+                dayCell.addEventListener('click', function() {
+                    selectDate(dayCount, currentCalendarMonth, currentCalendarYear);
+                });
+                
+                dayCount++;
+            }
+            
+            weekRow.appendChild(dayCell);
+        }
+        
+        calendarDays.appendChild(weekRow);
+        
+        // Stop if we've displayed all days of the current month and at least some of next month
+        if (dayCount > daysInMonth && i >= 3) {
+            break;
+        }
+    }
+}
+
+function navigateCalendar(direction) {
+    // Update current month and year
+    currentCalendarMonth += direction;
+    
+    // Handle year change
+    if (currentCalendarMonth < 0) {
+        currentCalendarMonth = 11;
+        currentCalendarYear--;
+    } else if (currentCalendarMonth > 11) {
+        currentCalendarMonth = 0;
+        currentCalendarYear++;
+    }
+    
+    // Regenerate calendar
+    generateCalendar();
+}
+
+function selectDate(day, month, year) {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, task } = taskData;
+    
+    // Validate day to ensure it's within the valid range for the month
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    if (day > daysInMonth) {
+        day = daysInMonth; // Correct invalid days (like May 32 → May 31)
+    }
+    
+    // Format date as "Month Day, Year" (e.g., "May 15, 2025")
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    const formattedDate = `${monthNames[month]} ${day}, ${year}`;
+    
+    // Update task date
+    task.date = formattedDate;
+    
+    // Update date display
+    const dateElement = document.querySelector('.task-date');
+    if (dateElement) {
+        dateElement.textContent = formattedDate;
+    }
+    
+    // Save changes
+    localStorage.setItem('todoAppData', JSON.stringify(appData));
+    
+    // Close calendar popup
+    closeCalendar();
 }
 
 function selectPriority(priority) {
