@@ -107,7 +107,7 @@ body {
 .task-title {
 	text-align: center;
 	font-size: 20px;
-	color: #999;
+	color: black;
 	border: none;
 	outline: none;
 	background: transparent;
@@ -117,7 +117,7 @@ body {
 .task-description {
 	text-align: center;
 	font-size: 16px;
-	color: #bbb;
+	color: black;
 	border: none;
 	outline: none;
 	background: transparent;
