@@ -225,7 +225,6 @@ function getDateSelectionMode() {
 }
 
 function generateCalendar() {
-	loadExistingDates();
 	const calendarDays = document.querySelector('.calendar-days');
 	if (!calendarDays) return;
 
@@ -369,11 +368,15 @@ function selectDate(date) {
 		tempDueDate = tempStartDate;
 		tempStartDate = date;
 	}
+
+	saveSelectedDates();
+
 	// Regenerate calendar to update highlights
 	generateCalendar();
 }
 
 function saveSelectedDates() {
+	console.log("Chiao");
 	const taskData = loadTaskData();
 	if (!taskData) return;
 
