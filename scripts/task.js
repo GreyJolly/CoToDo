@@ -379,7 +379,6 @@ function selectDate(date) {
 	saveSelectedDates();
 
 	// Regenerate calendar to update highlights
-	loadExistingDates();
 	generateCalendar();
 }
 

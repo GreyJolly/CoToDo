@@ -85,7 +85,7 @@ function renderHomepage() {
 		noteCard.className = 'note-card';
 		noteCard.dataset.listId = list.id;
 
-		let html = `<h2>${list.title|| 'New List'}</h2>`;
+		let html = `<h2>${list.title || 'New List'}</h2>`;
 
 		// Show first few incomplete tasks
 		const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
@@ -102,6 +102,15 @@ function renderHomepage() {
 			<label for="${task.id}">${task.text || "New Task"}</label>
 		  </div>
 		`;
+			if (task.startDate && task.dueDate) {
+				html += `<div class="task-date">${task.startDate} - ${task.dueDate}</div>`;
+			} else {
+				if (task.startDate) {
+					html += `<div class="task-date">Due: ${task.startDate}</div>`;
+				} else if (task.dueDate) {
+					html += `<div class="task-date">Start: ${task.dueDate}</div>`;
+				}
+			}
 		});
 
 		// Show collaborators if any
@@ -144,10 +153,10 @@ function setupHomepageEvents() {
 
 	// Plus button to add new list
 	document.getElementById('plus-button')?.addEventListener('click', function (e) {
-		const newListId = 'list' + Date.now(); 
+		const newListId = 'list' + Date.now();
 		const newList = {
 			id: newListId,
-			title: '', 
+			title: '',
 			tasks: []
 		};
 		appData.lists.push(newList);
