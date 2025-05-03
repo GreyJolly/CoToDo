@@ -60,12 +60,26 @@ body {
 .todo-list {
 	align-items: center;
 	padding: 5px 30px;
+	min-height: 20px;
 }
 
 .task-item {
 	display: flex;
 	align-items: center;
 	margin-bottom: 8px;
+	cursor: grab;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.task-item.dragging {
+    opacity: 0.5;
+    transform: scale(1.02);
+    cursor: grabbing;
+}
+
+.task-item.over {
+    border-top: 2px solid #666;
 }
 
 .task-item input[type="checkbox"] {
