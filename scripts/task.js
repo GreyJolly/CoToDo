@@ -185,7 +185,6 @@ function openCalendar() {
 	calendarPopup.hidden = false;
 	closeOtherPopups(calendarPopup);
 
-	// Load existing dates and generate calendar
 	loadExistingDates();
 	generateCalendar();
 }
@@ -221,10 +220,11 @@ let tempStartDate = null; // Temporary storage for start date selection
 let tempDueDate = null; // Temporary storage for due date selection
 
 function getDateSelectionMode() {
-		return document.querySelector('input[name="dateType"]:checked').value;
+	return document.querySelector('input[name="dateType"]:checked').value;
 }
 
 function generateCalendar() {
+	
 	const calendarDays = document.querySelector('.calendar-days');
 	if (!calendarDays) return;
 
@@ -311,9 +311,9 @@ function generateCalendar() {
 					if (currentDate > tempStartDate && currentDate < tempDueDate) {
 						dayCell.classList.add('in-range');
 					}
-				} else if (tempStartDate) {
+				} else if (tempStartDate || tempDueDate) {
 					// When selecting due date, highlight dates after start date
-					if (currentDate > tempStartDate) {
+					if (tempStartDate && currentDate > tempStartDate || tempDueDate && currentDate < tempDueDate) {
 						dayCell.classList.add('potential-range');
 					}
 				}
@@ -357,11 +357,18 @@ function navigateCalendar(direction) {
 }
 
 function selectDate(date) {
-
 	if (getDateSelectionMode() == 'start') {
-		tempStartDate = date;
+		if (!tempStartDate || tempStartDate.getTime() != date.getTime()) {
+			tempStartDate = date;
+		} else {
+			tempStartDate = null;
+		}
 	} else {
-		tempDueDate = date;
+		if (!tempDueDate || tempDueDate.getTime() != date.getTime()) {
+			tempDueDate = date;
+		} else {
+			tempDueDate = null;
+		}
 	}
 	if (tempStartDate && tempDueDate && tempStartDate > tempDueDate) {
 		date = tempDueDate
@@ -372,11 +379,11 @@ function selectDate(date) {
 	saveSelectedDates();
 
 	// Regenerate calendar to update highlights
+	loadExistingDates();
 	generateCalendar();
 }
 
 function saveSelectedDates() {
-	console.log("Chiao");
 	const taskData = loadTaskData();
 	if (!taskData) return;
 
@@ -389,11 +396,15 @@ function saveSelectedDates() {
 	if (tempStartDate) {
 		const formattedStartDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
 		task.startDate = formattedStartDate;
+	} else {
+		delete task.startDate;
 	}
 
 	if (tempDueDate) {
 		const formattedDueDate = `${monthNames[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
 		task.dueDate = formattedDueDate;
+	} else {
+		delete task.dueDate;
 	}
 
 	// Save changes
@@ -412,6 +423,8 @@ function updateDateDisplays() {
 			'July', 'August', 'September', 'October', 'November', 'December'];
 		const formattedDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
 		startDateElement.textContent = formattedDate;
+	} else {
+		startDateElement.textContent = "No date";
 	}
 
 	if (dueDateElement && tempDueDate) {
@@ -419,13 +432,9 @@ function updateDateDisplays() {
 			'July', 'August', 'September', 'October', 'November', 'December'];
 		const formattedDate = `${monthNames[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
 		dueDateElement.textContent = formattedDate;
+	} else {
+		dueDateElement.textContent = "No date";
 	}
-}
-
-function resetDateSelection() {
-	tempStartDate = null;
-	tempDueDate = null;
-	generateCalendar();
 }
 
 function loadExistingDates() {
