@@ -13,11 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${day} ${month} ${year}`;
     }
     
-    function formatDateForComparison(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+    function parseTaskDate(dateString) {
+        if (!dateString) return null;
+        
+        // Handle "Month Day, Year" format
+        if (dateString.includes(',')) {
+            const dateParts = dateString.split(' ');
+            const month = dateParts[0];
+            const day = dateParts[1].replace(',', '');
+            const year = dateParts[2];
+            return new Date(`${month} ${day}, ${year}`);
+        }
+        
+        // Handle "YYYY-MM-DD" format
+        if (dateString.includes('-')) {
+            const [year, month, day] = dateString.split('-');
+            return new Date(year, month - 1, day);
+        }
+        
+        return null;
     }
     
     function getAppData() {
@@ -27,16 +41,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function getTasksForDate(date) {
         const appData = getAppData();
-        const formattedDate = formatDateForComparison(date);
+        const currentDate = new Date(date.setHours(0, 0, 0, 0));
         
         let tasks = [];
         appData.lists.forEach(list => {
             list.tasks.forEach(task => {
-                if (task.dueDate === formattedDate) {
-                    tasks.push({
-                        ...task,
-                        listTitle: list.title || "Untitled List"
-                    });
+                const startDate = parseTaskDate(task.startDate);
+                const dueDate = parseTaskDate(task.dueDate);
+                
+                // Check if current date is within task's date range
+                if (startDate && dueDate) {
+                    const normalizedStart = new Date(startDate.setHours(0, 0, 0, 0));
+                    const normalizedDue = new Date(dueDate.setHours(0, 0, 0, 0));
+                    
+                    if (currentDate >= normalizedStart && currentDate <= normalizedDue) {
+                        tasks.push({
+                            ...task,
+                            listTitle: list.title || "Untitled List",
+                            listColor: list.color || "#cccccc"
+                        });
+                    }
+                }
+                // If only due date exists, show only on due date
+                else if (dueDate) {
+                    const normalizedDue = new Date(dueDate.setHours(0, 0, 0, 0));
+                    if (currentDate.getTime() === normalizedDue.getTime()) {
+                        tasks.push({
+                            ...task,
+                            listTitle: list.title || "Untitled List",
+                            listColor: list.color || "#cccccc"
+                        });
+                    }
                 }
             });
         });
@@ -55,17 +90,21 @@ document.addEventListener('DOMContentLoaded', function() {
         tasks.forEach(task => {
             const taskItem = document.createElement('div');
             taskItem.className = 'task-item';
+            if (task.completed) {
+                taskItem.classList.add('completed');
+            }
             
             let html = `
                 <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}>
                 <span class="task-label">${task.text || 'New Task'}</span>
-                <span class="task-list-name">${task.listTitle}</span>
+                <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
             `;
             
             taskItem.innerHTML = html;
             todoListContainer.appendChild(taskItem);
             
-            taskItem.querySelector('input[type="checkbox"]').addEventListener('change', function() {
+            const checkbox = taskItem.querySelector('input[type="checkbox"]');
+            checkbox.addEventListener('change', function() {
                 const appData = getAppData();
 
                 let found = false;
@@ -79,8 +118,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (found) {
                     localStorage.setItem('todoAppData', JSON.stringify(appData));
-
-                    setTimeout(() => updateCalendar(), 300);
+                    if (this.checked) {
+                        taskItem.classList.add('completed');
+                    } else {
+                        taskItem.classList.remove('completed');
+                    }
                 }
             });
         });
@@ -88,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateCalendar() {
         monthElement.textContent = formatDate(currentDate);
-        const tasks = getTasksForDate(currentDate);
+        const tasks = getTasksForDate(new Date(currentDate));
         renderTasksForDate(tasks);
     }
     
@@ -101,6 +143,15 @@ document.addEventListener('DOMContentLoaded', function() {
         currentDate.setDate(currentDate.getDate() + 1);
         updateCalendar();
     });
+    
+    // Add today button
+    const todayBtn = document.createElement('button');
+    todayBtn.textContent = 'Today';
+    todayBtn.addEventListener('click', function() {
+        currentDate = new Date();
+        updateCalendar();
+    });
+    document.querySelector('.calendar-header').appendChild(todayBtn);
     
     updateCalendar();
 });
