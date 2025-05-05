@@ -62,7 +62,7 @@ body {
 }
 
 .task-dates {
-	color: #aaa;
+	color: #777;
 	font-size: 18px;
 	flex-grow: 1;
 	margin-left: 20px;
@@ -114,6 +114,11 @@ body {
 	padding: 5px 0;
 }
 
+.task-title:focus {
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
 .task-description {
 	text-align: center;
 	font-size: 16px;
@@ -122,6 +127,11 @@ body {
 	outline: none;
 	background: transparent;
 	padding: 5px 0;
+}
+
+.task-description:focus {
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-popup {
