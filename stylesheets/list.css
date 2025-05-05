@@ -161,15 +161,14 @@ input[type="checkbox"]:checked::after {
 }
 
 .footer {
-	background-color: #d0deed;
-	color: white;
-	text-align: center;
-	padding-top: 5px;
-	font-size: 16px;
-	font-family: Arial, sans-serif;
-	flex-shrink: 0;
-	height: 75px;
-	display: flex;
-	justify-content: center;
-	gap: 180px;
+    background-color: #d0deed;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
 }

@@ -74,6 +74,7 @@ saveAppData();
 document.addEventListener('DOMContentLoaded', function () {
 	renderHomepage();
 	setupHomepageEvents();
+	setupSearch();
 });
 
 function renderHomepage() {
@@ -163,4 +164,145 @@ function setupHomepageEvents() {
 		saveAppData();
 		window.location.href = `list.html?id=${newListId}`; // Navigate to new list
 	});
+}
+
+// Search functionality
+function setupSearch() {
+	const searchInput = document.querySelector('.search-input');
+	const searchClear = document.querySelector('.search-clear');
+
+	// Show/hide clear button based on input
+	searchInput.addEventListener('input', function () {
+		const hasText = this.value.trim().length > 0;
+		searchClear.style.display = hasText ? 'block' : 'none';
+
+		const searchTerm = this.value.toLowerCase().trim();
+
+		if (searchTerm === '') {
+			renderHomepage();
+			return;
+		}
+
+		// Filter lists that match search term
+		const filteredLists = appData.lists.filter(list => {
+			// Check if list title matches
+			const titleMatch = list.title.toLowerCase().includes(searchTerm);
+
+			// Check if any task text matches
+			const taskMatch = list.tasks.some(task =>
+				task.text.toLowerCase().includes(searchTerm)
+			);
+
+			return titleMatch || taskMatch;
+		});
+
+		renderSearchResults(filteredLists, searchTerm);
+	});
+
+	// Clear search when X is clicked
+	searchClear.addEventListener('click', function () {
+		searchInput.value = '';
+		searchClear.style.display = 'none';
+		renderHomepage();
+	});
+}
+
+function renderSearchResults(lists, searchTerm) {
+	const notesContainer = document.querySelector('.notes-container');
+	notesContainer.innerHTML = '';
+
+	if (lists.length === 0) {
+		notesContainer.innerHTML = '<div class="no-results">No matching lists found</div>';
+		return;
+	}
+
+	lists.forEach(list => {
+		const noteCard = document.createElement('div');
+		noteCard.className = 'note-card';
+		noteCard.dataset.listId = list.id;
+
+		// Highlight matching title
+		let titleHtml = list.title || 'New List';
+		if (searchTerm && list.title.toLowerCase().includes(searchTerm)) {
+			titleHtml = highlightText(list.title, searchTerm);
+		}
+
+		let html = `<h2>${titleHtml}</h2>`;
+
+		// Show tasks that match the search term (up to 3)
+		const matchingTasks = list.tasks.filter(task =>
+			task.text.toLowerCase().includes(searchTerm)
+		).slice(0, 3);
+
+		matchingTasks.forEach(task => {
+			let priorityClass = '';
+			if (task.priority) {
+				priorityClass = `priority-${task.priority.toLowerCase()}`;
+			}
+
+			// Highlight matching text in tasks
+			const taskText = highlightText(task.text, searchTerm);
+
+			html += `
+                <div class="task-item">
+                    <input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
+                    <label for="${task.id}">${taskText}</label>
+                </div>
+            `;
+
+			if (task.startDate && task.dueDate) {
+				html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+			} else if (task.startDate) {
+				html += `<span class="task-date">Due: ${task.startDate}</span>`;
+			} else if (task.dueDate) {
+				html += `<span class="task-date">Start: ${task.dueDate}</span>`;
+			}
+		});
+
+		// If no matching tasks but list title matches, show first few tasks
+		if (matchingTasks.length === 0 && list.title.toLowerCase().includes(searchTerm)) {
+			const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
+			incompleteTasks.forEach(task => {
+				let priorityClass = '';
+				if (task.priority) {
+					priorityClass = `priority-${task.priority.toLowerCase()}`;
+				}
+
+				html += `
+                    <div class="task-item">
+                        <input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
+                        <label for="${task.id}">${task.text || "New Task"}</label>
+                    </div>
+                `;
+
+				if (task.startDate && task.dueDate) {
+					html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+				} else if (task.startDate) {
+					html += `<span class="task-date">Due: ${task.startDate}</span>`;
+				} else if (task.dueDate) {
+					html += `<span class="task-date">Start: ${task.dueDate}</span>`;
+				}
+			});
+		}
+
+		// Show collaborators if any
+		if (list.collaborators && list.collaborators.length > 0) {
+			html += `<div class="collaborator">
+                <div class="collaborator-avatar">${list.collaborators[0]}</div>
+            </div>`;
+		}
+
+		noteCard.innerHTML = html;
+		notesContainer.appendChild(noteCard);
+	});
+
+	// Reattach event listeners to the new cards
+	setupHomepageEvents();
+}
+
+function highlightText(text, searchTerm) {
+	if (!searchTerm) return text;
+
+	const regex = new RegExp(`(${searchTerm})`, 'gi');
+	return text.replace(regex, '<span class="highlight">$1</span>');
 }

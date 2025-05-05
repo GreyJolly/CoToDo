@@ -239,9 +239,7 @@ body {
 }
 
 .calendar-day.today {
-	background-color: #5a5fd2;
-	color: white;
-	border: 2px solid #2196F3;
+	border: 2px solid #5a5fd2;
 }
 
 .calendar-selection-mode {
@@ -366,14 +364,14 @@ body {
 }
 
 .footer {
-	color: white;
-	text-align: left;
-	padding: 10px;
-	font-size: 16px;
-	font-family: Arial, sans-serif;
-	flex-shrink: 0;
-	height: 75px;
-	display: flex;
-	justify-content: flex-start;
-	gap: 10px;
+    background-color: #d0deed;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
 }
