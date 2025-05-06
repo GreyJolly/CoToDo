@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getCurrentListId() {
 	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get('id') || 'list1'; 
+	return urlParams.get('id') || 'list1';
 }
 
 function renderListPage(listId) {
@@ -100,26 +100,31 @@ function setupListPageEvents(listId) {
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
 
-	// Set initial value and placeholder
-	listTitleElement.value = list.title || '';
-	listTitleElement.placeholder = list.title ? '' : 'New List';
+	// Set initial text
+	listTitleElement.textContent = list.title || '';
 
-	// Double click to edit
-	listTitleElement.addEventListener('dblclick', function () {
-		this.readOnly = false;
-		this.focus();
+	// Remove the readOnly handling (not needed for contenteditable)
+
+	// Focus handler to select all text when editing
+	listTitleElement.addEventListener('focus', function () {
+		const range = document.createRange();
+		range.selectNodeContents(this);
+		const selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(range);
 	});
 
-	// Blur handler
+	// Blur handler to save changes
 	listTitleElement.addEventListener('blur', function () {
-		this.readOnly = true;
-		const newTitle = this.value.trim();
+		const newTitle = this.textContent.trim();
 		list.title = newTitle;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 
+		// If empty, show placeholder style
 		if (!newTitle) {
-			this.placeholder = 'New List';
-			this.value = '';
+			this.classList.add('placeholder');
+		} else {
+			this.classList.remove('placeholder');
 		}
 	});
 
@@ -127,7 +132,7 @@ function setupListPageEvents(listId) {
 	listTitleElement.addEventListener('keydown', function (e) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
-			this.blur();
+			this.blur(); // This will trigger the blur handler above
 		}
 	});
 
@@ -144,7 +149,7 @@ function setupListPageEvents(listId) {
 			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
 		});
 	});
-	
+
 	// Back button
 	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
 		e.preventDefault();

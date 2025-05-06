@@ -103,15 +103,6 @@ function renderHomepage() {
 			<label for="${task.id}">${task.text || "New Task"}</label>
 		  </div>
 		`;
-			if (task.startDate && task.dueDate) {
-				html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-			} else {
-				if (task.startDate) {
-					html += `<span class="task-date">Due: ${task.startDate}</span>`;
-				} else if (task.dueDate) {
-					html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-				}
-			}
 		});
 
 		// Show collaborators if any
@@ -250,13 +241,6 @@ function renderSearchResults(lists, searchTerm) {
                 </div>
             `;
 
-			if (task.startDate && task.dueDate) {
-				html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-			} else if (task.startDate) {
-				html += `<span class="task-date">Due: ${task.startDate}</span>`;
-			} else if (task.dueDate) {
-				html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-			}
 		});
 
 		// If no matching tasks but list title matches, show first few tasks
@@ -275,13 +259,6 @@ function renderSearchResults(lists, searchTerm) {
                     </div>
                 `;
 
-				if (task.startDate && task.dueDate) {
-					html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-				} else if (task.startDate) {
-					html += `<span class="task-date">Due: ${task.startDate}</span>`;
-				} else if (task.dueDate) {
-					html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-				}
 			});
 		}
 
