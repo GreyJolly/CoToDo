@@ -12,7 +12,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	padding-top: 10px;
+	padding-top: 15px;
 	padding-bottom: 10px;
 }
 
@@ -148,13 +148,11 @@ body {
 	right: 10px;
 }
 
-/* Purple circle for the collaborator avatar */
 .collaborator-avatar {
 	width: 28px;
 	height: 28px;
 	border-radius: 50%;
 	background-color: #6200ee;
-	/* Purple color */
 	color: white;
 	font-size: 12px;
 	font-weight: bold;
@@ -245,8 +243,6 @@ input[type="checkbox"] {
 }
 
 .footer {
-	background-color: #d0deed;
-	color: white;
 	text-align: center;
 	padding: 20px;
 	font-size: 16px;

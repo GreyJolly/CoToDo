@@ -142,8 +142,9 @@ input[type="checkbox"]:checked::after {
 .task-date {
 	font-size: 12px;
 	color: #888;
-	margin-left: auto;
-	margin-right: 20px;
+	position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .task-avatar {
@@ -158,6 +159,7 @@ input[type="checkbox"]:checked::after {
 	justify-content: center;
 	border: 1px solid #000000;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	margin-left: auto;
 }
 
 .footer {
@@ -170,5 +172,5 @@ input[type="checkbox"]:checked::after {
     flex-shrink: 0;
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 80px;
 }
