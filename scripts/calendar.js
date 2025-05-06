@@ -1,10 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentDate = new Date();
+    const today = new Date(); // Store today's date for comparison
     
     const monthElement = document.querySelector('.month');
     const prevBtn = document.querySelector('.fa-angle-left');
     const nextBtn = document.querySelector('.fa-angle-right');
     const todoListContainer = document.querySelector('.todo-list');
+    const calendarHeader = document.querySelector('.calendar-header');
+    
+    // Create today button element
+    const todayBtn = document.createElement('button');
+    todayBtn.textContent = 'Back to today';
+    todayBtn.className = 'today-btn';
+    todayBtn.addEventListener('click', function() {
+        currentDate = new Date();
+        updateCalendar();
+    });
+    
+    // Create a container for the navigation elements
+    const navContainer = document.createElement('div');
+    navContainer.className = 'calendar-nav';
+    
+    // Move the existing navigation elements into the new container
+    navContainer.appendChild(prevBtn);
+    navContainer.appendChild(monthElement);
+    navContainer.appendChild(nextBtn);
+    
+    // Insert the navigation container into the header
+    calendarHeader.insertBefore(navContainer, calendarHeader.firstChild);
+    
+    // Add the today button after the navigation container
+    calendarHeader.appendChild(todayBtn);
     
     function formatDate(date) {
         const day = date.getDate();
@@ -155,10 +181,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    function isToday(date) {
+        return date.toDateString() === today.toDateString();
+    }
+    
     function updateCalendar() {
         monthElement.textContent = formatDate(currentDate);
         const tasks = getTasksForDate(new Date(currentDate));
         renderTasksForDate(tasks);
+        
+        // Show/hide today button based on whether we're viewing today
+        todayBtn.style.display = isToday(currentDate) ? 'none' : 'block';
     }
     
     prevBtn.addEventListener('click', function() {
@@ -170,15 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentDate.setDate(currentDate.getDate() + 1);
         updateCalendar();
     });
-    
-    // Add today button
-    const todayBtn = document.createElement('button');
-    todayBtn.textContent = 'Today';
-    todayBtn.addEventListener('click', function() {
-        currentDate = new Date();
-        updateCalendar();
-    });
-    document.querySelector('.calendar-header').appendChild(todayBtn);
     
     updateCalendar();
 });
