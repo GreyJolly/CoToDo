@@ -104,36 +104,97 @@ function setPriorityFlag(priority) {
 }
 
 function setupTaskEvents() {
-	// Save changes when leaving the page
-	window.addEventListener('beforeunload', saveTaskChanges);
+    // Save changes when leaving the page
+    window.addEventListener('beforeunload', saveTaskChanges);
 
-	// Back button
-	document.querySelector('.backto-list')?.addEventListener('click', function (e) {
-		e.preventDefault();
-		saveTaskChanges();
-		window.location.href = `list.html?id=${getCurrentListId()}`;
-	});
+    // Back button - modified to handle calendar back navigation
+    document.querySelector('.backto-list')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        saveTaskChanges();
+        
+        // Check if we came from the calendar
+        const lastCalendarDate = localStorage.getItem('lastCalendarDate');
+        if (lastCalendarDate) {
+            // Remove the stored date so it doesn't affect future navigation
+            localStorage.removeItem('lastCalendarDate');
+            // Go back to calendar with the stored date
+            window.location.href = `calendar.html?date=${lastCalendarDate}`;
+        } else {
+            // Default behavior - go back to list
+            window.location.href = `list.html?id=${getCurrentListId()}`;
+        }
+    });
 
-	// Priority popup
-	document.getElementById('flag-icon')?.addEventListener('click', openPriorityPopup);
+    // Priority popup
+    document.getElementById('flag-icon')?.addEventListener('click', openPriorityPopup);
 
-	// Checkbox change
-	document.getElementById('task-complete')?.addEventListener('change', function () {
-		saveTaskChanges();
-	});
+    // Checkbox change
+    document.getElementById('task-complete')?.addEventListener('change', function() {
+        saveTaskChanges();
+    });
 
-	// Title and description changes
-	document.querySelector('.task-title')?.addEventListener('input', debounce(saveTaskChanges, 300));
-	document.querySelector('.task-description')?.addEventListener('input', debounce(saveTaskChanges, 300));
+    // Title and description changes
+    document.querySelector('.task-title')?.addEventListener('input', debounce(saveTaskChanges, 300));
+    document.querySelector('.task-description')?.addEventListener('input', debounce(saveTaskChanges, 300));
 
-	// Priority options
-	document.querySelectorAll('.priority-option').forEach(option => {
-		option.addEventListener('click', function () {
-			selectPriority(this.getAttribute('data-priority'));
-		});
-	});
+    // Priority options
+    document.querySelectorAll('.priority-option').forEach(option => {
+        option.addEventListener('click', function() {
+            selectPriority(this.getAttribute('data-priority'));
+        });
+    });
+
+    // Calendar date selection
+    document.querySelector('.task-dates')?.addEventListener('click', function(e) {
+        // Only open calendar if not clicking on a specific date element
+        if (!e.target.classList.contains('task-start-date') && 
+            !e.target.classList.contains('task-due-date')) {
+            openCalendar();
+        }
+    });
+
+    // Close popups when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
+            closePriorityPopup();
+        }
+        if (!e.target.closest('.calendar-popup') && !e.target.closest('.task-dates')) {
+            closeCalendar();
+        }
+        if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
+            const hint = document.getElementById("enterHintContainer");
+            if (hint) {
+                hint.classList.remove("visible");
+                hint.hidden = true;
+            }
+        }
+        if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
+            const assign = document.getElementById("assignMembersPopup");
+            if (assign) {
+                assign.classList.remove("visible");
+                assign.hidden = true;
+            }
+        }
+    });
+
+    // Handle Escape key to close popups
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePriorityPopup();
+            closeCalendar();
+            const hint = document.getElementById("enterHintContainer");
+            if (hint) {
+                hint.classList.remove("visible");
+                hint.hidden = true;
+            }
+            const assign = document.getElementById("assignMembersPopup");
+            if (assign) {
+                assign.classList.remove("visible");
+                assign.hidden = true;
+            }
+        }
+    });
 }
-
 function saveTaskChanges() {
 	const taskData = loadTaskData();
 	if (!taskData) return;

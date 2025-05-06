@@ -3,7 +3,6 @@ function getAppData() {
 	return data ? JSON.parse(data) : { lists: [] };
 }
 
-// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const listId = getCurrentListId();
 	renderListPage(listId);
@@ -11,14 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getCurrentListId() {
 	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get('id') || 'list1'; // Default to first list if no ID
+	return urlParams.get('id') || 'list1'; 
 }
 
 function renderListPage(listId) {
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
 
-	// If list doesn't exist (shouldn't happen), redirect to homepage
 	if (!list) {
 		window.location.href = 'index.html';
 		return;
