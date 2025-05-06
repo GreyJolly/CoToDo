@@ -1,10 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let currentDate = new Date();
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+    
+    let currentDate;
+    if (dateParam) {
+        currentDate = new Date(dateParam);
+    } else {
+        currentDate = new Date();
+    }
+    
+    const today = new Date();
     
     const monthElement = document.querySelector('.month');
     const prevBtn = document.querySelector('.fa-angle-left');
     const nextBtn = document.querySelector('.fa-angle-right');
     const todoListContainer = document.querySelector('.todo-list');
+    const calendarHeader = document.querySelector('.calendar-header');
+    
+    const todayBtn = document.createElement('button');
+    todayBtn.textContent = 'Back to today';
+    todayBtn.className = 'today-btn';
+    todayBtn.addEventListener('click', function() {
+        currentDate = new Date();
+        updateCalendar();
+    });
+    
+    const navContainer = document.createElement('div');
+    navContainer.className = 'calendar-nav';
+    
+    navContainer.appendChild(prevBtn);
+    navContainer.appendChild(monthElement);
+    navContainer.appendChild(nextBtn);
+    
+    calendarHeader.insertBefore(navContainer, calendarHeader.firstChild);
+    
+    calendarHeader.appendChild(todayBtn);
     
     function formatDate(date) {
         const day = date.getDate();
@@ -16,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function parseTaskDate(dateString) {
         if (!dateString) return null;
         
-        // Handle "Month Day, Year" format
         if (dateString.includes(',')) {
             const dateParts = dateString.split(' ');
             const month = dateParts[0];
@@ -25,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return new Date(`${month} ${day}, ${year}`);
         }
         
-        // Handle "YYYY-MM-DD" format
         if (dateString.includes('-')) {
             const [year, month, day] = dateString.split('-');
             return new Date(year, month - 1, day);
@@ -49,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const startDate = parseTaskDate(task.startDate);
                 const dueDate = parseTaskDate(task.dueDate);
                 
-                // Check if current date is within task's date range
                 if (startDate && dueDate) {
                     const normalizedStart = new Date(startDate.setHours(0, 0, 0, 0));
                     const normalizedDue = new Date(dueDate.setHours(0, 0, 0, 0));
@@ -57,17 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (currentDate >= normalizedStart && currentDate <= normalizedDue) {
                         tasks.push({
                             ...task,
+                            listId: list.id,
                             listTitle: list.title || "Untitled List",
                             listColor: list.color || "#cccccc"
                         });
                     }
                 }
-                // If only due date exists, show only on due date
                 else if (dueDate) {
                     const normalizedDue = new Date(dueDate.setHours(0, 0, 0, 0));
                     if (currentDate.getTime() === normalizedDue.getTime()) {
                         tasks.push({
                             ...task,
+                            listId: list.id,
                             listTitle: list.title || "Untitled List",
                             listColor: list.color || "#cccccc"
                         });
@@ -94,8 +122,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 taskItem.classList.add('completed');
             }
             
+            let priorityClass = '';
+            if (task.priority) {
+                priorityClass = `priority-${task.priority.toLowerCase()}`;
+            }
+            
             let html = `
-                <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}>
+                <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} 
+                       class="${priorityClass}${task.completed ? ' completed-priority' : ''}">
                 <span class="task-label">${task.text || 'New Task'}</span>
                 <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
             `;
@@ -103,35 +137,58 @@ document.addEventListener('DOMContentLoaded', function() {
             taskItem.innerHTML = html;
             todoListContainer.appendChild(taskItem);
             
+            taskItem.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    // Store the current calendar date before navigating
+                    localStorage.setItem('lastCalendarDate', currentDate.toISOString());
+                    window.location.href = `task.html?listId=${task.listId}&taskId=${task.id}`;
+                }
+            });
+            
+            const listNameElement = taskItem.querySelector('.task-list-name');
+            listNameElement.addEventListener('click', function(e) {
+                e.stopPropagation();
+                window.location.href = `list.html?id=${task.listId}`;
+            });
+            
             const checkbox = taskItem.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', function() {
                 const appData = getAppData();
-
                 let found = false;
+                
                 appData.lists.forEach(list => {
                     const taskToUpdate = list.tasks.find(t => t.id === task.id);
                     if (taskToUpdate) {
                         taskToUpdate.completed = this.checked;
                         found = true;
+                        
+                        if (this.checked) {
+                            taskItem.classList.add('completed');
+                            checkbox.classList.add('completed-priority');
+                        } else {
+                            taskItem.classList.remove('completed');
+                            checkbox.classList.remove('completed-priority');
+                        }
                     }
                 });
                 
                 if (found) {
                     localStorage.setItem('todoAppData', JSON.stringify(appData));
-                    if (this.checked) {
-                        taskItem.classList.add('completed');
-                    } else {
-                        taskItem.classList.remove('completed');
-                    }
                 }
             });
         });
+    }
+    
+    function isToday(date) {
+        return date.toDateString() === today.toDateString();
     }
     
     function updateCalendar() {
         monthElement.textContent = formatDate(currentDate);
         const tasks = getTasksForDate(new Date(currentDate));
         renderTasksForDate(tasks);
+        
+        todayBtn.style.display = isToday(currentDate) ? 'none' : 'block';
     }
     
     prevBtn.addEventListener('click', function() {
@@ -143,15 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentDate.setDate(currentDate.getDate() + 1);
         updateCalendar();
     });
-    
-    // Add today button
-    const todayBtn = document.createElement('button');
-    todayBtn.textContent = 'Today';
-    todayBtn.addEventListener('click', function() {
-        currentDate = new Date();
-        updateCalendar();
-    });
-    document.querySelector('.calendar-header').appendChild(todayBtn);
     
     updateCalendar();
 });

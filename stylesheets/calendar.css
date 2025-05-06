@@ -42,23 +42,51 @@ html, body {
 
 .calendar-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    gap: 10px;
     padding: 15px;
     background-color: white;
     margin-bottom: 15px;
 }
 
-.calendar-header i {
-    cursor: pointer;
-    font-size: 18px;
-    color: #000000;
-    padding: 5px;
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    justify-content: space-between;
 }
 
-.calendar-header .month {
+.calendar-nav i {
+    cursor: pointer;
+    font-size: 20px;
+    color: #000000;
+    padding: 8px 15px;
+    flex-shrink: 0;
+}
+
+.calendar-nav .month {
     font-weight: 600;
     font-size: 18px;
+    margin: 0 20px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.today-btn {
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.today-btn:hover {
+    background-color: #3a5a8f;
 }
 
 .todo-list {
@@ -130,12 +158,66 @@ html, body {
 }
 
 .task-list-name {
-    font-size: 12px;
-    padding: 4px 10px;
+    cursor: pointer;
+    padding: 2px 8px;
     border-radius: 12px;
+    font-size: 12px;
+    margin-left: 8px;
     color: white;
-    font-weight: 600;
-    background-color: #4a6fa5;
+}
+
+.task-item input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    margin-right: 10px;
+    transition: all 0.2s;
+}
+
+.task-item input[type="checkbox"]:checked {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+.task-item input[type="checkbox"].priority-high {
+    border-color: #ff4444 !important;
+}
+
+.task-item input[type="checkbox"].priority-medium {
+    border-color: #ffbb33 !important;
+}
+
+.task-item input[type="checkbox"].priority-low {
+    border-color: #00C851 !important;
+}
+
+.task-item input[type="checkbox"]:checked::before {
+    content: "✓";
+    position: absolute;
+    font-size: 14px;
+    color: #555;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.task-item input[type="checkbox"].priority-high.completed-priority {
+    border-color: #ff9999 !important;
+}
+
+.task-item input[type="checkbox"].priority-medium.completed-priority {
+    border-color: #ffd699 !important;
+}
+
+.task-item input[type="checkbox"].priority-low.completed-priority {
+    border-color: #80e080 !important;
 }
 
 .no-tasks {
@@ -147,20 +229,6 @@ html, body {
     border-radius: 10px;
 }
 
-.calendar-header button {
-    background-color: #4a6fa5;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    margin: 0 5px;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-/* Responsive adjustments */
 @media (max-width: 480px) {
     .wrapper {
         padding: 12px 0;
@@ -179,11 +247,26 @@ html, body {
         padding: 12px;
     }
     
+    .calendar-nav i {
+        font-size: 18px;
+        padding: 6px 12px;
+    }
+    
+    .calendar-nav .month {
+        font-size: 16px;
+        margin: 0 15px;
+    }
+    
     .task-item {
         padding: 10px 12px;
     }
     
     .task-label {
         font-size: 15px;
+    }
+    
+    .today-btn {
+        padding: 6px 15px;
+        font-size: 13px;
     }
 }
