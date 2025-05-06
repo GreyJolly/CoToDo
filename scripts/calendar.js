@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (currentDate >= normalizedStart && currentDate <= normalizedDue) {
                         tasks.push({
                             ...task,
+                            listId: list.id,
                             listTitle: list.title || "Untitled List",
                             listColor: list.color || "#cccccc"
                         });
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (currentDate.getTime() === normalizedDue.getTime()) {
                         tasks.push({
                             ...task,
+                            listId: list.id,
                             listTitle: list.title || "Untitled List",
                             listColor: list.color || "#cccccc"
                         });
@@ -94,8 +96,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 taskItem.classList.add('completed');
             }
             
+            // Determine priority class
+            let priorityClass = '';
+            if (task.priority) {
+                priorityClass = `priority-${task.priority.toLowerCase()}`;
+            }
+            
             let html = `
-                <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}>
+                <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} 
+                       class="${priorityClass}${task.completed ? ' completed-priority' : ''}">
                 <span class="task-label">${task.text || 'New Task'}</span>
                 <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
             `;
@@ -103,26 +112,44 @@ document.addEventListener('DOMContentLoaded', function() {
             taskItem.innerHTML = html;
             todoListContainer.appendChild(taskItem);
             
+            // Make the task clickable (except the checkbox)
+            taskItem.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    window.location.href = `task.html?listId=${task.listId}&taskId=${task.id}`;
+                }
+            });
+            
+            // Make the list name clickable
+            const listNameElement = taskItem.querySelector('.task-list-name');
+            listNameElement.addEventListener('click', function(e) {
+                e.stopPropagation();
+                window.location.href = `list.html?id=${task.listId}`;
+            });
+            
             const checkbox = taskItem.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', function() {
                 const appData = getAppData();
-
                 let found = false;
+                
                 appData.lists.forEach(list => {
                     const taskToUpdate = list.tasks.find(t => t.id === task.id);
                     if (taskToUpdate) {
                         taskToUpdate.completed = this.checked;
                         found = true;
+                        
+                        // Update visual classes
+                        if (this.checked) {
+                            taskItem.classList.add('completed');
+                            checkbox.classList.add('completed-priority');
+                        } else {
+                            taskItem.classList.remove('completed');
+                            checkbox.classList.remove('completed-priority');
+                        }
                     }
                 });
                 
                 if (found) {
                     localStorage.setItem('todoAppData', JSON.stringify(appData));
-                    if (this.checked) {
-                        taskItem.classList.add('completed');
-                    } else {
-                        taskItem.classList.remove('completed');
-                    }
                 }
             });
         });
