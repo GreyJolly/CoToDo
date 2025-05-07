@@ -79,11 +79,32 @@ function displayRequests(requests, container) {
 		const friendItem = document.createElement('div');
 		friendItem.className = 'friend-item';
 		friendItem.innerHTML = `
-            <div class="friend-avatar" style="background-color: ${request.avatarColor};">${request.initialLetter}</div>
-            <div class="friend-name">${request.name}</div>
-        `;
+		<div class="friend-avatar" style="background-color: ${request.avatarColor};">${request.initialLetter}</div>
+		<div class="friend-name">${request.name}</div>
+		<button class="cancel-request-btn">Cancel Request</button>
+	`;
+
+		const cancelBtn = friendItem.querySelector('.cancel-request-btn');
+		cancelBtn.addEventListener('click', () => {
+			const updatedRequests = requests.filter(r => r.id !== request.id);
+			localStorage.setItem('pendingRequests', JSON.stringify(updatedRequests));
+			showConfirmation(`Cancelled request to ${request.name}`);
+		});
 		container.appendChild(friendItem);
 	});
+}
+
+function showConfirmation(message) {
+	const friendList = document.querySelector('.friend-list');
+	const confirmation = document.createElement('div');
+	confirmation.className = 'confirmation-msg';
+	confirmation.textContent = message;
+	friendList.appendChild(confirmation);
+
+	setTimeout(() => {
+		confirmation.remove();
+		loadFriends();
+	}, 2000);
 }
 
 // Initialize the page

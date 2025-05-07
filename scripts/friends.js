@@ -147,56 +147,51 @@ function showSearchResults(searchText) {
 }
 
 function addFriendRequest(account) {
-	const pending = JSON.parse(localStorage.getItem('pendingRequests'));
-	pending.push({
-		id: account.id,
-		name: account.name,
-		avatarColor: account.avatarColor,
-		initialLetter: account.initialLetter,
-		timestamp: Date.now()
-	});
-	localStorage.setItem('pendingRequests', JSON.stringify(pending));
+	const accountData = availableAccounts.find(a => a.id === account.id);
 
-	// Show confirmation
-	const friendList = document.querySelector('.friend-list');
-	const confirmation = document.createElement('div');
-	confirmation.className = 'confirmation-msg';
-	confirmation.textContent = `Friend request sent to ${account.name}!`;
-	friendList.appendChild(confirmation);
-
-	// Remove confirmation after 2 seconds
-	setTimeout(() => {
-		confirmation.remove();
-		loadFriends(); // Reload original friends list
-	}, 2000);
-}
-
-// Check for accepted friend requests
-function checkForAcceptedRequests() {
-	const friendRequests = JSON.parse(localStorage.getItem('friendRequests'));
-	const friends = JSON.parse(localStorage.getItem('friends'));
-
-	const newFriendRequests = friendRequests.filter(request => {
-		const account = availableAccounts.find(a => a.id === request.id);
-		if (account && account.isFriendly && Math.random() > 0.7) {
-			friends.push({
+	if (accountData.isFriendly) {
+		// Friendly account - auto-accept
+		const friends = JSON.parse(localStorage.getItem('friends'));
+		friends.push({
+			id: account.id,
+			name: account.name,
+			avatarColor: account.avatarColor,
+			initialLetter: account.initialLetter
+		});
+		localStorage.setItem('friends', JSON.stringify(friends));
+		showConfirmation(`${account.name} accepted your friend request!`);
+	} else {
+		// Non-friendly account - add to pending
+		const pendingRequests = JSON.parse(localStorage.getItem('pendingRequests'));
+		if (!pendingRequests.some(r => r.id === account.id)) {
+			pendingRequests.push({
 				id: account.id,
 				name: account.name,
 				avatarColor: account.avatarColor,
-				initialLetter: account.initialLetter
+				initialLetter: account.initialLetter,
+				timestamp: Date.now()
 			});
-			return false;
+			localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
+			showConfirmation(`Friend request sent to ${account.name}!`);
 		}
-		return true;
-	});
+	}
+}
 
-	localStorage.setItem('friendRequests', JSON.stringify(newFriendRequests));
-	localStorage.setItem('friends', JSON.stringify(friends));
+function showConfirmation(message) {
+	const friendList = document.querySelector('.friend-list');
+	const confirmation = document.createElement('div');
+	confirmation.className = 'confirmation-msg';
+	confirmation.textContent = message;
+	friendList.appendChild(confirmation);
+
+	setTimeout(() => {
+		confirmation.remove();
+		loadFriends();
+	}, 2000);
 }
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
 	loadFriends();
 	setupSearch();
-	checkForAcceptedRequests();
 });
