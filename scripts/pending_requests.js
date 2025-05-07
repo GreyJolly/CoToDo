@@ -1,0 +1,90 @@
+function loadPendingRequests() {
+	const pendingRequests = JSON.parse(localStorage.getItem('pendingRequests'));
+	const friendList = document.querySelector('.friend-list');
+	friendList.innerHTML = '';
+
+	// Setup search
+	setupSearch(pendingRequests, friendList);
+}
+
+function setupSearch(requests, container) {
+	const searchTextElement = document.querySelector('.search-friends-text');
+	const searchButton = document.querySelector('.search-button');
+
+	// Make search text editable and set placeholder behavior
+	searchTextElement.contentEditable = true;
+	searchTextElement.setAttribute('placeholder', 'Search pending requests');
+
+	// Clear placeholder on focus
+	searchTextElement.addEventListener('focus', () => {
+		if (searchTextElement.textContent === 'Search pending requests') {
+			searchTextElement.textContent = '';
+		}
+	});
+
+	// Restore placeholder if empty on blur
+	searchTextElement.addEventListener('blur', () => {
+		if (searchTextElement.textContent === '') {
+			searchTextElement.textContent = 'Search pending requests';
+		}
+	});
+
+	// Display all requests initially
+	displayRequests(requests, container);
+
+	// Handle search button click
+	searchButton.addEventListener('click', () => {
+		const searchText = searchTextElement.textContent.toLowerCase().trim();
+		if (searchText === 'search pending requests' || searchText === '') {
+			displayRequests(requests, container);
+			return;
+		}
+
+		const filtered = requests.filter(request =>
+			request.name.toLowerCase().includes(searchText)
+		);
+		displayRequests(filtered, container);
+	});
+
+	// Handle Enter key press
+	searchTextElement.addEventListener('keypress', (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			const searchText = searchTextElement.textContent.toLowerCase().trim();
+			if (searchText === 'search pending requests' || searchText === '') {
+				displayRequests(requests, container);
+				return;
+			}
+
+			const filtered = requests.filter(request =>
+				request.name.toLowerCase().includes(searchText)
+			);
+			displayRequests(filtered, container);
+		}
+	});
+}
+
+function displayRequests(requests, container) {
+	container.innerHTML = '';
+
+	if (requests.length === 0) {
+		const noResults = document.createElement('div');
+		noResults.className = 'no-results-msg';
+		noResults.textContent = 'No matching requests found';
+		container.appendChild(noResults);
+		return;
+	}
+
+	requests.forEach(request => {
+		const friendItem = document.createElement('div');
+		friendItem.className = 'friend-item';
+		friendItem.innerHTML = `
+            <div class="friend-avatar" style="background-color: ${request.avatarColor};">${request.initialLetter}</div>
+            <div class="friend-name">${request.name}</div>
+        `;
+		container.appendChild(friendItem);
+	});
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', loadPendingRequests);
