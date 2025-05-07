@@ -12,6 +12,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
+	min-width: 75px;
 	padding-top: 15px;
 	padding-bottom: 10px;
 }
@@ -265,6 +266,21 @@ input[type="checkbox"] {
 		to top,
 		rgba(255, 255, 255, 1),
 		rgba(255, 255, 255, 0)
+	);
+	pointer-events: none;
+	z-index: 1000;
+}
+
+.fade-overlay2 {
+	position: fixed; 
+	left: 0;
+	right: 0;
+	top: 74px;
+	height: 60px;
+	background: linear-gradient(
+		to top,
+		rgba(255, 255, 255, 0),
+		rgba(255, 255, 255, 1)
 	);
 	pointer-events: none;
 	z-index: 1000;
