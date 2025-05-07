@@ -11,7 +11,10 @@ const defaultData = {
 		{
 			id: 'list1',
 			title: 'Shopping list',
-			collaborators: ['E'],
+			contributors: [
+				{ id: 1, name: "Alice", avatarColor: "#FF9AA2", initialLetter: "A" },
+				{ id: 5, name: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" }
+			],
 			tasks: [
 				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'June 5 2025', assignee: 'G', priority: 'high' },
 				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
@@ -91,25 +94,48 @@ function renderHomepage() {
 		// Show first few incomplete tasks
 		const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
 		incompleteTasks.forEach(task => {
-			// Determine priority class
 			let priorityClass = '';
 			if (task.priority) {
 				priorityClass = `priority-${task.priority.toLowerCase()}`;
 			}
 
 			html += `
-		  <div class="task-item">
-			<input type="checkbox" id="${task.id}" class="${priorityClass}">
-			<label for="${task.id}">${task.text || "New Task"}</label>
-		  </div>
-		`;
+                <div class="task-item">
+                    <input type="checkbox" id="${task.id}" class="${priorityClass}">
+                    <label for="${task.id}">${task.text || "New Task"}</label>
+                </div>
+            `;
 		});
 
-		// Show collaborators if any
-		if (list.collaborators && list.collaborators.length > 0) {
-			html += `<div class="collaborator">
-		  <div class="collaborator-avatar">${list.collaborators[0]}</div>
-		</div>`;
+		// Show contributors if any (right-aligned with thin black border)
+		if (list.contributors && list.contributors.length > 0) {
+			html += `<div class="contributors-container">`;
+
+			// Show contributors (limit to 4 for better display)
+			const contributorsToShow = list.contributors.slice(0, 4);
+			contributorsToShow.forEach((contributor, index) => {
+				const offset = index * 15; // Adjust this value for more/less overlap
+				html += `
+                    <div class="contributor-avatar" 
+                         style="background-color: ${contributor.avatarColor};
+                                right: ${offset}px">
+                        ${contributor.initialLetter}
+                    </div>
+                `;
+			});
+
+			// Show +count if there are more than 4 contributors
+			if (list.contributors.length > 4) {
+				const offset = 4 * 15;
+				html += `
+                    <div class="contributor-more" 
+                         style="right: ${offset}px">
+                        +${list.contributors.length - 4}
+                    </div>
+                `;
+			}
+
+			html += `</div>`;
 		}
 
 		noteCard.innerHTML = html;
@@ -231,7 +257,6 @@ function renderSearchResults(lists, searchTerm) {
 				priorityClass = `priority-${task.priority.toLowerCase()}`;
 			}
 
-			// Highlight matching text in tasks
 			const taskText = highlightText(task.text, searchTerm);
 
 			html += `
@@ -240,7 +265,6 @@ function renderSearchResults(lists, searchTerm) {
                     <label for="${task.id}">${taskText}</label>
                 </div>
             `;
-
 		});
 
 		// If no matching tasks but list title matches, show first few tasks
@@ -258,22 +282,42 @@ function renderSearchResults(lists, searchTerm) {
                         <label for="${task.id}">${task.text || "New Task"}</label>
                     </div>
                 `;
-
 			});
 		}
 
-		// Show collaborators if any
-		if (list.collaborators && list.collaborators.length > 0) {
-			html += `<div class="collaborator">
-                <div class="collaborator-avatar">${list.collaborators[0]}</div>
-            </div>`;
+		// Show contributors if any (right-aligned with thin black border)
+		if (list.contributors && list.contributors.length > 0) {
+			html += `<div class="contributors-container">`;
+
+			const contributorsToShow = list.contributors.slice(0, 4);
+			contributorsToShow.forEach((contributor, index) => {
+				const offset = index * 15;
+				html += `
+                    <div class="contributor-avatar" 
+                         style="background-color: ${contributor.avatarColor};
+                                right: ${offset}px">
+                        ${contributor.initialLetter}
+                    </div>
+                `;
+			});
+
+			if (list.contributors.length > 4) {
+				const offset = 4 * 15;
+				html += `
+                    <div class="contributor-more" 
+                         style="right: ${offset}px">
+                        +${list.contributors.length - 4}
+                    </div>
+                `;
+			}
+
+			html += `</div>`;
 		}
 
 		noteCard.innerHTML = html;
 		notesContainer.appendChild(noteCard);
 	});
 
-	// Reattach event listeners to the new cards
 	setupHomepageEvents();
 }
 

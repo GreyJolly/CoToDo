@@ -18,32 +18,32 @@ body {
 }
 
 .searchbar {
-    width: 80%;
-    height: 50px;
-    background-color: #f0f0f0;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
-    position: relative; 
+	width: 80%;
+	height: 50px;
+	background-color: #f0f0f0;
+	border-radius: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 15px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-family: Arial, sans-serif;
+	position: relative;
 }
 
 .search-input {
-    flex-grow: 1;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 16px;
-    color: #333;
-    padding: 8px;
-    margin: 0 8px;
+	flex-grow: 1;
+	border: none;
+	background: transparent;
+	outline: none;
+	font-size: 16px;
+	color: #333;
+	padding: 8px;
+	margin: 0 8px;
 }
 
 .searchbar .fa-bars {
-    margin-right: 8px;
+	margin-right: 8px;
 }
 
 .searchbar i {
@@ -140,20 +140,18 @@ body {
 }
 
 .note-card::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 0;
-    right: 0;
-    height: 30px;
-    background: linear-gradient(
-        to bottom, 
-        rgba(255,255,255,0.8) 0%, 
-        rgba(255,255,255,0) 100%
-    );
-    z-index: -1;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+	content: '';
+	position: absolute;
+	bottom: -15px;
+	left: 0;
+	right: 0;
+	height: 30px;
+	background: linear-gradient(to bottom,
+			rgba(255, 255, 255, 0.8) 0%,
+			rgba(255, 255, 255, 0) 100%);
+	z-index: -1;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
 }
 
 .note-card h2 {
@@ -163,25 +161,45 @@ body {
 	font-weight: bold;
 }
 
-.collaborator {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
+/* Contributors styling */
+.contributors-container {
+	position: relative;
+	height: 30px;
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
 }
 
-.collaborator-avatar {
+.contributor-avatar {
 	width: 28px;
 	height: 28px;
 	border-radius: 50%;
-	background-color: #6200ee;
-	color: white;
-	font-size: 12px;
-	font-weight: bold;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	color: white;
+	font-weight: bold;
+	font-size: 12px;
 	border: 1px solid #000000;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 0;
+}
+
+.contributor-more {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f0f0f0;
+	color: #666;
+	font-size: 10px;
+	font-weight: bold;
+	border: 1px solid #000000;
+	position: absolute;
+	top: 0;
 }
 
 .task-item {
@@ -257,16 +275,14 @@ input[type="checkbox"] {
 }
 
 .fade-overlay {
-	position: fixed; 
+	position: fixed;
 	left: 0;
 	right: 0;
-	bottom: 88px; 
+	bottom: 88px;
 	height: 60px;
-	background: linear-gradient(
-		to top,
-		rgba(255, 255, 255, 1),
-		rgba(255, 255, 255, 0)
-	);
+	background: linear-gradient(to top,
+			rgba(255, 255, 255, 1),
+			rgba(255, 255, 255, 0));
 	pointer-events: none;
 	z-index: 1000;
 }
