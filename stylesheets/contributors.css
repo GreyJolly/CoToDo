@@ -1,4 +1,6 @@
-html, body {
+/* contributors.css */
+html,
+body {
     font-family: Arial, sans-serif;
     height: 100%;
     margin: 0;
@@ -15,14 +17,14 @@ html, body {
     position: relative;
     padding-bottom: 10px;
 }
-  
+
 .backto-index i {
     font-size: 30px;
     color: #000000;
     margin-left: 25px;
     cursor: pointer;
 }
-  
+
 .friends-text {
     position: absolute;
     left: 50%;
@@ -42,7 +44,7 @@ html, body {
     flex: 1;
     overflow-y: auto;
 }
-  
+
 .searchbar {
     width: 80%;
     height: 50px;
@@ -53,27 +55,23 @@ html, body {
     align-items: center;
     justify-content: center;
     padding: 0 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    margin-top: 0; 
+    margin-top: 0;
     margin-bottom: 20px;
 }
-  
+
 .searchbar i {
     font-size: 20px;
     margin-right: 10px;
     color: #515CC6;
 }
-  
+
 .searchbar span {
     flex-grow: 1;
     text-align: left;
     color: #888;
     font-size: 16px;
-}
-
-.account {
-    position: right;
 }
 
 .friend-list {
@@ -88,6 +86,14 @@ html, body {
     align-items: center;
     gap: 15px;
     width: 100%;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.friend-item.owner {
+    background-color: #fff9f0;
 }
 
 .friend-avatar {
@@ -101,11 +107,95 @@ html, body {
     align-items: center;
     justify-content: center;
     border: 1px solid #000000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .friend-name {
     font-size: 18px;
     font-weight: 500;
     color: #000;
+    flex: 1;
+}
+
+.contributor-status {
+    color: #888;
+    font-size: 14px;
+}
+
+.contributor-toggle {
+    margin-left: auto;
+}
+
+/* Toggle switch styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Search input styling */
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+    color: #000;
+}
+
+/* Content editable placeholder */
+[contenteditable="true"] {
+    outline: none;
+    min-width: 150px;
+}
+
+[contenteditable="true"]:empty:before {
+    content: attr(placeholder);
+    color: #888;
+}
+
+.no-results-msg {
+    padding: 15px;
+    text-align: center;
+    color: #666;
 }

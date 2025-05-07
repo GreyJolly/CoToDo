@@ -309,3 +309,8 @@ function updateTaskOrder(listId) {
 	list.tasks = newTasks;
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
+
+function getFriends() {
+    const friends = localStorage.getItem('friends');
+    return friends ? JSON.parse(friends) : [];
+}
