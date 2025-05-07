@@ -1,8 +1,17 @@
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
-	return data ? JSON.parse(data) : { lists: [] };
-}
+	const defaultData = { lists: [] };
+	const appData = data ? JSON.parse(data) : defaultData;
 
+	// Ensure each list has a contributors array
+	appData.lists.forEach(list => {
+		if (!list.contributors) {
+			list.contributors = [];
+		}
+	});
+
+	return appData;
+}
 document.addEventListener('DOMContentLoaded', function () {
 	const listId = getCurrentListId();
 	renderListPage(listId);
@@ -43,10 +52,10 @@ function renderListPage(listId) {
 		}
 
 		let html = `
-			<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
-			<span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
-			<div class="task-right-container">
-			`;
+            <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
+            <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
+            <div class="task-right-container">
+        `;
 
 		// Add date if it exists
 		if (task.startDate && task.dueDate) {
@@ -57,10 +66,21 @@ function renderListPage(listId) {
 			html += `<span class="task-date">Start: ${task.dueDate}</span>`;
 		}
 
-		// Add avatar (or placeholder if none exists)
+		// Add avatar for assignee
 		if (task.assignee) {
-			const color = task.assignee === 'G' ? '#ff89d8' : '#FFC107';
-			html += `<div class="task-avatar" style="background-color: ${color};">${task.assignee}</div>`;
+			if (task.assignee === 'me') {
+				// Current user (Me)
+				html += `<div class="task-avatar" style="background-color: #ee7300;">M</div>`;
+			} else {
+				// Find the contributor in the list's contributors
+				const contributor = list.contributors?.find(c => c.id === task.assignee);
+				if (contributor) {
+					html += `<div class="task-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>`;
+				} else {
+					// Fallback for unknown assignees
+					html += `<div class="task-avatar" style="background-color: #cccccc;">?</div>`;
+				}
+			}
 		} else {
 			html += '<div class="task-avatar-placeholder"></div>';
 		}
@@ -75,6 +95,7 @@ function renderListPage(listId) {
 			incompleteContainer.appendChild(taskItem);
 		}
 	});
+
 	setupListPageEvents(listId);
 	setupDragAndDrop(listId);
 }
@@ -156,36 +177,36 @@ function setupListPageEvents(listId) {
 	});
 
 	// Back button
-	document.querySelector('.backto-index')?.addEventListener('click', function(e) {
-    e.preventDefault();
-	document.querySelector('.backto-index')?.addEventListener('click', function(e) {
+	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
 		e.preventDefault();
-		
-		const fromCalendar = localStorage.getItem('lastCalendarView');
+		document.querySelector('.backto-index')?.addEventListener('click', function (e) {
+			e.preventDefault();
+
+			const fromCalendar = localStorage.getItem('lastCalendarView');
+			const lastCalendarDate = localStorage.getItem('lastCalendarDate');
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const fromCalendarParam = urlParams.get('fromCalendar');
+
+			if ((fromCalendar === 'true' || fromCalendarParam === 'true') && lastCalendarDate) {
+				localStorage.removeItem('lastCalendarView');
+				localStorage.removeItem('lastCalendarDate');
+
+				window.location.href = `calendar.html?date=${lastCalendarDate}`;
+			} else {
+				window.location.href = 'index.html';
+			}
+		});
+
+		// Check if we came from the calendar
 		const lastCalendarDate = localStorage.getItem('lastCalendarDate');
-		
-		const urlParams = new URLSearchParams(window.location.search);
-		const fromCalendarParam = urlParams.get('fromCalendar');
-		
-		if ((fromCalendar === 'true' || fromCalendarParam === 'true') && lastCalendarDate) {
-			localStorage.removeItem('lastCalendarView');
+		if (lastCalendarDate) {
 			localStorage.removeItem('lastCalendarDate');
-			
 			window.location.href = `calendar.html?date=${lastCalendarDate}`;
 		} else {
 			window.location.href = 'index.html';
 		}
 	});
-    
-    // Check if we came from the calendar
-    const lastCalendarDate = localStorage.getItem('lastCalendarDate');
-    if (lastCalendarDate) {
-        localStorage.removeItem('lastCalendarDate');
-        window.location.href = `calendar.html?date=${lastCalendarDate}`;
-    } else {
-        window.location.href = 'index.html';
-    }
-});
 }
 
 function newTask() {
@@ -198,7 +219,7 @@ function newTask() {
 	const newTask = {
 		id: newTaskId,
 		text: '',
-		completed: false
+		completed: false,
 	};
 
 	// Add to the list and save
@@ -311,6 +332,6 @@ function updateTaskOrder(listId) {
 }
 
 function getFriends() {
-    const friends = localStorage.getItem('friends');
-    return friends ? JSON.parse(friends) : [];
+	const friends = localStorage.getItem('friends');
+	return friends ? JSON.parse(friends) : [];
 }

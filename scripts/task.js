@@ -42,7 +42,7 @@ function renderTaskPage() {
 	const taskData = loadTaskData();
 	if (!taskData) return;
 
-	const { task } = taskData;
+	const { task, list } = taskData;
 
 	// Set task title
 	const titleInput = document.querySelector('.task-title');
@@ -74,7 +74,6 @@ function renderTaskPage() {
 
 	// Set assignee if exists
 	if (task.assignee) {
-		// TOBEDONE
 	}
 
 	// Setup event listeners
@@ -104,96 +103,96 @@ function setPriorityFlag(priority) {
 }
 
 function setupTaskEvents() {
-    // Save changes when leaving the page
-    window.addEventListener('beforeunload', saveTaskChanges);
+	// Save changes when leaving the page
+	window.addEventListener('beforeunload', saveTaskChanges);
 
-    // Back button
-    document.querySelector('.backto-list')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        saveTaskChanges();
-        
-        // Check if we came from the calendar
-        const lastCalendarDate = localStorage.getItem('lastCalendarDate');
-        if (lastCalendarDate) {
-            // Remove the stored date so it doesn't affect future navigation
-            localStorage.removeItem('lastCalendarDate');
-            // Go back to calendar with the stored date
-            window.location.href = `calendar.html?date=${lastCalendarDate}`;
-        } else {
-            // Default behavior - go back to list
-            window.location.href = `list.html?id=${getCurrentListId()}`;
-        }
-    });
+	// Back button
+	document.querySelector('.backto-list')?.addEventListener('click', function (e) {
+		e.preventDefault();
+		saveTaskChanges();
 
-    // Priority popup
-    document.getElementById('flag-icon')?.addEventListener('click', openPriorityPopup);
+		// Check if we came from the calendar
+		const lastCalendarDate = localStorage.getItem('lastCalendarDate');
+		if (lastCalendarDate) {
+			// Remove the stored date so it doesn't affect future navigation
+			localStorage.removeItem('lastCalendarDate');
+			// Go back to calendar with the stored date
+			window.location.href = `calendar.html?date=${lastCalendarDate}`;
+		} else {
+			// Default behavior - go back to list
+			window.location.href = `list.html?id=${getCurrentListId()}`;
+		}
+	});
 
-    // Checkbox change
-    document.getElementById('task-complete')?.addEventListener('change', function() {
-        saveTaskChanges();
-    });
+	// Priority popup
+	document.getElementById('flag-icon')?.addEventListener('click', openPriorityPopup);
 
-    // Title and description changes
-    document.querySelector('.task-title')?.addEventListener('input', debounce(saveTaskChanges, 300));
-    document.querySelector('.task-description')?.addEventListener('input', debounce(saveTaskChanges, 300));
+	// Checkbox change
+	document.getElementById('task-complete')?.addEventListener('change', function () {
+		saveTaskChanges();
+	});
 
-    // Priority options
-    document.querySelectorAll('.priority-option').forEach(option => {
-        option.addEventListener('click', function() {
-            selectPriority(this.getAttribute('data-priority'));
-        });
-    });
+	// Title and description changes
+	document.querySelector('.task-title')?.addEventListener('input', debounce(saveTaskChanges, 300));
+	document.querySelector('.task-description')?.addEventListener('input', debounce(saveTaskChanges, 300));
 
-    // Calendar date selection
-    document.querySelector('.task-dates')?.addEventListener('click', function(e) {
-        // Only open calendar if not clicking on a specific date element
-        if (!e.target.classList.contains('task-start-date') && 
-            !e.target.classList.contains('task-due-date')) {
-            openCalendar();
-        }
-    });
+	// Priority options
+	document.querySelectorAll('.priority-option').forEach(option => {
+		option.addEventListener('click', function () {
+			selectPriority(this.getAttribute('data-priority'));
+		});
+	});
 
-    // Close popups when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
-            closePriorityPopup();
-        }
-        if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
+	// Calendar date selection
+	document.querySelector('.task-dates')?.addEventListener('click', function (e) {
+		// Only open calendar if not clicking on a specific date element
+		if (!e.target.classList.contains('task-start-date') &&
+			!e.target.classList.contains('task-due-date')) {
+			openCalendar();
+		}
+	});
+
+	// Close popups when clicking outside
+	document.addEventListener('click', function (e) {
+		if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
+			closePriorityPopup();
+		}
+		if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
 			closeCalendar();
-        }
-        if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
-            const hint = document.getElementById("enterHintContainer");
-            if (hint) {
-                hint.classList.remove("visible");
-                hint.hidden = true;
-            }
-        }
-        if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
-            const assign = document.getElementById("assignMembersPopup");
-            if (assign) {
-                assign.classList.remove("visible");
-                assign.hidden = true;
-            }
-        }
-    });
+		}
+		if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
+			const hint = document.getElementById("enterHintContainer");
+			if (hint) {
+				hint.classList.remove("visible");
+				hint.hidden = true;
+			}
+		}
+		if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
+			const assign = document.getElementById("assignMembersPopup");
+			if (assign) {
+				assign.classList.remove("visible");
+				assign.hidden = true;
+			}
+		}
+	});
 
-    // Handle Escape key to close popups
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closePriorityPopup();
-            closeCalendar();
-            const hint = document.getElementById("enterHintContainer");
-            if (hint) {
-                hint.classList.remove("visible");
-                hint.hidden = true;
-            }
-            const assign = document.getElementById("assignMembersPopup");
-            if (assign) {
-                assign.classList.remove("visible");
-                assign.hidden = true;
-            }
-        }
-    });
+	// Handle Escape key to close popups
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape') {
+			closePriorityPopup();
+			closeCalendar();
+			const hint = document.getElementById("enterHintContainer");
+			if (hint) {
+				hint.classList.remove("visible");
+				hint.hidden = true;
+			}
+			const assign = document.getElementById("assignMembersPopup");
+			if (assign) {
+				assign.classList.remove("visible");
+				assign.hidden = true;
+			}
+		}
+	});
 }
 function saveTaskChanges() {
 	const taskData = loadTaskData();
@@ -232,10 +231,61 @@ function openSublist() {
 }
 
 function openAssignMembers() {
-	const assign = document.getElementById("assignMembersPopup");
-	assign.classList.toggle("visible");
-	assign.hidden = !assign.hidden;
-	closeOtherPopups(assign);
+	const assignPopup = document.getElementById("assignMembersPopup");
+	if (!assignPopup) return;
+
+	// Clear existing options
+	assignPopup.innerHTML = '<div class="assign-to-header">Assign to:</div>';
+
+	const taskData = loadTaskData();
+	if (!taskData) return;
+
+	const { list, task } = taskData;
+
+	// Add "None" option
+	const noneOption = document.createElement('div');
+	noneOption.className = 'member-option';
+	noneOption.onclick = () => selectMember('none');
+	noneOption.innerHTML = `
+        <div class="member-avatar" style="background-color: #a29bfe;">
+            <i class="fa-solid fa-ban"></i>
+        </div>
+        <span class="member-name">None</span>
+        ${!task.assignee ? '<i class="fa-solid fa-check"></i>' : ''}
+    `;
+	assignPopup.appendChild(noneOption);
+
+	// Add "Me" (current user) option
+	const meOption = document.createElement('div');
+	meOption.className = 'member-option';
+	meOption.onclick = () => selectMember('me');
+	meOption.innerHTML = `
+        <div class="member-avatar" style="background-color: #ee7300;">M</div>
+        <span class="member-name">Me</span>
+        ${task.assignee === 'me' ? '<i class="fa-solid fa-check"></i>' : ''}
+    `;
+	assignPopup.appendChild(meOption);
+
+	// Add contributors from the list
+	if (list.contributors && list.contributors.length > 0) {
+		list.contributors.forEach(contributor => {
+			const memberOption = document.createElement('div');
+			memberOption.className = 'member-option';
+			memberOption.onclick = () => selectMember(contributor.id);
+			memberOption.innerHTML = `
+                <div class="member-avatar" style="background-color: ${contributor.avatarColor}">
+                    ${contributor.initialLetter}
+                </div>
+                <span class="member-name">${contributor.name}</span>
+                ${task.assignee === contributor.id ? '<i class="fa-solid fa-check"></i>' : ''}
+            `;
+			assignPopup.appendChild(memberOption);
+		});
+	}
+
+	assignPopup.classList.toggle("visible");
+	assignPopup.hidden = !assignPopup.hidden;
+	closeOtherPopups(assignPopup);
 }
 
 function openCalendar() {
@@ -285,7 +335,7 @@ function getDateSelectionMode() {
 }
 
 function generateCalendar() {
-	
+
 	const calendarDays = document.querySelector('.calendar-days');
 	if (!calendarDays) return;
 
@@ -552,14 +602,35 @@ function selectPriority(priority) {
 	closePriorityPopup();
 }
 
-function selectMember(member) {
+function selectMember(memberId) {
 	const taskData = loadTaskData();
 	if (!taskData) return;
 
-	const { appData, task } = taskData;
-	task.assignee = member === 'none' ? null : member;
+	const { appData, task, list } = taskData;
+
+	if (memberId === 'none') {
+		task.assignee = null;
+	} else if (memberId === 'me') {
+		task.assignee = 'me';
+	} else {
+		// Verify the member is actually a contributor
+		const isContributor = list.contributors?.some(c => c.id === memberId);
+		if (isContributor) {
+			task.assignee = memberId;
+		}
+	}
+
+	// Save changes
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
-	// TOBEDONE: Handle assignee
+
+	// Close the popup
+	const assignPopup = document.getElementById("assignMembersPopup");
+	if (assignPopup) {
+		assignPopup.classList.remove("visible");
+		assignPopup.hidden = true;
+	}
+
+	// TOBEDONE: update visual
 }
 
 function debounce(func, wait) {
