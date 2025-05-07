@@ -11,7 +11,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    padding-top: 15px;
     position: relative;
     padding-bottom: 10px;
 }
@@ -29,7 +29,7 @@ html, body {
     transform: translateX(-50%);
     text-align: center;
     color: #000000;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 .main-content {
@@ -116,6 +116,16 @@ html, body {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
+}
+
+.cancel-request-btn {
+    margin-left: auto;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .add-friend-btn {

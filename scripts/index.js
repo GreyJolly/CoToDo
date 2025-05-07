@@ -91,53 +91,86 @@ function renderHomepage() {
 
 		let html = `<h2>${list.title || 'New List'}</h2>`;
 
-		// Show first few incomplete tasks
-		const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
-		incompleteTasks.forEach(task => {
-			let priorityClass = '';
-			if (task.priority) {
-				priorityClass = `priority-${task.priority.toLowerCase()}`;
-			}
+		// Get all incomplete tasks
+        const incompleteTasks = list.tasks.filter(task => !task.completed);
+        const hasManyTasks = incompleteTasks.length > 3;
+        const hasCollaborators = list.contributors && list.contributors.length > 0;
 
-			html += `
+        // Show first 3 tasks normally
+        const tasksToShow = incompleteTasks.slice(0, 3);
+        tasksToShow.forEach(task => {
+            let priorityClass = '';
+            if (task.priority) {
+                priorityClass = `priority-${task.priority.toLowerCase()}`;
+            }
+
+            html += `
                 <div class="task-item">
                     <input type="checkbox" id="${task.id}" class="${priorityClass}">
                     <label for="${task.id}">${task.text || "New Task"}</label>
                 </div>
             `;
-		});
+        });
 
-		// Show contributors if any (right-aligned with thin black border)
-		if (list.contributors && list.contributors.length > 0) {
-			html += `<div class="contributors-container">`;
+		// Show 4th task if exists (with normal spacing)
+        if (hasManyTasks) {
+            const fourthTask = incompleteTasks[3];
+            let priorityClass = '';
+            if (fourthTask.priority) {
+                priorityClass = `priority-${fourthTask.priority.toLowerCase()}`;
+            }
 
-			// Show contributors (limit to 4 for better display)
-			const contributorsToShow = list.contributors.slice(0, 4);
-			contributorsToShow.forEach((contributor, index) => {
-				const offset = index * 15; // Adjust this value for more/less overlap
-				html += `
+        }
+
+        // Container for bottom elements (will contain 4th task + more + contributors)
+        html += `<div class="bottom-elements-container">`;
+        
+        // Left side container (4th task + more indicator)
+        html += `<div class="bottom-left-container">`;
+
+        // More tasks indicator (now inside bottom container)
+        if (incompleteTasks.length > 3) {
+            const remainingCount = incompleteTasks.length - 3;
+            html += `
+                <div class="more-tasks-indicator">
+                    +${remainingCount} more...
+                </div>
+            `;
+        }
+
+        html += `</div>`;
+
+        // Contributors container (right side)
+        if (hasCollaborators) {
+            html += `<div class="contributors-container">`;
+
+            const contributorsToShow = list.contributors.slice(0, 4);
+            contributorsToShow.forEach((contributor, index) => {
+                const offset = index * 15;
+                html += `
                     <div class="contributor-avatar" 
                          style="background-color: ${contributor.avatarColor};
                                 right: ${offset}px">
                         ${contributor.initialLetter}
                     </div>
                 `;
-			});
+            });
 
-			// Show +count if there are more than 4 contributors
-			if (list.contributors.length > 4) {
-				const offset = 4 * 15;
-				html += `
+
+            if (list.contributors.length > 4) {
+                const offset = 4 * 15;
+                html += `
                     <div class="contributor-more" 
                          style="right: ${offset}px">
                         +${list.contributors.length - 4}
                     </div>
                 `;
-			}
+            }
 
-			html += `</div>`;
-		}
-
+            html += `</div>`;
+        }
+		html += `</div>`;
+		
 		noteCard.innerHTML = html;
 		notesContainer.appendChild(noteCard);
 	});

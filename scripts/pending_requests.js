@@ -77,7 +77,7 @@ function displayRequests(requests, container) {
 		friendItem.innerHTML = `
 		<div class="friend-avatar" style="background-color: ${request.avatarColor};">${request.initialLetter}</div>
 		<div class="friend-name">${request.name}</div>
-		<button class="cancel-request-btn">Cancel Request</button>
+		<button class="cancel-request-btn">Cancel Request <i class="fa-regular fa-rectangle-xmark" style="margin-left: 4px;"></i></button>
 	`;
 
 		const cancelBtn = friendItem.querySelector('.cancel-request-btn');

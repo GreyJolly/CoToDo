@@ -40,7 +40,7 @@ body {
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    width: 100%;
+    width: 90%;
     flex: 1;
     overflow-y: auto;
 }
