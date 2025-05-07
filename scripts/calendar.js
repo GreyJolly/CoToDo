@@ -106,78 +106,85 @@ document.addEventListener('DOMContentLoaded', function() {
         
         return tasks;
     }
+
+function renderTasksForDate(tasks) {
+    todoListContainer.innerHTML = '';
     
-    function renderTasksForDate(tasks) {
-        todoListContainer.innerHTML = '';
-        
-        if (tasks.length === 0) {
-            todoListContainer.innerHTML = '<div class="no-tasks">No tasks for this date</div>';
-            return;
+    if (tasks.length === 0) {
+        todoListContainer.innerHTML = '<div class="no-tasks">No tasks for this date</div>';
+        return;
+    }
+    
+    tasks.forEach(task => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        if (task.completed) {
+            taskItem.classList.add('completed');
         }
         
-        tasks.forEach(task => {
-            const taskItem = document.createElement('div');
-            taskItem.className = 'task-item';
-            if (task.completed) {
-                taskItem.classList.add('completed');
+        let priorityClass = '';
+        if (task.priority) {
+            priorityClass = `priority-${task.priority.toLowerCase()}`;
+        }
+        
+        let html = `
+            <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} 
+                   class="${priorityClass}${task.completed ? ' completed-priority' : ''}">
+            <span class="task-label">${task.text || 'New Task'}</span>
+            <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
+        `;
+        
+        taskItem.innerHTML = html;
+        todoListContainer.appendChild(taskItem);
+        
+        // Task item click handler (for the entire task except checkbox)
+        taskItem.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT' && !e.target.classList.contains('task-list-name')) {
+                // Store calendar context
+                localStorage.setItem('lastCalendarView', 'true');
+                localStorage.setItem('lastCalendarDate', currentDate.toISOString());
+                window.location.href = `task.html?listId=${task.listId}&taskId=${task.id}`;
             }
-            
-            let priorityClass = '';
-            if (task.priority) {
-                priorityClass = `priority-${task.priority.toLowerCase()}`;
-            }
-            
-            let html = `
-                <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} 
-                       class="${priorityClass}${task.completed ? ' completed-priority' : ''}">
-                <span class="task-label">${task.text || 'New Task'}</span>
-                <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
-            `;
-            
-            taskItem.innerHTML = html;
-            todoListContainer.appendChild(taskItem);
-            
-            taskItem.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT') {
-                    // Store the current calendar date before navigating
-                    localStorage.setItem('lastCalendarDate', currentDate.toISOString());
-                    window.location.href = `task.html?listId=${task.listId}&taskId=${task.id}`;
-                }
-            });
-            
-            const listNameElement = taskItem.querySelector('.task-list-name');
-            listNameElement.addEventListener('click', function(e) {
-                e.stopPropagation();
-                window.location.href = `list.html?id=${task.listId}`;
-            });
-            
-            const checkbox = taskItem.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', function() {
-                const appData = getAppData();
-                let found = false;
-                
-                appData.lists.forEach(list => {
-                    const taskToUpdate = list.tasks.find(t => t.id === task.id);
-                    if (taskToUpdate) {
-                        taskToUpdate.completed = this.checked;
-                        found = true;
-                        
-                        if (this.checked) {
-                            taskItem.classList.add('completed');
-                            checkbox.classList.add('completed-priority');
-                        } else {
-                            taskItem.classList.remove('completed');
-                            checkbox.classList.remove('completed-priority');
-                        }
-                    }
-                });
-                
-                if (found) {
-                    localStorage.setItem('todoAppData', JSON.stringify(appData));
-                }
-            });
         });
-    }
+        
+        // List name click handler (specific to the list name element)
+        const listNameElement = taskItem.querySelector('.task-list-name');
+        listNameElement.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Store calendar context
+            localStorage.setItem('lastCalendarView', 'true');
+            localStorage.setItem('lastCalendarDate', currentDate.toISOString());
+            window.location.href = `list.html?id=${task.listId}`;
+        });
+        
+        // Checkbox change handler
+        const checkbox = taskItem.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function() {
+            const appData = getAppData();
+            let found = false;
+            
+            appData.lists.forEach(list => {
+                const taskToUpdate = list.tasks.find(t => t.id === task.id);
+                if (taskToUpdate) {
+                    taskToUpdate.completed = this.checked;
+                    found = true;
+                    
+                    if (this.checked) {
+                        taskItem.classList.add('completed');
+                        checkbox.classList.add('completed-priority');
+                    } else {
+                        taskItem.classList.remove('completed');
+                        checkbox.classList.remove('completed-priority');
+                    }
+                }
+            });
+            
+            if (found) {
+                localStorage.setItem('todoAppData', JSON.stringify(appData));
+            }
+        });
+    });
+}
     
     function isToday(date) {
         return date.toDateString() === today.toDateString();

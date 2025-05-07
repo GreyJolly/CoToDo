@@ -151,10 +151,36 @@ function setupListPageEvents(listId) {
 	});
 
 	// Back button
-	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
+	document.querySelector('.backto-index')?.addEventListener('click', function(e) {
+    e.preventDefault();
+	document.querySelector('.backto-index')?.addEventListener('click', function(e) {
 		e.preventDefault();
-		window.location.href = 'index.html';
+		
+		const fromCalendar = localStorage.getItem('lastCalendarView');
+		const lastCalendarDate = localStorage.getItem('lastCalendarDate');
+		
+		const urlParams = new URLSearchParams(window.location.search);
+		const fromCalendarParam = urlParams.get('fromCalendar');
+		
+		if ((fromCalendar === 'true' || fromCalendarParam === 'true') && lastCalendarDate) {
+			localStorage.removeItem('lastCalendarView');
+			localStorage.removeItem('lastCalendarDate');
+			
+			window.location.href = `calendar.html?date=${lastCalendarDate}`;
+		} else {
+			window.location.href = 'index.html';
+		}
 	});
+    
+    // Check if we came from the calendar
+    const lastCalendarDate = localStorage.getItem('lastCalendarDate');
+    if (lastCalendarDate) {
+        localStorage.removeItem('lastCalendarDate');
+        window.location.href = `calendar.html?date=${lastCalendarDate}`;
+    } else {
+        window.location.href = 'index.html';
+    }
+});
 }
 
 function newTask() {
