@@ -43,24 +43,29 @@ function renderListPage(listId) {
 		}
 
 		let html = `
-        <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
-        <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
-        `;
+			<input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
+			<span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
+			<div class="task-right-container">
+			`;
 
+		// Add date if it exists
 		if (task.startDate && task.dueDate) {
 			html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-		} else {
-			if (task.startDate) {
-				html += `<span class="task-date">Due: ${task.startDate}</span>`;
-			} else if (task.dueDate) {
-				html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-			}
+		} else if (task.startDate) {
+			html += `<span class="task-date">Due: ${task.startDate}</span>`;
+		} else if (task.dueDate) {
+			html += `<span class="task-date">Start: ${task.dueDate}</span>`;
 		}
 
+		// Add avatar (or placeholder if none exists)
 		if (task.assignee) {
 			const color = task.assignee === 'G' ? '#ff89d8' : '#FFC107';
 			html += `<div class="task-avatar" style="background-color: ${color};">${task.assignee}</div>`;
+		} else {
+			html += '<div class="task-avatar-placeholder"></div>';
 		}
+
+		html += `</div>`; // Close task-right-container
 
 		taskItem.innerHTML = html;
 

@@ -63,13 +63,26 @@ body {
 	min-height: 20px;
 }
 
+.task-right-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto; /* Pushes container to the right */
+}
+
+.task-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    visibility: hidden; /* Invisible but maintains space */
+}
+
 .task-item {
 	display: flex;
 	align-items: center;
 	margin-bottom: 8px;
-	cursor: grab;
-    user-select: none;
-    transition: transform 0.2s ease;
+	gap: 8px;
+    width: 100%;
+    padding-right: 5px;
 }
 
 .task-item.dragging {
@@ -142,14 +155,14 @@ input[type="checkbox"]:checked::after {
 .task-date {
 	font-size: 12px;
 	color: #888;
-	position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+	white-space: nowrap;
+    text-align: right;
 }
 
 .task-avatar {
 	width: 28px;
 	height: 28px;
+	min-width: 28px;
 	border-radius: 50%;
 	color: white;
 	font-size: 12px;
@@ -159,7 +172,6 @@ input[type="checkbox"]:checked::after {
 	justify-content: center;
 	border: 1px solid #000000;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	margin-left: auto;
 }
 
 .footer {
