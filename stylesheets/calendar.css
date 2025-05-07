@@ -75,18 +75,21 @@ html, body {
 }
 
 .today-btn {
-    background-color: #4a6fa5;
-    color: white;
+    background-color: #4051d3;
     border: none;
-    border-radius: 4px;
-    padding: 8px 20px;
+    border-radius: 12px;
+    color: white;
+    padding: 12px 20px;
+    height: auto;
+    font-size: 16px;
     cursor: pointer;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.today-btn:hover {
-    background-color: #3a5a8f;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin: 0;
 }
 
 .todo-list {
