@@ -107,7 +107,7 @@ function setupTaskEvents() {
     // Save changes when leaving the page
     window.addEventListener('beforeunload', saveTaskChanges);
 
-    // Back button - modified to handle calendar back navigation
+    // Back button
     document.querySelector('.backto-list')?.addEventListener('click', function(e) {
         e.preventDefault();
         saveTaskChanges();
@@ -158,8 +158,8 @@ function setupTaskEvents() {
         if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
             closePriorityPopup();
         }
-        if (!e.target.closest('.calendar-popup') && !e.target.closest('.task-dates')) {
-            closeCalendar();
+        if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
+			closeCalendar();
         }
         if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
             const hint = document.getElementById("enterHintContainer");
