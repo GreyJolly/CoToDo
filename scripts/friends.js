@@ -38,13 +38,21 @@ function loadFriends() {
 	const friendList = document.querySelector('.friend-list');
 	friendList.innerHTML = '';
 
+	if (friends.length === 0) {
+		const emptyMsg = document.createElement('div');
+		emptyMsg.className = 'no-results-msg';
+		emptyMsg.textContent = 'No friends yet. Search for friends to add!';
+		friendList.appendChild(emptyMsg);
+		return;
+	}
+
 	friends.forEach(friend => {
 		const friendItem = document.createElement('div');
 		friendItem.className = 'friend-item';
 		friendItem.innerHTML = `
-            <div class="friend-avatar" style="background-color: ${friend.avatarColor};">${friend.initialLetter}</div>
-            <div class="friend-name">${friend.name}</div>
-        `;
+			<div class="friend-avatar" style="background-color: ${friend.avatarColor};">${friend.initialLetter}</div>
+			<div class="friend-name">${friend.name}</div>
+		`;
 		friendList.appendChild(friendItem);
 	});
 }
@@ -72,23 +80,22 @@ function setupSearch() {
 		}
 	});
 
-	// Handle search button click
-	searchButton.addEventListener('click', () => {
+	// Handle input events for dynamic search
+	searchTextElement.addEventListener('input', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
-		if (searchText === 'search new friends' || searchText === '') return;
+		if (searchText === 'search new friends' || searchText === '') {
+			loadFriends(); // Show all friends when search is empty
+			return;
+		}
 
 		showSearchResults(searchText);
 	});
 
-	// Handle Enter key press
-	searchTextElement.addEventListener('keypress', (e) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			const searchText = searchTextElement.textContent.toLowerCase().trim();
-			if (searchText === 'search new friends' || searchText === '') return;
-
-			showSearchResults(searchText);
-		}
+	// Keep the search button click handler as fallback
+	searchButton.addEventListener('click', () => {
+		const searchText = searchTextElement.textContent.toLowerCase().trim();
+		if (searchText === 'search new friends' || searchText === '') return;
+		showSearchResults(searchText);
 	});
 }
 

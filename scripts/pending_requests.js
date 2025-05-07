@@ -46,21 +46,17 @@ function setupSearch(requests, container) {
 		displayRequests(filtered, container);
 	});
 
-	// Handle Enter key press
-	searchTextElement.addEventListener('keypress', (e) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			const searchText = searchTextElement.textContent.toLowerCase().trim();
-			if (searchText === 'search pending requests' || searchText === '') {
-				displayRequests(requests, container);
-				return;
-			}
-
-			const filtered = requests.filter(request =>
-				request.name.toLowerCase().includes(searchText)
-			);
-			displayRequests(filtered, container);
+	// Handle input events for dynamic search
+	searchTextElement.addEventListener('input', () => {
+		const searchText = searchTextElement.textContent.toLowerCase().trim();
+		if (searchText === 'search pending requests' || searchText === '') {
+			displayRequests(requests, container); // Show all when empty
+			return;
 		}
+		const filtered = requests.filter(request =>
+			request.name.toLowerCase().includes(searchText)
+		);
+		displayRequests(filtered, container);
 	});
 }
 
