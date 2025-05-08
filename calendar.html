@@ -1,37 +1,55 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <link rel="icon" href="./images/icon-512.png" type="image/png">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="./stylesheets/calendar.css">
-    <link rel="stylesheet" href="./stylesheets/buttons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>CoToDo</title>
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<link rel="icon" href="./images/icon-512.png" type="image/png">
+	<link rel="manifest" href="./manifest.json">
+	<link rel="stylesheet" href="./stylesheets/calendar.css">
+	<link rel="stylesheet" href="./stylesheets/buttons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<title>CoToDo</title>
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="theme-color" content="#000000">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 </head>
+
 <body>
-    <div class="wrapper">
-        <div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></div>
-        <span class="calendar-text">Calendar</span>
-    </div>
+	<div class="wrapper">
+		<div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i>
+		</div>
+		<span class="calendar-text">Calendar</span>
+	</div>
 
-    <div class="main-content">
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <i class="fa-solid fa-angle-left"></i>
-                <span class="month">1 June 2025</span>
-                <i class="fa-solid fa-angle-right"></i>
-            </div>
-            <div class="tasks-container">
-                <div class="todo-list"></div>
-            </div>
-        </div>
-    </div>
+	<div class="main-content">
+		<div class="calendar-container">
+			<div class="calendar-header">
+				<i class="fa-solid fa-angle-left"></i>
+				<span class="month">1 June 2025</span>
+				<i class="fa-solid fa-angle-right"></i>
+			</div>
+			<div class="tasks-container">
+				<div class="todo-list"></div>
+			</div>
+		</div>
+		<div class="calendar-popup" id="calendarPopup" hidden>
+			<div class="calendar-header">
+				<div class="calendar-nav">
+					<button class="calendar-prev" onclick="navigateCalendar(-1)"><i
+							class="fa-solid fa-chevron-left"></i></button>
+					<span class="calendar-month-year">May 2025</span>
+					<button class="calendar-next" onclick="navigateCalendar(1)"><i
+							class="fa-solid fa-chevron-right"></i></button>
+				</div>
+				<div class="calendar-divider"></div>
+			</div>
+			<div class="calendar-days"></div>
+			<div class="calendar-bottom-bar"></div>
+		</div>
+	</div>
 
-    <script src="./scripts/calendar.js"></script>
+	<script src="./scripts/calendar.js"></script>
 </body>
+
 </html>

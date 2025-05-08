@@ -1,275 +1,392 @@
-html, body {
-    font-family: Arial, sans-serif;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff;
+html,
+body {
+	font-family: Arial, sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
 }
 
 .wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    position: relative;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px 0;
+	position: relative;
+	background-color: white;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-  
+
 .backto-index i {
-    font-size: 24px;
-    color: #000000;
-    margin-left: 20px;
-    cursor: pointer;
+	font-size: 24px;
+	color: #000000;
+	margin-left: 20px;
+	cursor: pointer;
 }
-  
+
 .calendar-text {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: #000000;
-    font-size: 20px;
-    font-weight: 600;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+	color: #000000;
+	font-size: 20px;
+	font-weight: 600;
 }
 
 .main-content {
-    flex: 1;
-    padding: 15px;
+	flex: 1;
+	padding: 15px;
 }
 
 .calendar-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 15px;
-    background-color: white;
-    margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 15px;
+	background-color: white;
+	margin-bottom: 15px;
 }
 
 .calendar-nav {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 300px;
-    justify-content: space-between;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	max-width: 300px;
+	justify-content: space-between;
 }
 
 .calendar-nav i {
-    cursor: pointer;
-    font-size: 20px;
-    color: #000000;
-    padding: 8px 15px;
-    flex-shrink: 0;
+	cursor: pointer;
+	font-size: 20px;
+	color: #000000;
+	padding: 8px 15px;
+	flex-shrink: 0;
 }
 
 .calendar-nav .month {
-    font-weight: 600;
-    font-size: 18px;
-    margin: 0 20px;
-    text-align: center;
-    flex-grow: 1;
+	font-weight: 600;
+	font-size: 18px;
+	margin: 0 20px;
+	text-align: center;
+	flex-grow: 1;
 }
 
 .today-btn {
-    background-color: #4051d3;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    padding: 12px 20px;
-    height: auto;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    margin: 0;
+	background-color: #4051d3;
+	border: none;
+	border-radius: 12px;
+	color: white;
+	padding: 12px 20px;
+	height: auto;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	margin: 0;
 }
 
 .todo-list {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .task-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    margin-bottom: 10px;
-    background-color: white;
-    border-radius: 10px;
-    transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	padding: 12px 15px;
+	margin-bottom: 10px;
+	background-color: white;
+	border-radius: 10px;
+	transition: all 0.2s ease;
 }
 
 .task-item:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .task-item:hover {
-    transform: translateY(-1px);
+	transform: translateY(-1px);
 }
 
 .task-item input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-    margin-right: 12px;
-    position: relative;
-    transition: all 0.2s ease;
+	appearance: none;
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	outline: none;
+	cursor: pointer;
+	margin-right: 12px;
+	position: relative;
+	transition: all 0.2s ease;
 }
 
 .task-item input[type="checkbox"]:checked {
-    background-color: #4a6fa5;
-    border-color: #4a6fa5;
+	background-color: #4a6fa5;
+	border-color: #4a6fa5;
 }
 
 .task-item input[type="checkbox"]:checked::after {
-    content: "✓";
-    position: absolute;
-    color: white;
-    font-size: 12px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	content: "✓";
+	position: absolute;
+	color: white;
+	font-size: 12px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .task-item.completed {
-    opacity: 0.7;
+	opacity: 0.7;
 }
 
 .task-item.completed .task-label {
-    text-decoration: line-through;
-    color: #888;
+	text-decoration: line-through;
+	color: #888;
 }
 
 .task-label {
-    flex-grow: 1;
-    margin: 0 10px;
-    font-size: 16px;
-    color: #333;
+	flex-grow: 1;
+	margin: 0 10px;
+	font-size: 16px;
+	color: #333;
 }
 
 .task-list-name {
-    cursor: pointer;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    margin-left: 8px;
-    color: white;
+	cursor: pointer;
+	padding: 2px 8px;
+	border-radius: 12px;
+	font-size: 12px;
+	margin-left: 8px;
+	color: white;
 }
 
 .task-item input[type="checkbox"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #ccc;
-    border-radius: 3px;
-    outline: none;
-    cursor: pointer;
-    position: relative;
-    margin-right: 10px;
-    transition: all 0.2s;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border: 2px solid #ccc;
+	border-radius: 3px;
+	outline: none;
+	cursor: pointer;
+	position: relative;
+	margin-right: 10px;
+	transition: all 0.2s;
 }
 
 .task-item input[type="checkbox"]:checked {
-    background-color: #f0f0f0;
-    border-color: #aaa;
+	background-color: #f0f0f0;
+	border-color: #aaa;
 }
 
 .task-item input[type="checkbox"].priority-high {
-    border-color: #ff4444 !important;
+	border-color: #ff4444 !important;
 }
 
 .task-item input[type="checkbox"].priority-medium {
-    border-color: #ffbb33 !important;
+	border-color: #ffbb33 !important;
 }
 
 .task-item input[type="checkbox"].priority-low {
-    border-color: #00C851 !important;
+	border-color: #00C851 !important;
 }
 
 .task-item input[type="checkbox"]:checked::before {
-    content: "✓";
-    position: absolute;
-    font-size: 14px;
-    color: #555;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	content: "✓";
+	position: absolute;
+	font-size: 14px;
+	color: #555;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .task-item input[type="checkbox"].priority-high.completed-priority {
-    border-color: #ff9999 !important;
+	border-color: #ff9999 !important;
 }
 
 .task-item input[type="checkbox"].priority-medium.completed-priority {
-    border-color: #ffd699 !important;
+	border-color: #ffd699 !important;
 }
 
 .task-item input[type="checkbox"].priority-low.completed-priority {
-    border-color: #80e080 !important;
+	border-color: #80e080 !important;
 }
 
 .no-tasks {
-    text-align: center;
-    padding: 30px 20px;
-    color: #888;
-    font-style: italic;
-    background-color: white;
-    border-radius: 10px;
+	text-align: center;
+	padding: 30px 20px;
+	color: #888;
+	font-style: italic;
+	background-color: white;
+	border-radius: 10px;
 }
 
 @media (max-width: 480px) {
-    .wrapper {
-        padding: 12px 0;
-    }
-    
-    .backto-index i {
-        font-size: 20px;
-        margin-left: 15px;
-    }
-    
-    .calendar-text {
-        font-size: 18px;
-    }
-    
-    .calendar-header {
-        padding: 12px;
-    }
-    
-    .calendar-nav i {
-        font-size: 18px;
-        padding: 6px 12px;
-    }
-    
-    .calendar-nav .month {
-        font-size: 16px;
-        margin: 0 15px;
-    }
-    
-    .task-item {
-        padding: 10px 12px;
-    }
-    
-    .task-label {
-        font-size: 15px;
-    }
-    
-    .today-btn {
-        padding: 6px 15px;
-        font-size: 13px;
-    }
+	.wrapper {
+		padding: 12px 0;
+	}
+
+	.backto-index i {
+		font-size: 20px;
+		margin-left: 15px;
+	}
+
+	.calendar-text {
+		font-size: 18px;
+	}
+
+	.calendar-header {
+		padding: 12px;
+	}
+
+	.calendar-nav i {
+		font-size: 18px;
+		padding: 6px 12px;
+	}
+
+	.calendar-nav .month {
+		font-size: 16px;
+		margin: 0 15px;
+	}
+
+	.task-item {
+		padding: 10px 12px;
+	}
+
+	.task-label {
+		font-size: 15px;
+	}
+
+	.today-btn {
+		padding: 6px 15px;
+		font-size: 13px;
+	}
+}
+
+.calendar-popup {
+	background-color: white;
+	border-radius: 10px;
+	color: #333;
+	width: 90%;
+	max-width: 350px;
+	position: absolute;
+	top: 120px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 100;
+	display: none;
+	overflow: hidden;
+}
+
+.calendar-popup.visible {
+	display: block;
+}
+
+.calendar-header {
+	padding: 15px;
+	background-color: #ffffff;
+}
+
+.calendar-nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.calendar-divider {
+	height: 1px;
+	background-color: #eee;
+	margin-top: 10px;
+	width: 100%;
+}
+
+.calendar-bottom-bar {
+	height: 4px;
+	background-color: #5a5fd2;
+	width: 100%;
+}
+
+.calendar-month-year {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.calendar-prev,
+.calendar-next {
+	background: none;
+	border: none;
+	font-size: 16px;
+	cursor: pointer;
+	color: #000000;
+	padding: 5px 10px;
+}
+
+.calendar-days {
+	padding: 10px;
+}
+
+.calendar-header-row {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	margin-bottom: 10px;
+}
+
+.calendar-day-header {
+	text-align: center;
+	font-size: 12px;
+	color: #999;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+.calendar-week-row {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
+	margin-bottom: 5px;
+}
+
+.calendar-day {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 36px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.calendar-day.today {
+	border: 2px solid #5a5fd2;
+}
+
+.calendar-selection-mode {
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.calendar-day:hover {
+	background-color: #f0f0f0;
+}
+
+.calendar-day.selected {
+	background-color: #4a4fb2;
+	color: white;
+}
+
+.prev-month-day,
+.next-month-day {
+	color: #ccc;
 }
