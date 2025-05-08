@@ -11,9 +11,37 @@
   border: none;
   border-radius: 12px; /* Slightly increased radius to match image */
   color: white !important;
-  padding: 15px; /* Equal padding for square shape */
+  padding: 0; /* Equal padding for square shape */
   width: 50px; /* Fixed width */
   height: 50px; /* Fixed height */
+  min-width: 50px; /* Ensure minimum width */
+  min-height: 50px; /* Ensure minimum height */
+  max-width: 50px; /* Enforce maximum width */
+  max-height: 50px; /* Enforce maximum height */
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow to match image */
+  display: inline-flex; /* Changed to inline-flex */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  text-decoration: none;
+  margin: 0 10px; /* Add spacing between buttons */
+}
+
+.button,
+#delete-button{
+  background-color: #ff0000; /* Slightly adjusted blue to match image */
+  border: none;
+  border-radius: 12px; /* Slightly increased radius to match image */
+  color: white !important;
+  padding: 0; /* Equal padding for square shape */
+  width: 50px; /* Fixed width */
+  height: 50px; /* Fixed height */
+  min-width: 50px; /* Ensure minimum width */
+  min-height: 50px; /* Ensure minimum height */
+  max-width: 50px; /* Enforce maximum width */
+  max-height: 50px; /* Enforce maximum height */
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;

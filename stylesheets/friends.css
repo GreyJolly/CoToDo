@@ -87,8 +87,7 @@ body {
 .friend-item {
 	display: flex;
 	align-items: center;
-	gap: 15px;
-	width: 100%;
+	width: 90%;
 }
 
 .friend-avatar {
@@ -108,6 +107,7 @@ body {
 .friend-name {
 	font-size: 18px;
 	font-weight: 500;
+	margin-left: 10px;
 	color: #000;
 }
 

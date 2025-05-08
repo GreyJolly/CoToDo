@@ -8,6 +8,12 @@ body {
 	flex-direction: column;
 }
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
 .wrapper {
 	display: flex;
 	justify-content: space-between;
@@ -36,7 +42,6 @@ body {
 .main-content {
 	display: flex;
 	flex-direction: column;
-	padding-bottom: 20px;
 	width: 100%;
 	flex: 1;
 	overflow-y: auto;
@@ -291,28 +296,87 @@ body {
 }
 
 .enter-hint-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	color: #aaa;
-	font-size: 14px;
-	margin-top: 10px;
-	padding-left: 5px;
-	display: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 25px;
+    margin-top: 10px;
+    display: none;
 }
 
 .enter-hint-container.visible {
-	display: flex;
+    display: flex;
+}
+
+.subtasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.subtask {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.subtask-text {
+	color: #777;
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+.subtask-text:focus {
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.delete-subtask {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.add-subtask-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-subtask-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px 0;
+    color: #aaa;
+}
+
+.add-subtask-input:focus {
+    color: #000;
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .enter-hint-checkbox {
-	width: 20px;
-	height: 20px;
-}
-
-.enter-hint-text {
-	color: #aaa;
-	font-size: 18px;
+    width: 20px;
+    height: 20px;
+    margin: 0;
 }
 
 .assign-members-popup {
@@ -373,10 +437,31 @@ body {
 	font-size: 16px;
 }
 
+.right-buttons {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+	margin-left: auto;
+	margin-right: 10px;
+}
+
+#delete-button {
+	margin-right: auto;
+	margin-left: 10px;
+}
+
 .footer {
+	position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 15px 0;
+	padding-right: 10px;
+	padding-left: 15px;
     color: white;
     text-align: center;
-    padding: 20px;
     font-size: 16px;
     font-family: Arial, sans-serif;
     flex-shrink: 0;

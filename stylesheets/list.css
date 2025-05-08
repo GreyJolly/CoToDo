@@ -183,5 +183,5 @@ input[type="checkbox"]:checked::after {
     flex-shrink: 0;
     display: flex;
     justify-content: center;
-    gap: 80px;
+    gap: 50px;
 }

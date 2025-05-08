@@ -37,9 +37,8 @@
 	</div>
 
 	<footer class="footer">
-		<button id="contributors-button"
-			onclick="window.location.href='contributors.html?listId=' + getCurrentListId()"><i
-				class="fa-solid fa-users"></i></button>
+		<button id="delete-button" onclick="deleteList()"><i class="fa-solid fa-trash"></i></button>
+		<button id="contributors-button" onclick="window.location.href='contributors.html?listId=' + getCurrentListId()"><i class="fa-solid fa-users"></i></button>
 		<button id="plus-button" onclick="newTask()"><i class="fa-solid fa-plus"></i></button>
 	</footer>
 </body>

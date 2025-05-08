@@ -336,3 +336,29 @@ input[type="checkbox"] {
 	justify-content: center;
 	gap: 60px;
 }
+
+@media (max-width: 390px) {
+    .searchbar .account-avatar {
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 365px) {
+    .searchbar .account-avatar {
+        margin-left: -5px;
+    }
+}
+
+@media (max-width: 355px) {
+    .searchbar .account-avatar {
+        margin-left: -15px;
+    }
+}
+
+@media (max-width: 345px) {
+    .searchbar .account-avatar {
+        margin-left: -25px;
+    }
+}
+
+
