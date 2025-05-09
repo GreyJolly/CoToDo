@@ -106,6 +106,10 @@ body {
 	justify-content: center;
 	border: 1px solid #000000;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	line-height: 1; /* Ensures consistent vertical alignment */
+    text-align: center; /* Additional text centering property */
+    padding: 0; /* Remove any potential padding */
+    position: relative; /* Enable precise positioning */
 }
 
 /* Main content area */
