@@ -11,7 +11,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    padding-top: 15px;
     position: relative;
     padding-bottom: 10px;
 }
@@ -45,7 +45,7 @@ html, body {
   
 .searchbar {
     width: 80%;
-    height: 50px;
+    min-height: 50px;
     background-color: #f0f0f0;
     border-radius: 25px;
     border: 1px solid #515CC6;
