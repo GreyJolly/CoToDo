@@ -390,3 +390,8 @@ body {
 .next-month-day {
 	color: #ccc;
 }
+
+.month {
+    cursor: pointer;
+    user-select: none;
+}
