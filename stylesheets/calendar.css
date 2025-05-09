@@ -13,16 +13,15 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 15px 0;
+	padding-top: 20px;
 	position: relative;
-	background-color: white;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	padding-bottom: 10px;
 }
 
 .backto-index i {
-	font-size: 24px;
+	font-size: 30px;
 	color: #000000;
-	margin-left: 20px;
+	margin-left: 25px;
 	cursor: pointer;
 }
 
@@ -32,8 +31,7 @@ body {
 	transform: translateX(-50%);
 	text-align: center;
 	color: #000000;
-	font-size: 20px;
-	font-weight: 600;
+	font-size: 26px;
 }
 
 .main-content {
@@ -234,19 +232,6 @@ body {
 }
 
 @media (max-width: 480px) {
-	.wrapper {
-		padding: 12px 0;
-	}
-
-	.backto-index i {
-		font-size: 20px;
-		margin-left: 15px;
-	}
-
-	.calendar-text {
-		font-size: 18px;
-	}
-
 	.calendar-header {
 		padding: 12px;
 	}
