@@ -9,7 +9,6 @@ if (dateParam) {
     currentDate = new Date();
 }
 
-// Month and year to track current calendar view
 let currentCalendarMonth = currentDate.getMonth();
 let currentCalendarYear = currentDate.getFullYear();
 
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const todoListContainer = document.querySelector('.todo-list');
     const calendarHeader = document.querySelector('.calendar-header');
 
-    // Make month element clickable
     if (monthElement) {
         monthElement.style.cursor = 'pointer';
         monthElement.addEventListener('click', openCalendar);
@@ -43,14 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
     calendarHeader.insertBefore(navContainer, calendarHeader.firstChild);
     calendarHeader.appendChild(todayBtn);
 
-    // Close calendar when clicking outside
     document.addEventListener('click', function(e) {
         if (calendarOpen && !e.target.closest('.calendar-popup') && !e.target.closest('.month')) {
             closeCalendar();
         }
     });
 
-    // Prevent calendar from closing when clicking inside it
     const calendarPopup = document.getElementById("calendarPopup");
     if (calendarPopup) {
         calendarPopup.addEventListener('click', function(e) {
@@ -58,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Navigation event listeners
     prevBtn.addEventListener('click', function () {
         currentDate.setDate(currentDate.getDate() - 1);
         updateCalendar();
@@ -70,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     updateCalendar();
+    highlightCurrentPage();
 });
 
 function formatDate(date) {
@@ -174,7 +170,6 @@ function renderTasksForDate(tasks) {
         taskItem.innerHTML = html;
         todoListContainer.appendChild(taskItem);
 
-        // Task item click handler
         taskItem.addEventListener('click', function (e) {
             if (e.target.tagName !== 'INPUT' && !e.target.classList.contains('task-list-name')) {
                 localStorage.setItem('lastCalendarView', 'true');
@@ -183,7 +178,6 @@ function renderTasksForDate(tasks) {
             }
         });
 
-        // List name click handler
         const listNameElement = taskItem.querySelector('.task-list-name');
         listNameElement.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -192,7 +186,6 @@ function renderTasksForDate(tasks) {
             window.location.href = `list.html?id=${task.listId}`;
         });
 
-        // Checkbox change handler
         const checkbox = taskItem.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', function () {
             const appData = getAppData();
@@ -244,16 +237,13 @@ function openCalendar() {
     const calendarPopup = document.getElementById("calendarPopup");
     if (!calendarPopup) return;
 
-    // Set the calendar to show the current viewed month
     currentCalendarMonth = currentDate.getMonth();
     currentCalendarYear = currentDate.getFullYear();
 
-    // Show the popup
     calendarPopup.hidden = false;
     calendarPopup.classList.add("visible");
     calendarOpen = true;
 
-    // Generate the calendar content
     generateCalendar();
 }
 
@@ -274,10 +264,8 @@ function generateCalendar() {
     const calendarDays = document.querySelector('.calendar-days');
     if (!calendarDays) return;
 
-    // Clear previous calendar days
     calendarDays.innerHTML = '';
 
-    // Set the month and year display
     const monthYearText = document.querySelector('.calendar-month-year');
     if (monthYearText) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -285,12 +273,10 @@ function generateCalendar() {
         monthYearText.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
     }
 
-    // Get the first day of the month and the number of days
     const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
     const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
     const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
 
-    // Add day headers
     const dayHeaders = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
     const headerRow = document.createElement('div');
     headerRow.className = 'calendar-header-row';
@@ -304,7 +290,6 @@ function generateCalendar() {
 
     calendarDays.appendChild(headerRow);
 
-    // Create calendar grid
     let dayCount = 1;
     let nextMonthDay = 1;
     let adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
@@ -370,8 +355,28 @@ function selectDate(date) {
     updateCalendar();
     closeCalendar();
     
-    // Update URL
     const newUrl = new URL(window.location.href);
     newUrl.searchParams.set('date', date.toISOString().split('T')[0]);
     window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+}
+
+function highlightCurrentPage() {
+    // Get current page filename
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    // Remove active class from all buttons first
+    document.querySelectorAll('.footer button').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Add active class to the current page's button
+    if (currentPage === 'index.html') {
+        document.getElementById('list-button').classList.add('active');
+    } else if (currentPage === 'calendar.html') {
+        document.getElementById('calendar-button').classList.add('active');
+    } else if (currentPage === 'friends.html') {
+        document.getElementById('friends-button').classList.add('active');
+    } else if (currentPage === 'friend_requests.html') {
+        document.getElementById('inbox-button1').classList.add('active');
+    }
 }

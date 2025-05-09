@@ -1,52 +1,136 @@
 .button,
 #add-user-button,
-#calendar-button,
 #plus-button,
 #clock-button,
 #inbox-button,
 #contributors-button{
-  background-color: #515CC6; /* Slightly adjusted blue to match image */
+  background-color: #515CC6 !important;
   border: none;
-  border-radius: 12px; /* Slightly increased radius to match image */
+  border-radius: 12px !important;
   color: white !important;
-  padding: 0; /* Equal padding for square shape */
-  width: 50px; /* Fixed width */
-  height: 50px; /* Fixed height */
-  min-width: 50px; /* Ensure minimum width */
-  min-height: 50px; /* Ensure minimum height */
-  max-width: 50px; /* Enforce maximum width */
-  max-height: 50px; /* Enforce maximum height */
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow to match image */
-  display: inline-flex; /* Changed to inline-flex */
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
-  margin: 0 10px; /* Add spacing between buttons */
+  margin: 0 10px;
 }
 
 .button,
 #delete-button{
-  background-color: #ff0000; /* Slightly adjusted blue to match image */
+  background-color: #ff0000;
   border: none;
-  border-radius: 12px; /* Slightly increased radius to match image */
+  border-radius: 12px;
   color: white !important;
-  padding: 0; /* Equal padding for square shape */
-  width: 50px; /* Fixed width */
-  height: 50px; /* Fixed height */
-  min-width: 50px; /* Ensure minimum width */
-  min-height: 50px; /* Ensure minimum height */
-  max-width: 50px; /* Enforce maximum width */
-  max-height: 50px; /* Enforce maximum height */
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow to match image */
-  display: inline-flex; /* Changed to inline-flex */
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
-  margin: 0 10px; /* Add spacing between buttons */
+  margin: 0 10px;
+}
+
+.footer {
+	position: fixed;  
+    bottom: 0;
+    left: 0;   
+    right: 0;
+	background-color: #ffffff;
+	min-height: 50px;
+	text-align: center;
+	padding: 20px;
+	font-size: 16px;
+	font-family: Arial, sans-serif;
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	gap: 60px;
+}
+.footer-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px; 
+}
+
+.footer button {
+    background-color: transparent;
+    border: none;
+    color: #777;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.footer span {
+    font-size: 14px;
+    color: #777;
+    font-weight: normal;
+}
+
+#plus-button {
+    background-color: #515CC6;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#plus-button:hover {
+    background-color: #3a45b5;
+    color: white;
+}
+
+.plus-text {
+    margin-top: -5px;
+}
+
+.footer button.active {
+    color: #515CC6;
+    font-weight: bold;
+}
+
+.fade-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 88px; 
+    height: 60px;
+    background: linear-gradient(to top,
+        rgba(255, 255, 255, 1),
+        rgba(255, 255, 255, 0));
+    pointer-events: none;
+	z-index: 10000;
+}
+
+.footer button.active + span {
+    font-weight: bold;
 }

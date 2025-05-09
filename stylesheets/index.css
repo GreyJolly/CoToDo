@@ -223,21 +223,18 @@ body {
 	color: #333;
 }
 
-/* Update the bottom elements container to include the 4th task */
 .bottom-elements-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
 
-/* Style for the left side container (4th task + more indicator) */
 .bottom-left-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
-/* More tasks indicator */
 .more-tasks-indicator {
     font-size: 12px;
     color: #999;
@@ -297,48 +294,6 @@ input[type="checkbox"] {
 	outline: none;
 	cursor: pointer;
 	position: relative;
-}
-
-.fade-overlay {
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 88px;
-	height: 60px;
-	background: linear-gradient(to top,
-			rgba(255, 255, 255, 1),
-			rgba(255, 255, 255, 0));
-	pointer-events: none;
-	z-index: 1000;
-}
-
-/*
-.fade-overlay2 {
-	position: fixed; 
-	left: 0;
-	right: 0;
-	top: 74px;
-	height: 60px;
-	background: linear-gradient(
-		to top,
-		rgba(255, 255, 255, 0),
-		rgba(255, 255, 255, 1)
-	);
-	pointer-events: none;
-	z-index: 1000;
-}
-*/
-
-.footer {
-	min-height: 50px;
-	text-align: center;
-	padding: 20px;
-	font-size: 16px;
-	font-family: Arial, sans-serif;
-	flex-shrink: 0;
-	display: flex;
-	justify-content: center;
-	gap: 60px;
 }
 
 @media (max-width: 390px) {

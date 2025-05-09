@@ -360,3 +360,28 @@ function highlightText(text, searchTerm) {
 	const regex = new RegExp(`(${searchTerm})`, 'gi');
 	return text.replace(regex, '<span class="highlight">$1</span>');
 }
+
+function highlightCurrentPage() {
+    // Get current page filename
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    // Remove active class from all buttons first
+    document.querySelectorAll('.footer button').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Add active class to the current page's button
+    if (currentPage === 'index.html') {
+        document.getElementById('list-button').classList.add('active');
+    } else if (currentPage === 'calendar.html') {
+        document.getElementById('calendar-button').classList.add('active');
+    } else if (currentPage === 'friends.html') {
+        document.getElementById('friends-button').classList.add('active');
+    } else if (currentPage === 'friend_requests.html') {
+        document.getElementById('inbox-button1').classList.add('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    highlightCurrentPage();
+});
