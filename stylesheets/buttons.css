@@ -4,9 +4,7 @@
 #plus-button,
 #clock-button,
 #inbox-button,
-#contributors-button,
-#bullet-list-button,
-#user-list-button {
+#contributors-button{
   background-color: #4051d3; /* Slightly adjusted blue to match image */
   border: none;
   border-radius: 12px; /* Slightly increased radius to match image */

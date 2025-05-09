@@ -166,13 +166,12 @@ html, body {
     font-size: 18px;
 }
 
-#delete-button {
+#delete-profile-button {
     background-color: #E35452;
     border: 2px solid white;
-    margin-top: 20px;
 }
 
-#delete-button:active {
+#delete-profile-button:active {
 	transform: translateY(-5px);
     background-color: #c23331;
 }

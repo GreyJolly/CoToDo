@@ -441,15 +441,56 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap: 5px;
 	margin-left: auto;
 	margin-right: 10px;
 }
 
-#delete-button {
+.right-buttons button {
+	background-color: white;
+	color: black;
+	border: none;
+	border-radius: 12px; /* Slightly increased radius to match image */
+	color: black !important;
+	padding: 0; /* Equal padding for square shape */
+	width: 0px; /* Fixed width */
+	height: 30px; /* Fixed height */
+	min-width: 30px; /* Ensure minimum width */
+	min-height: 30px; /* Ensure minimum height */
+	max-width: 30px; /* Enforce maximum width */
+	max-height: 30px; /* Enforce maximum height */
+	font-size: 24px;
+	cursor: pointer;
+	display: inline-flex; /* Changed to inline-flex */
+	justify-content: center; /* Center content horizontally */
+	align-items: center; /* Center content vertically */
+	text-decoration: none;
+	margin: 0 10px; /* Add spacing between buttons */
+}
+
+#delete-task-button {
 	margin-right: auto;
 	margin-left: 10px;
+
+	background-color: white;
+	color: red !important;
+	border: none;
+	border-radius: 12px; /* Slightly increased radius to match image */
+	padding: 0; /* Equal padding for square shape */
+	height: 30px; /* Fixed height */
+	min-width: 30px; /* Ensure minimum width */
+	min-height: 30px; /* Ensure minimum height */
+	max-width: 30px; /* Enforce maximum width */
+	max-height: 30px; /* Enforce maximum height */
+	font-size: 24px;
+	cursor: pointer;
+	display: inline-flex; /* Changed to inline-flex */
+	justify-content: center; /* Center content horizontally */
+	align-items: center; /* Center content vertically */
+	text-decoration: none;
+	margin: 0 10px; /* Add spacing between buttons */
 }
+
+
 
 .footer {
 	position: fixed;
