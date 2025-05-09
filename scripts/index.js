@@ -362,15 +362,12 @@ function highlightText(text, searchTerm) {
 }
 
 function highlightCurrentPage() {
-    // Get current page filename
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     
-    // Remove active class from all buttons first
     document.querySelectorAll('.footer button').forEach(button => {
         button.classList.remove('active');
     });
     
-    // Add active class to the current page's button
     if (currentPage === 'index.html') {
         document.getElementById('list-button').classList.add('active');
     } else if (currentPage === 'calendar.html') {

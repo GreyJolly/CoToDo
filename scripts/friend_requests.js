@@ -118,5 +118,24 @@ function displayRequests(requests, container) {
 	});
 }
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', loadFriendRequests);
+function highlightCurrentPage() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    document.querySelectorAll('.footer button').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    if (currentPage === 'index.html') {
+        document.getElementById('list-button').classList.add('active');
+    } else if (currentPage === 'calendar.html') {
+        document.getElementById('calendar-button').classList.add('active');
+    } else if (currentPage === 'friends.html') {
+        document.getElementById('friends-button').classList.add('active');
+    } else if (currentPage === 'friend_requests.html') {
+        document.getElementById('inbox-button1').classList.add('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    highlightCurrentPage();
+});
