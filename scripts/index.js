@@ -105,11 +105,11 @@ function renderHomepage() {
             }
 
             html += `
-                <div class="task-item">
-                    <input type="checkbox" id="${task.id}" class="${priorityClass}">
-                    <label for="${task.id}">${task.text || "New Task"}</label>
-                </div>
-            `;
+			<div class="task-item">
+				<input type="checkbox" id="${task.id}" class="${priorityClass}">
+				<label for="${task.id}" title="${task.text}">${truncateTaskText(task.text) || "New Task"}</label>
+			</div>
+			`;
         });
 
 		// Show 4th task if exists (with normal spacing)
@@ -293,11 +293,11 @@ function renderSearchResults(lists, searchTerm) {
 			const taskText = highlightText(task.text, searchTerm);
 
 			html += `
-                <div class="task-item">
-                    <input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
-                    <label for="${task.id}">${taskText}</label>
-                </div>
-            `;
+        	<div class="task-item">
+            	<input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
+            	<label for="${task.id}" title="${task.text}">${truncatedText}</label>
+        	</div>
+   			`;
 		});
 
 		// If no matching tasks but list title matches, show first few tasks
@@ -352,6 +352,14 @@ function renderSearchResults(lists, searchTerm) {
 	});
 
 	setupHomepageEvents();
+}
+
+function truncateTaskText(text) {
+    if (!text) return "New Task";
+    const maxLength = 40;
+    return text.length > maxLength ? 
+           text.substring(0, maxLength - 3) + '...' : 
+           text;
 }
 
 function highlightText(text, searchTerm) {

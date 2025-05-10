@@ -221,6 +221,12 @@ body {
 .task-item label {
 	font-size: 16px;
 	color: #333;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Adjust based on your layout */
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .bottom-elements-container {
