@@ -3,7 +3,8 @@
 #plus-button,
 #clock-button,
 #inbox-button,
-#contributors-button{
+#contributors-button,
+#plus-task-button{
   background-color: #515CC6 !important;
   border: none;
   border-radius: 12px !important;
@@ -64,8 +65,9 @@
 	flex-shrink: 0;
 	display: flex;
 	justify-content: center;
-	gap: 60px;
+	gap: 40px;
 }
+
 .footer-button {
     display: flex;
     flex-direction: column;
@@ -102,6 +104,16 @@
     height: 50px;
     margin-top: -15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    position: absolute;
+    right: 20px; 
+    bottom: 15px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+
+    z-index: 1000;
 }
 
 #plus-button:hover {
@@ -132,5 +144,6 @@
 }
 
 .footer button.active + span {
+    color: #515CC6;
     font-weight: bold;
 }
