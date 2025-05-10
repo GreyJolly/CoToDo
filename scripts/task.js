@@ -35,11 +35,6 @@ function loadTaskData() {
 		return null;
 	}
 
-	// Initialize subtasks if they don't exist
-	if (!task.subtasks) {
-		task.subtasks = [];
-	}
-
 	return { appData, list, task };
 }
 
@@ -80,9 +75,6 @@ function renderTaskPage() {
 	// Set assignee if exists
 	if (task.assignee) {
 	}
-
-	// Render subtasks
-    renderSubtasks(task);
 
 	// Setup event listeners
 	setupTaskEvents();
@@ -182,14 +174,6 @@ function setupTaskEvents() {
 				assign.hidden = true;
 			}
 		}
-		// Delete subtask
-        if (e.target.closest('.delete-subtask') || e.target.classList.contains('fa-trash')) {
-            const subtaskId = e.target.closest('.delete-subtask')?.getAttribute('data-id') || 
-                              e.target.closest('.fa-trash')?.parentElement.getAttribute('data-id');
-            if (subtaskId) {
-                deleteSubtask(subtaskId);
-            }
-        }
 	});
 
 	// Handle Escape key to close popups
@@ -208,90 +192,8 @@ function setupTaskEvents() {
 				assign.hidden = true;
 			}
 		}
-		const addSubtaskInput = document.querySelector('.add-subtask-input');
-        if (e.key === 'Enter' && e.target === addSubtaskInput && addSubtaskInput.value.trim()) {
-            addSubtask(addSubtaskInput.value.trim());
-            addSubtaskInput.value = '';
-            // Keep focus on the input for adding more subtasks
-            addSubtaskInput.focus();
-        }
 	});
-
-    // Handle subtask checkbox changes
-    document.addEventListener('change', function(e) {
-        if (e.target.classList.contains('subtask-checkbox')) {
-            const subtaskId = e.target.getAttribute('data-id');
-            updateSubtask(subtaskId, {
-                completed: e.target.checked
-            });
-        }
-    });
-
-    // Handle subtask text changes
-    document.addEventListener('input', debounce(function(e) {
-        if (e.target.classList.contains('subtask-text')) {
-            const subtaskId = e.target.getAttribute('data-id');
-            updateSubtask(subtaskId, {
-                text: e.target.value
-            });
-        }
-    }, 300));
-
 }
-
-function addSubtask(text) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
-
-    const { appData, task } = taskData;
-    
-    // Initialize subtasks array if it doesn't exist
-    if (!task.subtasks) {
-        task.subtasks = [];
-    }
-    
-    const newSubtask = {
-        text: text,
-        completed: false,
-        id: Date.now().toString() // Generate unique ID
-    };
-    
-    task.subtasks.push(newSubtask);
-    saveTaskChanges();
-    renderSubtasks(task);
-}
-
-function updateSubtask(subtaskId, updates) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
-
-    const { appData, task } = taskData;
-    
-    if (!task.subtasks) return;
-    
-    const subtaskIndex = task.subtasks.findIndex(s => s.id === subtaskId);
-    if (subtaskIndex >= 0) {
-        Object.assign(task.subtasks[subtaskIndex], updates);
-        saveTaskChanges();
-    }
-}
-
-function deleteSubtask(subtaskId) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
-
-    const { appData, task } = taskData;
-    
-    if (!task.subtasks) return;
-    
-    const subtaskIndex = task.subtasks.findIndex(s => s.id === subtaskId);
-    if (subtaskIndex >= 0) {
-        task.subtasks.splice(subtaskIndex, 1);
-        saveTaskChanges();
-        renderSubtasks(task);
-    }
-}
-
 function saveTaskChanges() {
 	const taskData = loadTaskData();
 	if (!taskData) return;
@@ -322,19 +224,10 @@ function closePriorityPopup() {
 }
 
 function openSublist() {
-    const hint = document.getElementById("enterHintContainer");
-    hint.classList.toggle("visible");
-    hint.hidden = !hint.hidden;
-    
-    // Focus on the input when opening
-    if (!hint.hidden) {
-        const addSubtaskInput = document.querySelector('.add-subtask-input');
-        if (addSubtaskInput) {
-            addSubtaskInput.focus();
-        }
-    }
-    
-    closeOtherPopups(hint);
+	const hint = document.getElementById("enterHintContainer");
+	hint.classList.toggle("visible");
+	hint.hidden = !hint.hidden;
+	closeOtherPopups(hint);
 }
 
 function openAssignMembers() {
@@ -738,31 +631,6 @@ function selectMember(memberId) {
 	}
 
 	// TOBEDONE: update visual
-}
-
-
-function renderSubtasks(task) {
-    const subtasksList = document.querySelector('.subtasks-list');
-    if (!subtasksList) return;
-
-    // Clear existing subtasks
-    subtasksList.innerHTML = '';
-
-    // Add each subtask
-    task.subtasks.forEach((subtask, index) => {
-        const subtaskElement = document.createElement('div');
-        subtaskElement.className = 'subtask';
-        subtaskElement.innerHTML = `
-            <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
-                   data-id="${subtask.id}">
-            <input type="text" class="subtask-text" value="${subtask.text || ''}" 
-                   data-id="${subtask.id}" placeholder="Subtask">
-            <button class="delete-subtask" data-id="${subtask.id}">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        `;
-        subtasksList.appendChild(subtaskElement);
-    });
 }
 
 function debounce(func, wait) {

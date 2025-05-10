@@ -392,7 +392,7 @@ body {
 	position: fixed;
 	bottom: auto;
 	bottom: 300px;
-	z-index: 100;
+	z-index: 1000;
 	overflow-y: auto;
 	display: none;
 }

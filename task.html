@@ -17,84 +17,76 @@
 </head>
 
 <body>
-	<div class="page-container">
-		<div class="wrapper">
-			<div class="backto-list"><i class="fa-solid fa-arrow-left"></i></div>
-			<span class="list-text"></span>
-		</div>
+	<div class="wrapper">
+		<div class="backto-list"><i class="fa-solid fa-arrow-left"></i></div>
+		<span class="list-text"></span>
+	</div>
 
-		<div class="main-content">
-			<div class="task-detail">
-				<div class="task-header">
-					<input type="checkbox" id="task-complete">
-					<div class="task-dates" onclick="openCalendar()">
-						<div class="task-date-item">
-							<span>Start:</span>
-							<span class="task-start-date">No date</span>
-						</div>
-						<div class="task-date-item">
-							<span>Due:</span>
-							<span class="task-due-date">No date</span>
-						</div>
-					</div> <i class="fa-regular fa-flag" id="flag-icon"></i>
-				</div>
-				<div class="priority-popup" id="priorityPopup" hidden>
-					<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i>
-						High priority</div>
-					<div class="priority-option" data-priority="medium"><i class="fa-solid fa-flag"
-							style="color: orange;"></i> Medium priority</div>
-					<div class="priority-option" data-priority="low"><i class="fa-solid fa-flag"
-							style="color: limegreen;"></i> Low priority</div>
-					<div class="priority-option" data-priority="none"><i class="fa-regular fa-flag"
-							style="color: white;"></i> No priority</div>
-				</div>
-				<input type="text" class="task-title" placeholder="What would you like to do?">
-				<input type="text" class="task-description" placeholder="Description">
-
-				<div class="calendar-popup" id="calendarPopup" hidden>
-					<div class="calendar-header">
-						<div class="calendar-nav">
-							<button class="calendar-prev" onclick="navigateCalendar(-1)"><i
-									class="fa-solid fa-chevron-left"></i></button>
-							<span class="calendar-month-year">May 2025</span>
-							<button class="calendar-next" onclick="navigateCalendar(1)"><i
-									class="fa-solid fa-chevron-right"></i></button>
-						</div>
-						<div class="calendar-divider"></div>
+	<div class="main-content">
+		<div class="task-detail">
+			<div class="task-header">
+				<input type="checkbox" id="task-complete">
+				<div class="task-dates" onclick="openCalendar()">
+					<div class="task-date-item">
+						<span>Start:</span>
+						<span class="task-start-date">No date</span>
 					</div>
-					<div class="calendar-days"></div>
-					<div class="calendar-bottom-bar"></div>
-					<div class="date-selection-mode">
-						<label>
-							<input type="radio" name="dateType" value="start"> Start Date
-						</label>
-						<label>
-							<input type="radio" name="dateType" value="due" checked="checked"> Due Date
-						</label>
+					<div class="task-date-item">
+						<span>Due:</span>
+						<span class="task-due-date">No date</span>
 					</div>
-				</div>
+				</div> <i class="fa-regular fa-flag" id="flag-icon"></i>
+			</div>
+			<div class="priority-popup" id="priorityPopup" hidden>
+				<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i>
+					High priority</div>
+				<div class="priority-option" data-priority="medium"><i class="fa-solid fa-flag"
+						style="color: orange;"></i> Medium priority</div>
+				<div class="priority-option" data-priority="low"><i class="fa-solid fa-flag"
+						style="color: limegreen;"></i> Low priority</div>
+				<div class="priority-option" data-priority="none"><i class="fa-regular fa-flag"
+						style="color: white;"></i> No priority</div>
+			</div>
+			<input type="text" class="task-title" placeholder="What would you like to do?">
+			<input type="text" class="task-description" placeholder="Description">
 
-				<div class="enter-hint-container" id="enterHintContainer" hidden>
-					<div class="subtasks-list"></div>
-					<div class="add-subtask-container">
-						<input type="checkbox" class="enter-hint-checkbox" disabled>
-						<input type="text" class="add-subtask-input" placeholder="Tap enter to create an item">
+			<div class="calendar-popup" id="calendarPopup" hidden>
+				<div class="calendar-header">
+					<div class="calendar-nav">
+						<button class="calendar-prev" onclick="navigateCalendar(-1)"><i
+								class="fa-solid fa-chevron-left"></i></button>
+						<span class="calendar-month-year">May 2025</span>
+						<button class="calendar-next" onclick="navigateCalendar(1)"><i
+								class="fa-solid fa-chevron-right"></i></button>
+					</div>
+					<div class="calendar-divider"></div>
 				</div>
-				<div class="assign-members-popup" id="assignMembersPopup" hidden>
+				<div class="calendar-days"></div>
+				<div class="calendar-bottom-bar"></div>
+				<div class="date-selection-mode">
+					<label>
+						<input type="radio" name="dateType" value="start"> Start Date
+					</label>
+					<label>
+						<input type="radio" name="dateType" value="due" checked="checked"> Due Date
+					</label>
 				</div>
 			</div>
 
-		</div>
-
-		<footer class="footer">
-			<button id="delete-task-button" onclick="deleteList()"><i class="fa-solid fa-trash-can"></i></button>
-			<div class="right-buttons">
-				<button id="bullet-list-button" onclick="openSublist()"><i class="fa-solid fa-list"></i></button>
-				<button id="user-list-button" onclick="openAssignMembers()"><i class="fa-solid fa-user-group"></i></button>
+			<div class="enter-hint-container" id="enterHintContainer" hidden>
+				<input type="checkbox" class="enter-hint-checkbox" disabled>
+				<span class="enter-hint-text">Tap “enter” to create an item</span>
 			</div>
-		</footer>
+			<div class="assign-members-popup" id="assignMembersPopup" hidden>
+			</div>
+		</div>
 
 	</div>
+
+	<footer class="footer">
+		<button id="bullet-list-button" onclick="openSublist()"><i class="fa-solid fa-list"></i></button>
+		<button id="user-list-button" onclick="openAssignMembers()"><i class="fa-solid fa-users"></i></button>
+	</footer>
 </body>
 
 </html>
