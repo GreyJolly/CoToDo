@@ -137,5 +137,6 @@ function highlightCurrentPage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+	loadFriendRequests();
     highlightCurrentPage();
 });
