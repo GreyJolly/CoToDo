@@ -16,13 +16,6 @@ html, body {
     padding-bottom: 10px;
 }
   
-.backto-index i {
-    font-size: 30px;
-    color: #000000;
-    margin-left: 25px;
-    cursor: pointer;
-}
-  
 .friends-text {
     position: absolute;
     left: 50%;
