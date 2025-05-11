@@ -329,15 +329,33 @@ function deleteList() {
     const listId = getCurrentListId();
     const appData = getAppData();
     
-    const confirmDelete = confirm("Are you sure you want to delete this list? This action cannot be undone.");
+    // Show the confirmation popup
+    const popup = document.getElementById('delete-confirm-popup');
+    popup.style.display = 'flex';
     
-    if (confirmDelete) {
+    // Close any other popups (if you have any)
+    // document.querySelectorAll('.popup').forEach(p => {
+    //     if (p.id !== 'delete-confirm-popup') p.style.display = 'none';
+    // });
+    
+    // Setup event listeners for the buttons
+    popup.querySelector('.cancel-button').onclick = function() {
+        popup.style.display = 'none';
+    };
+    
+    popup.querySelector('.confirm-button').onclick = function() {
         appData.lists = appData.lists.filter(list => list.id !== listId);
-    
         localStorage.setItem('todoAppData', JSON.stringify(appData));
-        
+        popup.style.display = 'none';
         window.location.href = 'index.html';
-    }
+    };
+    
+    // Close popup when clicking outside
+    popup.onclick = function(e) {
+        if (e.target === popup) {
+            popup.style.display = 'none';
+        }
+    };
 }
 
 function getFriends() {

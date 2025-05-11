@@ -777,15 +777,28 @@ function deleteTask() {
     const listId = getCurrentListId();
     const taskId = getCurrentTaskId();
 
-    const confirmDelete = confirm("Are you sure you want to delete this task? This action cannot be undone.");
+	// Show the confirmation popup
+    const popup = document.getElementById('delete-confirm-popup');
+    popup.style.display = 'flex';
+
+    // Setup event listeners for the buttons
+    popup.querySelector('.cancel-button').onclick = function() {
+        popup.style.display = 'none';
+    };
     
-    if (confirmDelete) {
-        list.tasks = list.tasks.filter(t => t.id !== taskId);
-        
+    popup.querySelector('.confirm-button').onclick = function() {
+		list.tasks = list.tasks.filter(t => t.id !== taskId);
         localStorage.setItem('todoAppData', JSON.stringify(appData));
-        
+        popup.style.display = 'none';
         window.location.href = `list.html?id=${listId}`;
-    }
+    };
+    
+    // Close popup when clicking outside
+    popup.onclick = function(e) {
+        if (e.target === popup) {
+            popup.style.display = 'none';
+        }
+    };
 }
 
 document.addEventListener('DOMContentLoaded', function () {
