@@ -2,78 +2,67 @@
 <html>
 
 <head>
-	<link rel="icon" href="./images/icon-512.png" type="image/png">
-	<link rel="manifest" href="./manifest.json">
-	<link rel="stylesheet" href="./stylesheets/friends.css">
+    <link rel="icon" href="./images/icon-512.png" type="image/png">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./stylesheets/friends.css">
 	<link rel="stylesheet" href="./stylesheets/buttons.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-	<script src="./scripts/friends.js"></script>
-	<title>CoToDo</title>
-	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name="theme-color" content="#000000">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="./scripts/friends.js"></script>
+    <title>CoToDo</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 </head>
 
 <body>
     <div class="wrapper">
-		<span class="friends-text">Friends</span>
+        <span class="friends-text">Friends</span>
     </div>
 
     <div class="main-content">
         <div class="searchbar">
-			<div class="search-button"><i class="fa-solid fa-magnifying-glass"></i></div>
-			<span class="search-friends-text">Search new friends</span>
-		</div>
-        <div class="friend-list">
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #FF9AA2;">A</div>
-                <div class="friend-name">Alice</div>
+            <div class="search-button"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <span class="search-friends-text">Search new friends</span>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" id="friends-tab">Friends</button>
+            <button class="tab-button" id="pending-tab">Pending Requests</button>
+        </div>
+        
+        <div class="content-section" id="friends-section">
+            <div class="friend-list" id="current-friends-list">
+                <!-- Friends will be loaded here -->
             </div>
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #FFB347;">A</div>
-                <div class="friend-name">Alexander</div>
-            </div>
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #B5EAD7;">A</div>
-                <div class="friend-name">Audrey</div>
-            </div>
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #C7CEEA;">A</div>
-                <div class="friend-name">Ava</div>
-            </div>
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #FFDAC1;">B</div>
-                <div class="friend-name">Bob</div>
-            </div>
-            <div class="friend-item">
-                <div class="friend-avatar" style="background-color: #b0ff30;">M</div>
-                <div class="friend-name">Mary</div>
+        </div>
+        
+        <div class="content-section" id="pending-section" style="display:none;">
+            <div class="friend-list" id="pending-requests-list">
+                <!-- Pending requests will be loaded here -->
             </div>
         </div>
     </div>
 
     <div class="fade-overlay"></div>
-	<footer class="footer">
-		<div class="footer-button">
-			<button id="list-button" onclick="window.location.href='index.html'"><i class="fa-solid fa-list"></i></button>
-			<span>List</span>
-		</div>
-		<div class="footer-button">
-			<button id="calendar-button" onclick="window.location.href='calendar.html'"><i class="fa-solid fa-calendar"></i></button>
-			<span>Calendar</span>
-		</div>
-		<div class="footer-button">
-			<button id="friends-button" onclick="window.location.href='friends.html'"><i class="fa-solid fa-user-group"></i></button>
-			<span>Friends</span>
-		</div>
-		<div class="footer-button">
-			<button id="inbox-button1" onclick="window.location.href='friend_requests.html'"><i class="fa-solid fa-inbox"></i></button>
-			<span>Inbox</span>
-		</div>
-	</footer>
-
+    <footer class="footer">
+        <div class="footer-button">
+            <button id="list-button" onclick="window.location.href='index.html'"><i class="fa-solid fa-list"></i></button>
+            <span>List</span>
+        </div>
+        <div class="footer-button">
+            <button id="calendar-button" onclick="window.location.href='calendar.html'"><i class="fa-solid fa-calendar"></i></button>
+            <span>Calendar</span>
+        </div>
+        <div class="footer-button">
+            <button id="friends-button" onclick="window.location.href='friends.html'"><i class="fa-solid fa-user-group"></i></button>
+            <span>Friends</span>
+        </div>
+        <div class="footer-button">
+            <button id="inbox-button1" onclick="window.location.href='friend_requests.html'"><i class="fa-solid fa-inbox"></i></button>
+            <span>Inbox</span>
+        </div>
+    </footer>
 </body>
-
 </html>
