@@ -101,7 +101,6 @@ function renderListPage(listId) {
 }
 
 function setupListPageEvents(listId) {
-	// Remove old event listeners to prevent duplicates
 	document.querySelectorAll('.task-item').forEach(task => {
 		task.replaceWith(task.cloneNode(true));
 	});
@@ -125,11 +124,6 @@ function setupListPageEvents(listId) {
 	const listTitleElement = document.querySelector('.list-text');
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
-
-	// Set initial text
-	listTitleElement.textContent = list.title || '';
-
-	// Remove the readOnly handling (not needed for contenteditable)
 
 	// Focus handler to select all text when editing
 	listTitleElement.addEventListener('focus', function () {
