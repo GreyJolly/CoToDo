@@ -331,25 +331,6 @@ function updateTaskOrder(listId) {
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
-function deleteList() {
-    const listId = getCurrentListId();
-    const appData = getAppData();
-    
-    // Confirm with the user before deleting
-    const confirmDelete = confirm("Are you sure you want to delete this list? This action cannot be undone.");
-    
-    if (confirmDelete) {
-        // Filter out the list to be deleted
-        appData.lists = appData.lists.filter(list => list.id !== listId);
-        
-        // Save the updated data
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        
-        // Redirect back to the main page
-        window.location.href = 'index.html';
-    }
-}
-
 function getFriends() {
 	const friends = localStorage.getItem('friends');
 	return friends ? JSON.parse(friends) : [];

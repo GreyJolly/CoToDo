@@ -39,45 +39,54 @@ function loadTaskData() {
 }
 
 function renderTaskPage() {
-	const taskData = loadTaskData();
-	if (!taskData) return;
+    const taskData = loadTaskData();
+    if (!taskData) return;
 
-	const { task, list } = taskData;
+    const { task, list } = taskData;
 
-	// Set task title
-	const titleInput = document.querySelector('.task-title');
-	titleInput.value = task.text || '';
+    // Initialize subtasks array if it doesn't exist
+    if (!task.subtasks) {
+        task.subtasks = [];
+    }
 
-	// Set task description
-	const descInput = document.querySelector('.task-description');
-	descInput.value = task.description || '';
+    // Set task title
+    const titleInput = document.querySelector('.task-title');
+    titleInput.value = task.text || '';
 
-	// Set completion status
-	const completeCheckbox = document.getElementById('task-complete');
-	completeCheckbox.checked = task.completed || false;
+    // Set task description
+    const descInput = document.querySelector('.task-description');
+    descInput.value = task.description || '';
 
-	// Set dates if they exist
-	const startDateElement = document.querySelector('.task-start-date');
-	const dueDateElement = document.querySelector('.task-due-date');
+    // Set completion status
+    const completeCheckbox = document.getElementById('task-complete');
+    completeCheckbox.checked = task.completed || false;
 
-	if (task.startDate) {
-		startDateElement.textContent = task.startDate;
-	}
-	if (task.dueDate) {
-		dueDateElement.textContent = task.dueDate;
-	}
+    // Set dates if they exist
+    const startDateElement = document.querySelector('.task-start-date');
+    const dueDateElement = document.querySelector('.task-due-date');
 
-	// Set priority if exists
-	if (task.priority) {
-		setPriorityFlag(task.priority);
-	}
+    if (task.startDate) {
+        startDateElement.textContent = task.startDate;
+    }
+    if (task.dueDate) {
+        dueDateElement.textContent = task.dueDate;
+    }
 
-	// Set assignee if exists
-	if (task.assignee) {
-	}
+    // Set priority if exists
+    if (task.priority) {
+        setPriorityFlag(task.priority);
+    }
 
-	// Setup event listeners
-	setupTaskEvents();
+    // Show subtasks if they exist
+    if (task.subtasks && task.subtasks.length > 0) {
+        const subtasksContainer = document.getElementById("subtasksContainer");
+        subtasksContainer.classList.add("visible");
+        subtasksContainer.hidden = false;
+        renderSubtasks();
+    }
+
+    // Setup event listeners
+    setupTaskEvents();
 }
 
 function setPriorityFlag(priority) {
@@ -153,28 +162,37 @@ function setupTaskEvents() {
 	});
 
 	// Close popups when clicking outside
-	document.addEventListener('click', function (e) {
-		if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
-			closePriorityPopup();
-		}
-		if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
-			closeCalendar();
-		}
-		if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
-			const hint = document.getElementById("enterHintContainer");
-			if (hint) {
-				hint.classList.remove("visible");
-				hint.hidden = true;
-			}
-		}
-		if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
-			const assign = document.getElementById("assignMembersPopup");
-			if (assign) {
-				assign.classList.remove("visible");
-				assign.hidden = true;
-			}
-		}
-	});
+document.addEventListener('click', function (e) {
+	const subtasksContainer = document.getElementById("subtasksContainer");
+    
+	if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
+        closePriorityPopup();
+    }
+    if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
+        closeCalendar();
+    }
+    if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
+        const hint = document.getElementById("enterHintContainer");
+        if (hint) {
+            hint.classList.remove("visible");
+            hint.hidden = true;
+        }
+    }
+    if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
+        const assign = document.getElementById("assignMembersPopup");
+        if (assign) {
+            assign.classList.remove("visible");
+            assign.hidden = true;
+        }
+    }
+	if (!e.target.closest('.add-subtask-container') && !e.target.closest('#bullet-list-button')) {
+        const addSubtaskContainer = document.getElementById("addSubtaskContainer");
+        if (addSubtaskContainer) {
+            addSubtaskContainer.classList.remove("visible");
+            addSubtaskContainer.hidden = true;
+        }
+    }
+});
 
 	// Handle Escape key to close popups
 	document.addEventListener('keydown', function (e) {
@@ -221,13 +239,6 @@ function closePriorityPopup() {
 	const popup = document.getElementById("priorityPopup");
 	popup.classList.remove("visible");
 	popup.hidden = true;
-}
-
-function openSublist() {
-	const hint = document.getElementById("enterHintContainer");
-	hint.classList.toggle("visible");
-	hint.hidden = !hint.hidden;
-	closeOtherPopups(hint);
 }
 
 function openAssignMembers() {
@@ -313,7 +324,7 @@ function closeOtherPopups(currentPopup) {
 		document.getElementById("priorityPopup"),
 		document.getElementById("enterHintContainer"),
 		document.getElementById("assignMembersPopup"),
-		document.getElementById("calendarPopup")
+		document.getElementById("calendarPopup"),
 	];
 
 	popups.forEach(popup => {
@@ -644,7 +655,147 @@ function debounce(func, wait) {
 	};
 }
 
-// Initialize the page when DOM is loaded
+function openSublist() {
+    const subtasksContainer = document.getElementById("subtasksContainer");
+    const addSubtaskContainer = document.getElementById("addSubtaskContainer");
+    
+    if (subtasksContainer.hidden) {
+        subtasksContainer.classList.add("visible");
+        subtasksContainer.hidden = false;
+        renderSubtasks();
+    }
+    
+    addSubtaskContainer.classList.toggle("visible");
+    addSubtaskContainer.hidden = !addSubtaskContainer.hidden;
+    
+    if (!addSubtaskContainer.hidden) {
+        document.getElementById("addSubtaskInput").focus();
+    }
+    
+    closeOtherPopups(null);
+}
+
+function renderSubtasks() {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { task } = taskData;
+    const subtasksList = document.getElementById("subtasksList");
+    
+    subtasksList.innerHTML = '';
+
+    if (task.subtasks && task.subtasks.length > 0) {
+        task.subtasks.forEach((subtask, index) => {
+            const subtaskElement = document.createElement('div');
+            subtaskElement.className = 'subtask';
+            subtaskElement.innerHTML = `
+                <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
+                    data-index="${index}" onchange="toggleSubtaskCompletion(${index})">
+                <input type="text" class="subtask-text" value="${subtask.text}" 
+                    data-index="${index}" onchange="updateSubtaskText(${index})">
+                <button class="delete-subtask" onclick="deleteSubtask(${index})">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
+            subtasksList.appendChild(subtaskElement);
+            
+            if (subtask.completed) {
+                subtaskElement.querySelector('.subtask-text').style.textDecoration = 'line-through';
+                subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
+            }
+        });
+    }
+
+    const addSubtaskInput = document.getElementById("addSubtaskInput");
+    addSubtaskInput.value = '';
+    addSubtaskInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim() !== '') {
+            addSubtask(this.value.trim());
+            this.value = '';
+        }
+    });
+}
+
+function addSubtask(text) {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, task } = taskData;
+    
+    if (!task.subtasks) {
+        task.subtasks = [];
+    }
+    
+    task.subtasks.push({
+        text: text,
+        completed: false
+    });
+    
+    localStorage.setItem('todoAppData', JSON.stringify(appData));
+    renderSubtasks();
+}
+
+function toggleSubtaskCompletion(index) {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, task } = taskData;
+    
+    if (task.subtasks && task.subtasks[index]) {
+        task.subtasks[index].completed = !task.subtasks[index].completed;
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        renderSubtasks();
+    }
+}
+
+function updateSubtaskText(index) {
+    const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
+    if (!subtaskText) return;
+
+    const newText = subtaskText.value;
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, task } = taskData;
+    
+    if (task.subtasks && task.subtasks[index]) {
+        task.subtasks[index].text = newText;
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+    }
+}
+
+function deleteSubtask(index) {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, task } = taskData;
+    
+    if (task.subtasks && task.subtasks[index]) {
+        task.subtasks.splice(index, 1);
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        renderSubtasks();
+    }
+}
+
+function deleteTask() {
+    const taskData = loadTaskData();
+    if (!taskData) return;
+
+    const { appData, list, task } = taskData;
+    const listId = getCurrentListId();
+    const taskId = getCurrentTaskId();
+
+    const confirmDelete = confirm("Are you sure you want to delete this task? This action cannot be undone.");
+    
+    if (confirmDelete) {
+        list.tasks = list.tasks.filter(t => t.id !== taskId);
+        
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        
+        window.location.href = `list.html?id=${listId}`;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	renderTaskPage();
 });

@@ -453,22 +453,22 @@ body {
 	background-color: white;
 	color: black;
 	border: none;
-	border-radius: 12px; /* Slightly increased radius to match image */
+	border-radius: 12px;
 	color: black !important;
-	padding: 0; /* Equal padding for square shape */
-	width: 0px; /* Fixed width */
-	height: 30px; /* Fixed height */
-	min-width: 30px; /* Ensure minimum width */
-	min-height: 30px; /* Ensure minimum height */
-	max-width: 30px; /* Enforce maximum width */
-	max-height: 30px; /* Enforce maximum height */
+	padding: 0;
+	width: 0px;
+	height: 30px;
+	min-width: 30px;
+	min-height: 30px;
+	max-width: 30px;
+	max-height: 30px;
 	font-size: 24px;
 	cursor: pointer;
-	display: inline-flex; /* Changed to inline-flex */
-	justify-content: center; /* Center content horizontally */
-	align-items: center; /* Center content vertically */
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	text-decoration: none;
-	margin: 0 10px; /* Add spacing between buttons */
+	margin: 0 10px;
 }
 
 #delete-task-button {
@@ -477,21 +477,104 @@ body {
 	background-color: white;
 	color: red !important;
 	border: none;
-	border-radius: 12px; /* Slightly increased radius to match image */
-	padding: 0; /* Equal padding for square shape */
-	height: 30px; /* Fixed height */
-	min-width: 30px; /* Ensure minimum width */
-	min-height: 30px; /* Ensure minimum height */
-	max-width: 30px; /* Enforce maximum width */
-	max-height: 30px; /* Enforce maximum height */
+	border-radius: 12px;
+	padding: 0;
+	height: 30px;
+	min-width: 30px;
+	min-height: 30px;
+	max-width: 30px;
+	max-height: 30px;
 	font-size: 24px;
 	cursor: pointer;
-	display: inline-flex; /* Changed to inline-flex */
-	justify-content: center; /* Center content horizontally */
-	align-items: center; /* Center content vertically */
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	text-decoration: none;
-	margin: 0 10px; /* Add spacing between buttons */
+	margin: 0 10px;
 
 	position: relative;
     top: 10px;
+}
+
+.subtasks-container {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 25px;
+    margin-top: 10px;
+}
+
+/* Show when visible class is added */
+.subtasks-container.visible {
+    display: flex;
+}
+
+.subtasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.subtask {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.subtask-text {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px 0;
+    color: #777;
+}
+
+.subtask-text:focus {
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.delete-subtask {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.add-subtask-container {
+    display: none; /* Hidden by default */
+    align-items: center;
+    gap: 10px;
+}
+
+/* Show when visible class is added */
+.add-subtask-container.visible {
+    display: flex;
+}
+
+.add-subtask-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px 0;
+    color: #aaa;
+}
+
+.add-subtask-input:focus {
+    color: #000;
+    background-color: #f0f0f0;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
