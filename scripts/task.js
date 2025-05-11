@@ -44,24 +44,19 @@ function renderTaskPage() {
 
     const { task, list } = taskData;
 
-    // Initialize subtasks array if it doesn't exist
     if (!task.subtasks) {
         task.subtasks = [];
     }
 
-    // Set task title
     const titleInput = document.querySelector('.task-title');
     titleInput.value = task.text || '';
 
-    // Set task description
     const descInput = document.querySelector('.task-description');
     descInput.value = task.description || '';
 
-    // Set completion status
     const completeCheckbox = document.getElementById('task-complete');
     completeCheckbox.checked = task.completed || false;
 
-    // Set dates if they exist
     const startDateElement = document.querySelector('.task-start-date');
     const dueDateElement = document.querySelector('.task-due-date');
 
@@ -72,12 +67,10 @@ function renderTaskPage() {
         dueDateElement.textContent = task.dueDate;
     }
 
-    // Set priority if exists
     if (task.priority) {
         setPriorityFlag(task.priority);
     }
 
-    // Show subtasks if they exist
     if (task.subtasks && task.subtasks.length > 0) {
         const subtasksContainer = document.getElementById("subtasksContainer");
         subtasksContainer.classList.add("visible");
@@ -85,7 +78,6 @@ function renderTaskPage() {
         renderSubtasks();
     }
 
-    // Setup event listeners
     setupTaskEvents();
 }
 
@@ -161,7 +153,7 @@ function setupTaskEvents() {
 		}
 	});
 
-	// Close popups when clicking outside
+// Close popups when clicking outside
 document.addEventListener('click', function (e) {
 	const subtasksContainer = document.getElementById("subtasksContainer");
     

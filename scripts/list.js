@@ -325,6 +325,21 @@ function updateTaskOrder(listId) {
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
+function deleteList() {
+    const listId = getCurrentListId();
+    const appData = getAppData();
+    
+    const confirmDelete = confirm("Are you sure you want to delete this list? This action cannot be undone.");
+    
+    if (confirmDelete) {
+        appData.lists = appData.lists.filter(list => list.id !== listId);
+    
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        
+        window.location.href = 'index.html';
+    }
+}
+
 function getFriends() {
 	const friends = localStorage.getItem('friends');
 	return friends ? JSON.parse(friends) : [];
