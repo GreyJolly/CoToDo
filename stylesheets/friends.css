@@ -25,13 +25,14 @@ body {
 }
 
 .friends-text {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	text-align: center;
-	color: #000000;
-	font-size: 26px;
-	font-weight: bold;
+	flex-grow: 1;
+	border: none;
+	background: transparent;
+	outline: none;
+	font-size: 16px;
+	color: #333;
+	padding: 8px;
+	margin: 0 8px;
 }
 
 .main-content {
@@ -50,7 +51,6 @@ body {
 	min-height: 50px;
 	background-color: #f0f0f0;
 	border-radius: 25px;
-	border: 1px solid #515CC6;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -63,8 +63,8 @@ body {
 
 .searchbar i {
 	font-size: 20px;
-	margin-right: 10px;
-	color: #515CC6;
+	margin-right: 20px;
+	color: #777;
 }
 
 .searchbar span {

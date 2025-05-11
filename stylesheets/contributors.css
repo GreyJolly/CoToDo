@@ -50,7 +50,6 @@ body {
 	min-height: 50px;
 	background-color: #f0f0f0;
 	border-radius: 25px;
-	border: 1px solid #515CC6;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -65,7 +64,8 @@ body {
 .searchbar i {
 	font-size: 20px;
 	margin-right: 10px;
-	color: #515CC6;
+	color: #777;
+	margin-right: 20px;
 }
 
 .searchbar span {
