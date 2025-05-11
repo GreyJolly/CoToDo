@@ -10,6 +10,7 @@ function loadFriendRequests() {
 function setupSearch(requests, container) {
 	const searchTextElement = document.querySelector('.search-friends-text');
 	const searchButton = document.querySelector('.search-button');
+	const searchClear = document.querySelector('.search-clear');
 
 	// Make search text editable and set placeholder behavior
 	searchTextElement.contentEditable = true;
@@ -32,11 +33,13 @@ function setupSearch(requests, container) {
 	// Display all requests initially
 	displayRequests(requests, container);
 
-	// Handle search button click
-	searchButton.addEventListener('click', () => {
+	// Handle input events for dynamic search
+	searchTextElement.addEventListener('input', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
+		searchClear.style.display = (searchText !== '' && searchText !== 'search friend requests') ? 'block' : 'none';
+
 		if (searchText === 'search friend requests' || searchText === '') {
-			displayRequests(requests, container);
+			displayRequests(requests, container); // Show all when empty
 			return;
 		}
 
@@ -46,13 +49,21 @@ function setupSearch(requests, container) {
 		displayRequests(filtered, container);
 	});
 
-	// Handle input events for dynamic search
-	searchTextElement.addEventListener('input', () => {
+	// Clear search when X is clicked
+	searchClear.addEventListener('click', () => {
+		searchTextElement.textContent = 'Search friend requests';
+		searchClear.style.display = 'none';
+		displayRequests(requests, container);
+	});
+
+	// Keep the search button click handler as fallback
+	searchButton.addEventListener('click', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
 		if (searchText === 'search friend requests' || searchText === '') {
-			displayRequests(requests, container); // Show all when empty
+			displayRequests(requests, container);
 			return;
 		}
+
 		const filtered = requests.filter(request =>
 			request.name.toLowerCase().includes(searchText)
 		);
@@ -119,24 +130,24 @@ function displayRequests(requests, container) {
 }
 
 function highlightCurrentPage() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    document.querySelectorAll('.footer button').forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    if (currentPage === 'index.html') {
-        document.getElementById('list-button').classList.add('active');
-    } else if (currentPage === 'calendar.html') {
-        document.getElementById('calendar-button').classList.add('active');
-    } else if (currentPage === 'friends.html') {
-        document.getElementById('friends-button').classList.add('active');
-    } else if (currentPage === 'friend_requests.html') {
-        document.getElementById('inbox-button1').classList.add('active');
-    }
+	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+	document.querySelectorAll('.footer button').forEach(button => {
+		button.classList.remove('active');
+	});
+
+	if (currentPage === 'index.html') {
+		document.getElementById('list-button').classList.add('active');
+	} else if (currentPage === 'calendar.html') {
+		document.getElementById('calendar-button').classList.add('active');
+	} else if (currentPage === 'friends.html') {
+		document.getElementById('friends-button').classList.add('active');
+	} else if (currentPage === 'friend_requests.html') {
+		document.getElementById('inbox-button1').classList.add('active');
+	}
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	loadFriendRequests();
-    highlightCurrentPage();
+	highlightCurrentPage();
 });

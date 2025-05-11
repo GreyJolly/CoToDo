@@ -27,7 +27,10 @@ function initializeStorage() {
 		localStorage.setItem('pendingRequests', JSON.stringify([]));
 	}
 	if (!localStorage.getItem('friendRequests')) {
-		localStorage.setItem('friendRequests', JSON.stringify([]));
+		localStorage.setItem('friendRequests', JSON.stringify([
+			{ id: 7, name: "Hazel", avatarColor: "#5df7ff", initialLetter: "H", isFriendly: true },
+			{ id: 8, name: "William", avatarColor: "#e4e128", initialLetter: "W", isFriendly: false },
+		]));
 	}
 }
 
@@ -104,6 +107,7 @@ function cancelRequest(id) {
 function setupSearch() {
 	const searchTextElement = document.querySelector('.search-friends-text');
 	const searchButton = document.querySelector('.search-button');
+	const searchClear = document.querySelector('.search-clear');
 	const friendList = document.getElementById('current-friends-list');
 
 	// Make search text editable and set placeholder behavior
@@ -127,12 +131,21 @@ function setupSearch() {
 	// Handle input events for dynamic search
 	searchTextElement.addEventListener('input', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
+		searchClear.style.display = (searchText !== '' && searchText !== 'search new friends') ? 'block' : 'none';
+
 		if (searchText === 'search new friends' || searchText === '') {
 			loadFriends(); // Show all friends when search is empty
 			return;
 		}
 
 		showSearchResults(searchText);
+	});
+
+	// Clear search when X is clicked
+	searchClear.addEventListener('click', () => {
+		searchTextElement.textContent = 'Search new friends';
+		searchClear.style.display = 'none';
+		loadFriends();
 	});
 
 	// Keep the search button click handler as fallback
