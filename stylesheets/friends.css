@@ -78,6 +78,16 @@ body {
 	position: right;
 }
 
+.friends-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 26px;
+    font-weight: bold;
+}
+
 .friend-list {
 	width: 90%;
 	display: flex;
