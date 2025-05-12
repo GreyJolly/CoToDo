@@ -122,6 +122,23 @@ body {
 	width: 90%;
 }
 
+.empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.empty-state p {
+    max-width: 300px;
+}
+
 .notes-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;

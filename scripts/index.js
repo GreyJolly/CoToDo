@@ -81,8 +81,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function renderHomepage() {
+	const mainContent = document.querySelector('.main-content');
 	const notesContainer = document.querySelector('.notes-container');
 	notesContainer.innerHTML = '';
+
+	if (appData.lists.length === 0) {
+        mainContent.innerHTML = `
+            <div class="empty-state">
+                <p>No lists saved, press on the "+" icon to create one!</p>
+            </div>
+        `;
+        return;
+    }
 
 	appData.lists.forEach(list => {
 		const noteCard = document.createElement('div');
