@@ -79,13 +79,15 @@ body {
 }
 
 .task-header input[type="checkbox"]:checked::after {
-	content: '✓';
+	content: '\f00c';
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	color: rgb(0, 0, 0);
 	font-size: 18px;
+	font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
 }
 
 .task-header input[type="checkbox"].priority-high {
@@ -368,13 +370,15 @@ body {
 }
 
 .subtask-checkbox:checked::after {
-	content: '✓';
+	content: '\f00c';
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	color: rgb(0, 0, 0);
 	font-size: 14px;
+	font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
 }
 
 .subtask-text {
