@@ -344,19 +344,19 @@ input[type="checkbox"] {
 
 @media (max-width: 365px) {
     .searchbar .account-avatar {
-        margin-left: -5px;
+        margin-left: -10px;
     }
 }
 
 @media (max-width: 355px) {
     .searchbar .account-avatar {
-        margin-left: -15px;
+        margin-left: -20px;
     }
 }
 
 @media (max-width: 345px) {
     .searchbar .account-avatar {
-        margin-left: -25px;
+        margin-left: -30px;
     }
 }
 
