@@ -159,6 +159,20 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	transition: transform 0.2s, box-shadow 0.2s;
+    cursor: grab;
+    user-select: none;
+}
+
+.note-card.dragging {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+    cursor: grabbing;
+}
+
+.note-card.over {
+    border: 2px dashed #000;
 }
 
 .note-card::after {

@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	renderHomepage();
 	setupHomepageEvents();
 	setupSearch();
+	highlightCurrentPage();
+	setupDragAndDrop();
 });
 
 function renderHomepage() {
@@ -410,6 +412,119 @@ function highlightCurrentPage() {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	highlightCurrentPage();
-});
+let draggedItem = null;
+let draggedIndex = null;
+
+function setupDragAndDrop() {
+    const notesContainer = document.querySelector('.notes-container');
+    const noteCards = document.querySelectorAll('.note-card');
+
+    noteCards.forEach((card, index) => {
+        card.setAttribute('draggable', 'true');
+        card.dataset.index = index;
+
+        // Drag start
+        card.addEventListener('dragstart', function(e) {
+            draggedItem = this;
+            draggedIndex = parseInt(this.dataset.index);
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        });
+
+        // Drag end
+        card.addEventListener('dragend', function() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+            draggedIndex = null;
+        });
+
+        // Prevent default to allow drop
+        card.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Drag enter - visual feedback
+        card.addEventListener('dragenter', function(e) {
+            e.preventDefault();
+            this.classList.add('over');
+        });
+
+        // Drag leave - remove visual feedback
+        card.addEventListener('dragleave', function() {
+            this.classList.remove('over');
+        });
+
+        // Drop handler
+        card.addEventListener('drop', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            this.classList.remove('over');
+
+            if (draggedItem !== this) {
+                const targetIndex = parseInt(this.dataset.index);
+                
+                // Swap the items in the DOM
+                const allCards = document.querySelectorAll('.note-card');
+                const temp = document.createElement('div');
+                notesContainer.insertBefore(temp, this);
+                notesContainer.insertBefore(this, draggedItem);
+                notesContainer.insertBefore(draggedItem, temp);
+                notesContainer.removeChild(temp);
+
+                // Update data-index attributes
+                allCards.forEach((card, idx) => {
+                    card.dataset.index = idx;
+                });
+
+                // Update the order in appData
+                const listId1 = draggedItem.dataset.listId;
+                const listId2 = this.dataset.listId;
+                
+                const index1 = appData.lists.findIndex(list => list.id === listId1);
+                const index2 = appData.lists.findIndex(list => list.id === listId2);
+                
+                if (index1 !== -1 && index2 !== -1) {
+                    // Swap the lists in the array
+                    [appData.lists[index1], appData.lists[index2]] = [appData.lists[index2], appData.lists[index1]];
+                    saveAppData();
+                }
+            }
+            
+            return false;
+        });
+    });
+
+    // Container events to handle dropping at the end
+    notesContainer.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    notesContainer.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (draggedItem) {
+            // Move to the end
+            notesContainer.appendChild(draggedItem);
+            
+            // Update data-index attributes
+            const allCards = document.querySelectorAll('.note-card');
+            allCards.forEach((card, idx) => {
+                card.dataset.index = idx;
+            });
+            
+            // Update the order in appData
+            const listId = draggedItem.dataset.listId;
+            const index = appData.lists.findIndex(list => list.id === listId);
+            
+            if (index !== -1) {
+                // Move to the end of the array
+                const [movedList] = appData.lists.splice(index, 1);
+                appData.lists.push(movedList);
+                saveAppData();
+            }
+        }
+        return false;
+    });
+}

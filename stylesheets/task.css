@@ -71,7 +71,7 @@ body {
 	-webkit-appearance: none;
 	min-width: 24px;
 	min-height: 24px;
-	border: 2px solid #ddd;
+	border: 3px solid #ddd;
 	border-radius: 4px;
 	outline: none;
 	cursor: pointer;
