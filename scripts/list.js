@@ -140,8 +140,9 @@ function setupListPageEvents(listId) {
 		list.title = newTitle;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 
-		// If empty, show placeholder style
-		if (!newTitle) {
+		// Update placeholder style based on whether there's content
+		if (newTitle === '') {
+			this.textContent = 'New List'; // Reset to placeholder text
 			this.classList.add('placeholder');
 		} else {
 			this.classList.remove('placeholder');
@@ -152,7 +153,23 @@ function setupListPageEvents(listId) {
 	listTitleElement.addEventListener('keydown', function (e) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
-			this.blur(); // This will trigger the blur handler above
+			// Remove placeholder class immediately when user starts typing
+			if (this.classList.contains('placeholder')) {
+				this.textContent = ''; // Clear placeholder text
+				this.classList.remove('placeholder');
+			}
+			this.blur();
+		}
+	});
+
+	listTitleElement.addEventListener('input', function () {
+		// Remove placeholder style as soon as user starts typing
+		if (this.classList.contains('placeholder')) {
+			this.classList.remove('placeholder');
+			// If the content is still the placeholder text, clear it
+			if (this.textContent.trim() === 'New List') {
+				this.textContent = '';
+			}
 		}
 	});
 
@@ -326,36 +343,36 @@ function updateTaskOrder(listId) {
 }
 
 function deleteList() {
-    const listId = getCurrentListId();
-    const appData = getAppData();
-    
-    // Show the confirmation popup
-    const popup = document.getElementById('delete-confirm-popup');
-    popup.style.display = 'flex';
-    
-    // Close any other popups (if you have any)
-    // document.querySelectorAll('.popup').forEach(p => {
-    //     if (p.id !== 'delete-confirm-popup') p.style.display = 'none';
-    // });
-    
-    // Setup event listeners for the buttons
-    popup.querySelector('.cancel-button').onclick = function() {
-        popup.style.display = 'none';
-    };
-    
-    popup.querySelector('.confirm-button').onclick = function() {
-        appData.lists = appData.lists.filter(list => list.id !== listId);
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        popup.style.display = 'none';
-        window.location.href = 'index.html';
-    };
-    
-    // Close popup when clicking outside
-    popup.onclick = function(e) {
-        if (e.target === popup) {
-            popup.style.display = 'none';
-        }
-    };
+	const listId = getCurrentListId();
+	const appData = getAppData();
+
+	// Show the confirmation popup
+	const popup = document.getElementById('delete-confirm-popup');
+	popup.style.display = 'flex';
+
+	// Close any other popups (if you have any)
+	// document.querySelectorAll('.popup').forEach(p => {
+	//     if (p.id !== 'delete-confirm-popup') p.style.display = 'none';
+	// });
+
+	// Setup event listeners for the buttons
+	popup.querySelector('.cancel-button').onclick = function () {
+		popup.style.display = 'none';
+	};
+
+	popup.querySelector('.confirm-button').onclick = function () {
+		appData.lists = appData.lists.filter(list => list.id !== listId);
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		popup.style.display = 'none';
+		window.location.href = 'index.html';
+	};
+
+	// Close popup when clicking outside
+	popup.onclick = function (e) {
+		if (e.target === popup) {
+			popup.style.display = 'none';
+		}
+	};
 }
 
 function getFriends() {
