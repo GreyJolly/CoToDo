@@ -26,16 +26,16 @@
 		<div class="task-detail">
 			<div class="task-header">
 				<input type="checkbox" id="task-complete">
-				<div class="task-dates" onclick="openCalendar()">
-					<div class="task-date-item">
-						<span>Start:</span>
+				<div class="task-dates">
+					<div class="task-date-item" onclick="openCalendar('start')">
+						<span>Start:</span><br>
 						<span class="task-start-date">No date</span>
 					</div>
-					<div class="task-date-item">
-						<span>Due:</span>
+					<div class="task-date-item" onclick="openCalendar('due')">
+						<span>Due:</span><br>
 						<span class="task-due-date">No date</span>
 					</div>
-				</div> <i class="fa-regular fa-flag" id="flag-icon"></i>
+				</div> <i class="flag-icon fa-regular fa-flag" id="flag-icon"></i>
 			</div>
 			<div class="priority-popup" id="priorityPopup" hidden>
 				<div class="priority-option" data-priority="high"><i class="fa-solid fa-flag" style="color: red;"></i>
@@ -65,10 +65,10 @@
 				<div class="calendar-bottom-bar"></div>
 				<div class="date-selection-mode">
 					<label>
-						<input type="radio" name="dateType" value="start"> Start Date
+						<input id="radio-start" type="radio" name="dateType" value="start"> Start Date
 					</label>
 					<label>
-						<input type="radio" name="dateType" value="due" checked="checked"> Due Date
+						<input id="radio-due" type="radio" name="dateType" value="due" checked="checked"> Due Date
 					</label>
 				</div>
 			</div>

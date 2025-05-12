@@ -39,79 +39,79 @@ function loadTaskData() {
 }
 
 function renderTaskPage() {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { task, list } = taskData;
+	const { task, list } = taskData;
 	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
-    if (!task.subtasks) {
-        task.subtasks = [];
-    }
+	if (!task.subtasks) {
+		task.subtasks = [];
+	}
 
-    const titleInput = document.querySelector('.task-title');
-    titleInput.value = task.text || '';
+	const titleInput = document.querySelector('.task-title');
+	titleInput.value = task.text || '';
 
-    const descInput = document.querySelector('.task-description');
-    descInput.value = task.description || '';
+	const descInput = document.querySelector('.task-description');
+	descInput.value = task.description || '';
 
-    const completeCheckbox = document.getElementById('task-complete');
-    completeCheckbox.checked = task.completed || false;
+	const completeCheckbox = document.getElementById('task-complete');
+	completeCheckbox.checked = task.completed || false;
 
-    const startDateElement = document.querySelector('.task-start-date');
-    const dueDateElement = document.querySelector('.task-due-date');
+	const startDateElement = document.querySelector('.task-start-date');
+	const dueDateElement = document.querySelector('.task-due-date');
 
-    if (task.startDate) {
-        startDateElement.textContent = task.startDate;
-    }
-    if (task.dueDate) {
-        dueDateElement.textContent = task.dueDate;
-    }
+	if (task.startDate) {
+		startDateElement.textContent = task.startDate;
+	}
+	if (task.dueDate) {
+		dueDateElement.textContent = task.dueDate;
+	}
 
-    if (task.priority) {
-        setPriorityFlag(task.priority);
-        headerCheckbox.classList.add(`priority-${task.priority}`);
-    }
+	if (task.priority) {
+		setPriorityFlag(task.priority);
+		headerCheckbox.classList.add(`priority-${task.priority}`);
+	}
 
-    if (task.subtasks && task.subtasks.length > 0) {
-        const subtasksContainer = document.getElementById("subtasksContainer");
-        subtasksContainer.classList.add("visible");
-        subtasksContainer.hidden = false;
-        renderSubtasks();
-    }
+	if (task.subtasks && task.subtasks.length > 0) {
+		const subtasksContainer = document.getElementById("subtasksContainer");
+		subtasksContainer.classList.add("visible");
+		subtasksContainer.hidden = false;
+		renderSubtasks();
+	}
 
-    setupTaskEvents();
+	setupTaskEvents();
 }
 
 function setPriorityFlag(priority) {
 	const flagIcon = document.getElementById('flag-icon');
 	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
-    // Remove all priority classes first
-    flagIcon.className = 'fa-regular fa-flag';
-    flagIcon.style.color = '';
-    headerCheckbox.classList.remove('priority-high', 'priority-medium', 'priority-low');
+	// Remove all priority classes first
+	flagIcon.className = 'flag-icon fa-regular fa-flag';
+	flagIcon.style.color = '';
+	headerCheckbox.classList.remove('priority-high', 'priority-medium', 'priority-low');
 
-    switch (priority) {
-        case 'high':
-            flagIcon.className = 'fa-solid fa-flag';
-            flagIcon.style.color = 'red';
-            headerCheckbox.classList.add('priority-high');
-            break;
-        case 'medium':
-            flagIcon.className = 'fa-solid fa-flag';
-            flagIcon.style.color = 'orange';
-            headerCheckbox.classList.add('priority-medium');
-            break;
-        case 'low':
-            flagIcon.className = 'fa-solid fa-flag';
-            flagIcon.style.color = 'limegreen';
-            headerCheckbox.classList.add('priority-low');
-            break;
-        default:
-            flagIcon.className = 'fa-regular fa-flag';
-            flagIcon.style.color = '';
-    }
+	switch (priority) {
+		case 'high':
+			flagIcon.className = 'flag-icon fa-solid fa-flag';
+			flagIcon.style.color = 'red';
+			headerCheckbox.classList.add('priority-high');
+			break;
+		case 'medium':
+			flagIcon.className = 'flag-icon fa-solid fa-flag';
+			flagIcon.style.color = 'orange';
+			headerCheckbox.classList.add('priority-medium');
+			break;
+		case 'low':
+			flagIcon.className = 'flag-icon fa-solid fa-flag';
+			flagIcon.style.color = 'limegreen';
+			headerCheckbox.classList.add('priority-low');
+			break;
+		default:
+			flagIcon.className = 'flag-icon fa-regular fa-flag';
+			flagIcon.style.color = '';
+	}
 }
 
 function setupTaskEvents() {
@@ -164,38 +164,38 @@ function setupTaskEvents() {
 		}
 	});
 
-// Close popups when clicking outside
-document.addEventListener('click', function (e) {
-	const subtasksContainer = document.getElementById("subtasksContainer");
-    
-	if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
-        closePriorityPopup();
-    }
-    if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
-        closeCalendar();
-    }
-    if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button')) {
-        const hint = document.getElementById("enterHintContainer");
-        if (hint) {
-            hint.classList.remove("visible");
-            hint.hidden = true;
-        }
-    }
-    if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
-        const assign = document.getElementById("assignMembersPopup");
-        if (assign) {
-            assign.classList.remove("visible");
-            assign.hidden = true;
-        }
-    }
-	if (!e.target.closest('.add-subtask-container') && !e.target.closest('#bullet-list-button')) {
-        const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-        if (addSubtaskContainer) {
-            addSubtaskContainer.classList.remove("visible");
-            addSubtaskContainer.hidden = true;
-        }
-    }
-});
+	// Close popups when clicking outside
+	document.addEventListener('click', function (e) {
+
+		if (!e.target.closest('.priority-popup') && !e.target.matches('#flag-icon')) {
+			closePriorityPopup();
+		}
+		if (!e.target.closest('.calendar-popup') && !e.target.closest('.calendar-day') && !e.target.closest('.task-dates')) {
+			closeCalendar();
+			console.log("BELLA: " + e.target.closest);
+		}
+		if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button') && !e.target.closest('.task-date-item')) {
+			const hint = document.getElementById("enterHintContainer");
+			if (hint) {
+				hint.classList.remove("visible");
+				hint.hidden = true;
+			}
+		}
+		if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
+			const assign = document.getElementById("assignMembersPopup");
+			if (assign) {
+				assign.classList.remove("visible");
+				assign.hidden = true;
+			}
+		}
+		if (!e.target.closest('.add-subtask-container') && !e.target.closest('#bullet-list-button')) {
+			const addSubtaskContainer = document.getElementById("addSubtaskContainer");
+			if (addSubtaskContainer) {
+				addSubtaskContainer.classList.remove("visible");
+				addSubtaskContainer.hidden = true;
+			}
+		}
+	});
 
 	// Handle Escape key to close popups
 	document.addEventListener('keydown', function (e) {
@@ -302,10 +302,16 @@ function openAssignMembers() {
 	closeOtherPopups(assignPopup);
 }
 
-function openCalendar() {
+function openCalendar(start_or_due) {
 	const calendarPopup = document.getElementById("calendarPopup");
 	if (!calendarPopup) return;
 
+	if (start_or_due == "start") {
+		document.getElementById('radio-start').click();
+	}
+	else {
+		document.getElementById('radio-due').click();
+	}
 	calendarPopup.classList.toggle("visible");
 	calendarPopup.hidden = false;
 	closeOtherPopups(calendarPopup);
@@ -659,39 +665,39 @@ function debounce(func, wait) {
 }
 
 function openSublist() {
-    const subtasksContainer = document.getElementById("subtasksContainer");
-    const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-    
-    if (subtasksContainer.hidden) {
-        subtasksContainer.classList.add("visible");
-        subtasksContainer.hidden = false;
-        renderSubtasks();
-    }
-    
-    addSubtaskContainer.classList.toggle("visible");
-    addSubtaskContainer.hidden = !addSubtaskContainer.hidden;
-    
-    if (!addSubtaskContainer.hidden) {
-        document.getElementById("addSubtaskInput").focus();
-    }
-    
-    closeOtherPopups(null);
+	const subtasksContainer = document.getElementById("subtasksContainer");
+	const addSubtaskContainer = document.getElementById("addSubtaskContainer");
+
+	if (subtasksContainer.hidden) {
+		subtasksContainer.classList.add("visible");
+		subtasksContainer.hidden = false;
+		renderSubtasks();
+	}
+
+	addSubtaskContainer.classList.toggle("visible");
+	addSubtaskContainer.hidden = !addSubtaskContainer.hidden;
+
+	if (!addSubtaskContainer.hidden) {
+		document.getElementById("addSubtaskInput").focus();
+	}
+
+	closeOtherPopups(null);
 }
 
 function renderSubtasks() {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { task } = taskData;
-    const subtasksList = document.getElementById("subtasksList");
-    
-    subtasksList.innerHTML = '';
+	const { task } = taskData;
+	const subtasksList = document.getElementById("subtasksList");
 
-    if (task.subtasks && task.subtasks.length > 0) {
-        task.subtasks.forEach((subtask, index) => {
-            const subtaskElement = document.createElement('div');
-            subtaskElement.className = 'subtask';
-            subtaskElement.innerHTML = `
+	subtasksList.innerHTML = '';
+
+	if (task.subtasks && task.subtasks.length > 0) {
+		task.subtasks.forEach((subtask, index) => {
+			const subtaskElement = document.createElement('div');
+			subtaskElement.className = 'subtask';
+			subtaskElement.innerHTML = `
                 <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
                     data-index="${index}" onchange="toggleSubtaskCompletion(${index})">
                 <input type="text" class="subtask-text" value="${subtask.text}" 
@@ -700,115 +706,115 @@ function renderSubtasks() {
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
-            subtasksList.appendChild(subtaskElement);
-            
-            if (subtask.completed) {
-                subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
-            }
-        });
-    }
+			subtasksList.appendChild(subtaskElement);
 
-    const addSubtaskInput = document.getElementById("addSubtaskInput");
-    addSubtaskInput.value = '';
-    addSubtaskInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && this.value.trim() !== '') {
-            addSubtask(this.value.trim());
-            this.value = '';
-        }
-    });
+			if (subtask.completed) {
+				subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
+			}
+		});
+	}
+
+	const addSubtaskInput = document.getElementById("addSubtaskInput");
+	addSubtaskInput.value = '';
+	addSubtaskInput.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter' && this.value.trim() !== '') {
+			addSubtask(this.value.trim());
+			this.value = '';
+		}
+	});
 }
 
 function addSubtask(text) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, task } = taskData;
-    
-    if (!task.subtasks) {
-        task.subtasks = [];
-    }
-    
-    task.subtasks.push({
-        text: text,
-        completed: false
-    });
-    
-    localStorage.setItem('todoAppData', JSON.stringify(appData));
-    renderSubtasks();
+	const { appData, task } = taskData;
+
+	if (!task.subtasks) {
+		task.subtasks = [];
+	}
+
+	task.subtasks.push({
+		text: text,
+		completed: false
+	});
+
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
+	renderSubtasks();
 }
 
 function toggleSubtaskCompletion(index) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, task } = taskData;
-    
-    if (task.subtasks && task.subtasks[index]) {
-        task.subtasks[index].completed = !task.subtasks[index].completed;
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        renderSubtasks();
-    }
+	const { appData, task } = taskData;
+
+	if (task.subtasks && task.subtasks[index]) {
+		task.subtasks[index].completed = !task.subtasks[index].completed;
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		renderSubtasks();
+	}
 }
 
 function updateSubtaskText(index) {
-    const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
-    if (!subtaskText) return;
+	const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
+	if (!subtaskText) return;
 
-    const newText = subtaskText.value;
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const newText = subtaskText.value;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, task } = taskData;
-    
-    if (task.subtasks && task.subtasks[index]) {
-        task.subtasks[index].text = newText;
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-    }
+	const { appData, task } = taskData;
+
+	if (task.subtasks && task.subtasks[index]) {
+		task.subtasks[index].text = newText;
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+	}
 }
 
 function deleteSubtask(index) {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, task } = taskData;
-    
-    if (task.subtasks && task.subtasks[index]) {
-        task.subtasks.splice(index, 1);
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        renderSubtasks();
-    }
+	const { appData, task } = taskData;
+
+	if (task.subtasks && task.subtasks[index]) {
+		task.subtasks.splice(index, 1);
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		renderSubtasks();
+	}
 }
 
 function deleteTask() {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, list, task } = taskData;
-    const listId = getCurrentListId();
-    const taskId = getCurrentTaskId();
+	const { appData, list, task } = taskData;
+	const listId = getCurrentListId();
+	const taskId = getCurrentTaskId();
 
 	// Show the confirmation popup
-    const popup = document.getElementById('delete-confirm-popup');
-    popup.style.display = 'flex';
+	const popup = document.getElementById('delete-confirm-popup');
+	popup.style.display = 'flex';
 
-    // Setup event listeners for the buttons
-    popup.querySelector('.cancel-button').onclick = function() {
-        popup.style.display = 'none';
-    };
-    
-    popup.querySelector('.confirm-button').onclick = function() {
+	// Setup event listeners for the buttons
+	popup.querySelector('.cancel-button').onclick = function () {
+		popup.style.display = 'none';
+	};
+
+	popup.querySelector('.confirm-button').onclick = function () {
 		list.tasks = list.tasks.filter(t => t.id !== taskId);
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        popup.style.display = 'none';
-        window.location.href = `list.html?id=${listId}`;
-    };
-    
-    // Close popup when clicking outside
-    popup.onclick = function(e) {
-        if (e.target === popup) {
-            popup.style.display = 'none';
-        }
-    };
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		popup.style.display = 'none';
+		window.location.href = `list.html?id=${listId}`;
+	};
+
+	// Close popup when clicking outside
+	popup.onclick = function (e) {
+		if (e.target === popup) {
+			popup.style.display = 'none';
+		}
+	};
 }
 
 document.addEventListener('DOMContentLoaded', function () {
