@@ -43,6 +43,7 @@ function renderTaskPage() {
     if (!taskData) return;
 
     const { task, list } = taskData;
+	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
     if (!task.subtasks) {
         task.subtasks = [];
@@ -69,6 +70,7 @@ function renderTaskPage() {
 
     if (task.priority) {
         setPriorityFlag(task.priority);
+        headerCheckbox.classList.add(`priority-${task.priority}`);
     }
 
     if (task.subtasks && task.subtasks.length > 0) {
@@ -83,24 +85,33 @@ function renderTaskPage() {
 
 function setPriorityFlag(priority) {
 	const flagIcon = document.getElementById('flag-icon');
+	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
-	switch (priority) {
-		case 'high':
-			flagIcon.className = 'fa-solid fa-flag';
-			flagIcon.style.color = 'red';
-			break;
-		case 'medium':
-			flagIcon.className = 'fa-solid fa-flag';
-			flagIcon.style.color = 'orange';
-			break;
-		case 'low':
-			flagIcon.className = 'fa-solid fa-flag';
-			flagIcon.style.color = 'limegreen';
-			break;
-		default:
-			flagIcon.className = 'fa-regular fa-flag';
-			flagIcon.style.color = '';
-	}
+    // Remove all priority classes first
+    flagIcon.className = 'fa-regular fa-flag';
+    flagIcon.style.color = '';
+    headerCheckbox.classList.remove('priority-high', 'priority-medium', 'priority-low');
+
+    switch (priority) {
+        case 'high':
+            flagIcon.className = 'fa-solid fa-flag';
+            flagIcon.style.color = 'red';
+            headerCheckbox.classList.add('priority-high');
+            break;
+        case 'medium':
+            flagIcon.className = 'fa-solid fa-flag';
+            flagIcon.style.color = 'orange';
+            headerCheckbox.classList.add('priority-medium');
+            break;
+        case 'low':
+            flagIcon.className = 'fa-solid fa-flag';
+            flagIcon.style.color = 'limegreen';
+            headerCheckbox.classList.add('priority-low');
+            break;
+        default:
+            flagIcon.className = 'fa-regular fa-flag';
+            flagIcon.style.color = '';
+    }
 }
 
 function setupTaskEvents() {
@@ -692,7 +703,6 @@ function renderSubtasks() {
             subtasksList.appendChild(subtaskElement);
             
             if (subtask.completed) {
-                subtaskElement.querySelector('.subtask-text').style.textDecoration = 'line-through';
                 subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
             }
         });

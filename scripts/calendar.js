@@ -164,7 +164,7 @@ function renderTasksForDate(tasks) {
             <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} 
                    class="${priorityClass}${task.completed ? ' completed-priority' : ''}">
             <span class="task-label">${task.text || 'New Task'}</span>
-            <span class="task-list-name" style="background-color: ${task.listColor}">${task.listTitle}</span>
+            <span class="task-list-name" style="background-color: #515CC6">${task.listTitle}</span>
         `;
 
         taskItem.innerHTML = html;
