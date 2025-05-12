@@ -108,15 +108,27 @@ function setupSearch() {
 	const searchTextElement = document.querySelector('.search-friends-text');
 	const searchButton = document.querySelector('.search-button');
 	const searchClear = document.querySelector('.search-clear');
-	const friendList = document.getElementById('current-friends-list');
+	const friendsTab = document.getElementById('friends-tab');
+	const pendingTab = document.getElementById('pending-tab');
 
 	// Make search text editable and set placeholder behavior
 	searchTextElement.contentEditable = true;
 	searchTextElement.setAttribute('placeholder', 'Search new friends');
 
+	// Prevent newlines on Enter key and trigger search instead
+	searchTextElement.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			const searchText = searchTextElement.textContent.toLowerCase().trim();
+			if (searchText !== searchTextElement.getAttribute('placeholder').toLowerCase() && searchText !== '') {
+				performSearch(searchText);
+			}
+		}
+	});
+
 	// Clear placeholder on focus
 	searchTextElement.addEventListener('focus', () => {
-		if (searchTextElement.textContent === 'Search new friends') {
+		if (searchTextElement.textContent === searchTextElement.getAttribute('placeholder')) {
 			searchTextElement.textContent = '';
 		}
 	});
@@ -124,40 +136,69 @@ function setupSearch() {
 	// Restore placeholder if empty on blur
 	searchTextElement.addEventListener('blur', () => {
 		if (searchTextElement.textContent === '') {
-			searchTextElement.textContent = 'Search new friends';
+			searchTextElement.textContent = searchTextElement.getAttribute('placeholder');
 		}
 	});
 
 	// Handle input events for dynamic search
 	searchTextElement.addEventListener('input', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
-		searchClear.style.display = (searchText !== '' && searchText !== 'search new friends') ? 'block' : 'none';
+		const isPlaceholder = searchText === searchTextElement.getAttribute('placeholder').toLowerCase();
+		searchClear.style.display = (searchText !== '' && !isPlaceholder) ? 'block' : 'none';
 
-		if (searchText === 'search new friends' || searchText === '') {
-			loadFriends(); // Show all friends when search is empty
+		if (isPlaceholder || searchText === '') {
+			if (friendsTab.classList.contains('active')) {
+				loadFriends();
+			} else {
+				loadPendingRequests();
+			}
 			return;
 		}
 
-		showSearchResults(searchText);
+		performSearch(searchText);
 	});
 
 	// Clear search when X is clicked
 	searchClear.addEventListener('click', () => {
-		searchTextElement.textContent = 'Search new friends';
+		searchTextElement.textContent = searchTextElement.getAttribute('placeholder');
 		searchClear.style.display = 'none';
-		loadFriends();
+		if (friendsTab.classList.contains('active')) {
+			loadFriends();
+		} else {
+			loadPendingRequests();
+		}
 	});
 
-	// Keep the search button click handler as fallback
+	// Search button click handler
 	searchButton.addEventListener('click', () => {
 		const searchText = searchTextElement.textContent.toLowerCase().trim();
-		if (searchText === 'search new friends' || searchText === '') return;
-		showSearchResults(searchText);
+		if (searchText === searchTextElement.getAttribute('placeholder').toLowerCase() || searchText === '') return;
+		performSearch(searchText);
+	});
+
+	// Update search placeholder when tab changes (without changing content)
+	friendsTab.addEventListener('click', () => {
+		searchTextElement.setAttribute('placeholder', 'Search new friends');
+	});
+
+	pendingTab.addEventListener('click', () => {
+		searchTextElement.setAttribute('placeholder', 'Search pending requests');
 	});
 }
 
-// Show search results
-function showSearchResults(searchText) {
+// Perform search based on active tab
+function performSearch(searchText) {
+	const friendsTab = document.getElementById('friends-tab');
+
+	if (friendsTab.classList.contains('active')) {
+		showFriendSearchResults(searchText);
+	} else {
+		showPendingSearchResults(searchText);
+	}
+}
+
+// Show search results for friends tab
+function showFriendSearchResults(searchText) {
 	const friendList = document.getElementById('current-friends-list');
 	friendList.innerHTML = '';
 
@@ -180,10 +221,10 @@ function showSearchResults(searchText) {
 			const resultItem = document.createElement('div');
 			resultItem.className = 'friend-item';
 			resultItem.innerHTML = `
-                <div class="friend-avatar" style="background-color: ${account.avatarColor};">${account.initialLetter}</div>
-                <div class="friend-name">${account.name}</div>
-                <button class="add-friend-btn">Add</button>
-            `;
+				<div class="friend-avatar" style="background-color: ${account.avatarColor};">${account.initialLetter}</div>
+				<div class="friend-name">${account.name}</div>
+				<button class="add-friend-btn">Add</button>
+			`;
 			friendList.appendChild(resultItem);
 
 			// Add click handler for the add friend button
@@ -204,8 +245,43 @@ function showSearchResults(searchText) {
 	} else {
 		const noResultsMsg = document.createElement('div');
 		noResultsMsg.className = 'no-results-msg';
-		noResultsMsg.textContent = 'No matching accounts found or already friends/requested';
+		noResultsMsg.textContent = 'No matching accounts found, or matches are already friends or requested';
 		friendList.appendChild(noResultsMsg);
+	}
+}
+
+// Show search results for pending tab
+function showPendingSearchResults(searchText) {
+	const pendingList = document.getElementById('pending-requests-list');
+	pendingList.innerHTML = '';
+
+	const pendingRequests = JSON.parse(localStorage.getItem('pendingRequests'));
+	const results = pendingRequests.filter(request =>
+		request.name.toLowerCase().includes(searchText)
+	);
+
+	if (results.length > 0) {
+		results.forEach(request => {
+			const requestItem = document.createElement('div');
+			requestItem.className = 'friend-item';
+			requestItem.innerHTML = `
+				<div class="friend-avatar" style="background-color: ${request.avatarColor};">${request.initialLetter}</div>
+				<div class="friend-name">${request.name}</div>
+				<button class="cancel-request-btn">Cancel</button>
+			`;
+
+			const cancelBtn = requestItem.querySelector('.cancel-request-btn');
+			cancelBtn.addEventListener('click', () => {
+				cancelRequest(request.id);
+			});
+
+			pendingList.appendChild(requestItem);
+		});
+	} else {
+		const noResultsMsg = document.createElement('div');
+		noResultsMsg.className = 'no-results-msg';
+		noResultsMsg.textContent = 'No matching pending requests found';
+		pendingList.appendChild(noResultsMsg);
 	}
 }
 
@@ -301,13 +377,26 @@ function setupTabs() {
 	const pendingTab = document.getElementById('pending-tab');
 	const friendsSection = document.getElementById('friends-section');
 	const pendingSection = document.getElementById('pending-section');
+	const searchTextElement = document.querySelector('.search-friends-text');
 
 	friendsTab.addEventListener('click', () => {
 		friendsTab.classList.add('active');
 		pendingTab.classList.remove('active');
 		friendsSection.style.display = 'block';
 		pendingSection.style.display = 'none';
-		loadFriends();
+		searchTextElement.setAttribute('placeholder', 'Search new friends');
+
+		// If there's a search query, perform the search
+		const searchText = searchTextElement.textContent.trim();
+		if (searchText !== '' && searchText !== 'Search pending requests') {
+			if (searchText === 'Search new friends') {
+				loadFriends();
+			} else {
+				performSearch(searchText);
+			}
+		} else {
+			loadFriends();
+		}
 	});
 
 	pendingTab.addEventListener('click', () => {
@@ -315,7 +404,19 @@ function setupTabs() {
 		friendsTab.classList.remove('active');
 		pendingSection.style.display = 'block';
 		friendsSection.style.display = 'none';
-		loadPendingRequests();
+		searchTextElement.setAttribute('placeholder', 'Search pending requests');
+
+		// If there's a search query, perform the search
+		const searchText = searchTextElement.textContent.trim();
+		if (searchText !== '' && searchText !== 'Search new friends') {
+			if (searchText === 'Search pending requests') {
+				loadPendingRequests();
+			} else {
+				performSearch(searchText);
+			}
+		} else {
+			loadPendingRequests();
+		}
 	});
 }
 
