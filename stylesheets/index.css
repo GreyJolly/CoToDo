@@ -119,6 +119,7 @@ body {
 	padding-bottom: 80px;
 	overflow-y: auto;
 	position: relative;
+	width: 90%;
 }
 
 .notes-container {
