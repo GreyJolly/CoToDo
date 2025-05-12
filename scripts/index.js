@@ -86,13 +86,13 @@ function renderHomepage() {
 	notesContainer.innerHTML = '';
 
 	if (appData.lists.length === 0) {
-        mainContent.innerHTML = `
+		mainContent.innerHTML = `
             <div class="empty-state">
                 <p>No lists saved, press on the "+" icon to create one!</p>
             </div>
         `;
-        return;
-    }
+		return;
+	}
 
 	appData.lists.forEach(list => {
 		const noteCard = document.createElement('div');
@@ -102,85 +102,85 @@ function renderHomepage() {
 		let html = `<h2>${list.title || 'New List'}</h2>`;
 
 		// Get all incomplete tasks
-        const incompleteTasks = list.tasks.filter(task => !task.completed);
-        const hasManyTasks = incompleteTasks.length > 3;
-        const hasCollaborators = list.contributors && list.contributors.length > 0;
+		const incompleteTasks = list.tasks.filter(task => !task.completed);
+		const hasManyTasks = incompleteTasks.length > 3;
+		const hasCollaborators = list.contributors && list.contributors.length > 0;
 
-        // Show first 3 tasks normally
-        const tasksToShow = incompleteTasks.slice(0, 3);
-        tasksToShow.forEach(task => {
-            let priorityClass = '';
-            if (task.priority) {
-                priorityClass = `priority-${task.priority.toLowerCase()}`;
-            }
+		// Show first 3 tasks normally
+		const tasksToShow = incompleteTasks.slice(0, 3);
+		tasksToShow.forEach(task => {
+			let priorityClass = '';
+			if (task.priority) {
+				priorityClass = `priority-${task.priority.toLowerCase()}`;
+			}
 
-            html += `
+			html += `
 			<div class="task-item">
 				<input type="checkbox" id="${task.id}" class="${priorityClass}">
 				<label for="${task.id}" title="${task.text}">${truncateTaskText(task.text) || "New Task"}</label>
 			</div>
 			`;
-        });
+		});
 
 		// Show 4th task if exists (with normal spacing)
-        if (hasManyTasks) {
-            const fourthTask = incompleteTasks[3];
-            let priorityClass = '';
-            if (fourthTask.priority) {
-                priorityClass = `priority-${fourthTask.priority.toLowerCase()}`;
-            }
+		if (hasManyTasks) {
+			const fourthTask = incompleteTasks[3];
+			let priorityClass = '';
+			if (fourthTask.priority) {
+				priorityClass = `priority-${fourthTask.priority.toLowerCase()}`;
+			}
 
-        }
+		}
 
-        // Container for bottom elements (will contain 4th task + more + contributors)
-        html += `<div class="bottom-elements-container">`;
-        
-        // Left side container (4th task + more indicator)
-        html += `<div class="bottom-left-container">`;
+		// Container for bottom elements (will contain 4th task + more + contributors)
+		html += `<div class="bottom-elements-container">`;
 
-        // More tasks indicator (now inside bottom container)
-        if (incompleteTasks.length > 3) {
-            const remainingCount = incompleteTasks.length - 3;
-            html += `
+		// Left side container (4th task + more indicator)
+		html += `<div class="bottom-left-container">`;
+
+		// More tasks indicator (now inside bottom container)
+		if (incompleteTasks.length > 3) {
+			const remainingCount = incompleteTasks.length - 3;
+			html += `
                 <div class="more-tasks-indicator">
                     +${remainingCount} more...
                 </div>
             `;
-        }
+		}
 
-        html += `</div>`;
+		html += `</div>`;
 
-        // Contributors container (right side)
-        if (hasCollaborators) {
-            html += `<div class="contributors-container">`;
+		// Contributors container (right side)
+		if (hasCollaborators) {
+			html += `<div class="contributors-container">`;
 
-            const contributorsToShow = list.contributors.slice(0, 4);
-            contributorsToShow.forEach((contributor, index) => {
-                const offset = index * 15;
-                html += `
+			const contributorsToShow = list.contributors.slice(0, 4);
+			contributorsToShow.forEach((contributor, index) => {
+				const offset = index * 15;
+				html += `
                     <div class="contributor-avatar" 
                          style="background-color: ${contributor.avatarColor};
                                 right: ${offset}px">
                         ${contributor.initialLetter}
                     </div>
                 `;
-            });
+			});
 
 
-            if (list.contributors.length > 4) {
-                const offset = 4 * 15;
-                html += `
+			if (list.contributors.length > 4) {
+				const offset = 4 * 15;
+				html += `
                     <div class="contributor-more" 
                          style="right: ${offset}px">
                         +${list.contributors.length - 4}
                     </div>
                 `;
-            }
+			}
 
-            html += `</div>`;
-        }
+			html += `</div>`;
+		}
 		html += `</div>`;
-		
+
 		noteCard.innerHTML = html;
 		notesContainer.appendChild(noteCard);
 	});
@@ -290,47 +290,58 @@ function renderSearchResults(lists, searchTerm) {
 
 		let html = `<h2>${titleHtml}</h2>`;
 
-		// Show tasks that match the search term (up to 3)
+		// Get all tasks that match the search term
 		const matchingTasks = list.tasks.filter(task =>
 			task.text.toLowerCase().includes(searchTerm)
-		).slice(0, 3);
+		);
 
-		matchingTasks.forEach(task => {
+		// Or if title matches, show incomplete tasks
+		const tasksToShow = matchingTasks.length > 0 ? matchingTasks :
+			(list.title.toLowerCase().includes(searchTerm) ?
+				list.tasks.filter(task => !task.completed) : []);
+
+		const hasManyTasks = tasksToShow.length > 3;
+		const hasCollaborators = list.contributors && list.contributors.length > 0;
+
+		// Show first 3 tasks
+		const visibleTasks = tasksToShow.slice(0, 3);
+		visibleTasks.forEach(task => {
 			let priorityClass = '';
 			if (task.priority) {
 				priorityClass = `priority-${task.priority.toLowerCase()}`;
 			}
 
 			const taskText = highlightText(task.text, searchTerm);
+			const truncatedText = truncateTaskText(taskText);
 
 			html += `
-        	<div class="task-item">
-            	<input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
-            	<label for="${task.id}" title="${task.text}">${truncatedText}</label>
-        	</div>
-   			`;
+            <div class="task-item">
+                <input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
+                <label for="${task.id}" title="${task.text}">${truncatedText}</label>
+            </div>
+            `;
 		});
 
-		// If no matching tasks but list title matches, show first few tasks
-		if (matchingTasks.length === 0 && list.title.toLowerCase().includes(searchTerm)) {
-			const incompleteTasks = list.tasks.filter(task => !task.completed).slice(0, 3);
-			incompleteTasks.forEach(task => {
-				let priorityClass = '';
-				if (task.priority) {
-					priorityClass = `priority-${task.priority.toLowerCase()}`;
-				}
+		// Container for bottom elements
+		html += `<div class="bottom-elements-container">`;
 
-				html += `
-                    <div class="task-item">
-                        <input type="checkbox" id="${task.id}" class="${priorityClass}" ${task.completed ? 'checked' : ''}>
-                        <label for="${task.id}">${task.text || "New Task"}</label>
-                    </div>
-                `;
-			});
+		// Left side container (4th task + more indicator)
+		html += `<div class="bottom-left-container">`;
+
+		// More tasks indicator
+		if (tasksToShow.length > 3) {
+			const remainingCount = tasksToShow.length - 3;
+			html += `
+                <div class="more-tasks-indicator">
+                    +${remainingCount} more...
+                </div>
+            `;
 		}
 
-		// Show contributors if any (right-aligned with thin black border)
-		if (list.contributors && list.contributors.length > 0) {
+		html += `</div>`;
+
+		// Contributors container (right side)
+		if (hasCollaborators) {
 			html += `<div class="contributors-container">`;
 
 			const contributorsToShow = list.contributors.slice(0, 4);
@@ -357,6 +368,7 @@ function renderSearchResults(lists, searchTerm) {
 
 			html += `</div>`;
 		}
+		html += `</div>`;
 
 		noteCard.innerHTML = html;
 		notesContainer.appendChild(noteCard);
@@ -366,11 +378,11 @@ function renderSearchResults(lists, searchTerm) {
 }
 
 function truncateTaskText(text) {
-    if (!text) return "New Task";
-    const maxLength = 40;
-    return text.length > maxLength ? 
-           text.substring(0, maxLength - 3) + '...' : 
-           text;
+	if (!text) return "New Task";
+	const maxLength = 40;
+	return text.length > maxLength ?
+		text.substring(0, maxLength - 3) + '...' :
+		text;
 }
 
 function highlightText(text, searchTerm) {
@@ -381,23 +393,23 @@ function highlightText(text, searchTerm) {
 }
 
 function highlightCurrentPage() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    document.querySelectorAll('.footer button').forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    if (currentPage === 'index.html') {
-        document.getElementById('list-button').classList.add('active');
-    } else if (currentPage === 'calendar.html') {
-        document.getElementById('calendar-button').classList.add('active');
-    } else if (currentPage === 'friends.html') {
-        document.getElementById('friends-button').classList.add('active');
-    } else if (currentPage === 'friend_requests.html') {
-        document.getElementById('inbox-button1').classList.add('active');
-    }
+	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+	document.querySelectorAll('.footer button').forEach(button => {
+		button.classList.remove('active');
+	});
+
+	if (currentPage === 'index.html') {
+		document.getElementById('list-button').classList.add('active');
+	} else if (currentPage === 'calendar.html') {
+		document.getElementById('calendar-button').classList.add('active');
+	} else if (currentPage === 'friends.html') {
+		document.getElementById('friends-button').classList.add('active');
+	} else if (currentPage === 'friend_requests.html') {
+		document.getElementById('inbox-button1').classList.add('active');
+	}
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    highlightCurrentPage();
+document.addEventListener('DOMContentLoaded', function () {
+	highlightCurrentPage();
 });
