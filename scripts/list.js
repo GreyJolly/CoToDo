@@ -140,6 +140,10 @@ function renderListPage(listId) {
             const subtasksContainer = document.createElement('div');
             subtasksContainer.className = 'subtasks-container';
 
+			const connectorLine = document.createElement('div');
+    		connectorLine.className = 'task-connector-line';
+   			subtasksContainer.appendChild(connectorLine);
+
 			task.subtasks.forEach((subtask, index) => {
 				const subtaskItem = document.createElement('div');
 				subtaskItem.className = 'subtask-item';
