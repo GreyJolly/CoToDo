@@ -140,8 +140,23 @@ function setupTaskEvents() {
 	document.getElementById('flag-icon')?.addEventListener('click', openPriorityPopup);
 
 	// Checkbox change
-	document.getElementById('task-complete')?.addEventListener('change', function () {
-		saveTaskChanges();
+	document.getElementById('task-complete')?.addEventListener('change', function() {
+		const taskData = loadTaskData();
+		if (!taskData) return;
+
+		const { appData, task } = taskData;
+		const newCompletedState = this.checked;
+		task.completed = newCompletedState;
+
+		// Update all subtasks to match parent task state
+		if (task.subtasks && task.subtasks.length > 0) {
+			task.subtasks.forEach(subtask => {
+				subtask.completed = newCompletedState;
+			});
+		}
+
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		renderSubtasks(); // Refresh subtask display
 	});
 
 	// Title and description changes
@@ -746,6 +761,17 @@ function toggleSubtaskCompletion(index) {
     if (task.subtasks && task.subtasks[index]) {
         task.subtasks[index].completed = !task.subtasks[index].completed;
         localStorage.setItem('todoAppData', JSON.stringify(appData));
+        
+        // Update parent task completion
+        const allSubtasksCompleted = task.subtasks.every(subtask => subtask.completed);
+        if (task.completed !== allSubtasksCompleted) {
+            task.completed = allSubtasksCompleted;
+            localStorage.setItem('todoAppData', JSON.stringify(appData));
+            
+            // Update the checkbox in the UI
+            document.getElementById('task-complete').checked = task.completed;
+        }
+        
         renderSubtasks();
     }
 }
