@@ -188,7 +188,6 @@ function setupListPageEvents(listId) {
 	});
 
 	// Checkbox functionality
-	// In setupListPageEvents function
 	document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
 		checkbox.addEventListener('change', function() {
 			const appData = getAppData();
