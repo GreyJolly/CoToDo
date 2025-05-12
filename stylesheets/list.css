@@ -312,6 +312,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .task-container {
+	position: relative;
     margin-bottom: 12px;
     border-radius: 8px;
     background-color: #ffffff;

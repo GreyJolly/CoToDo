@@ -115,7 +115,11 @@ body {
 
 .task-start-date,
 .task-due-date {
-	box-shadow: #000;
+    padding: 4px;
+    border: none;
+    border-radius: 8px;
+   	background-color: #eee;
+    color: #000;
 }
 
 .flag-icon {

@@ -37,6 +37,39 @@ function getCurrentListId() {
 	return urlParams.get('id') || 'list1';
 }
 
+function updateParentTaskCompletion(taskId, listId) {
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
+    const task = list.tasks.find(t => t.id === taskId);
+
+    if (!task || !task.subtasks || task.subtasks.length === 0) return;
+
+    // Check if all subtasks are completed
+    const allSubtasksCompleted = task.subtasks.every(subtask => subtask.completed);
+    
+    // Only update if there's a change
+    if (task.completed !== allSubtasksCompleted) {
+        task.completed = allSubtasksCompleted;
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        renderListPage(listId); // Re-render to show the updated state
+    }
+}
+
+function toggleSubtaskCompletion(taskId, subtaskIndex) {
+    const appData = getAppData();
+    const listId = getCurrentListId();
+    const list = appData.lists.find(l => l.id === listId);
+    const task = list.tasks.find(t => t.id === taskId);
+
+    if (task && task.subtasks && task.subtasks[subtaskIndex]) {
+        // Toggle the subtask status
+        task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        
+        // Update parent task completion
+        updateParentTaskCompletion(taskId, listId);
+    }
+}
 function renderListPage(listId) {
     const appData = getAppData();
     const list = appData.lists.find(l => l.id === listId);
@@ -107,17 +140,22 @@ function renderListPage(listId) {
             const subtasksContainer = document.createElement('div');
             subtasksContainer.className = 'subtasks-container';
 
-            task.subtasks.forEach(subtask => {
-                const subtaskItem = document.createElement('div');
-                subtaskItem.className = 'subtask-item';
-                
-                subtaskItem.innerHTML = `
-                    <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
-                    <span class="subtask-label">${subtask.text}</span>
-                `;
-                
-                subtasksContainer.appendChild(subtaskItem);
-            });
+			task.subtasks.forEach((subtask, index) => {
+				const subtaskItem = document.createElement('div');
+				subtaskItem.className = 'subtask-item';
+				
+				subtaskItem.innerHTML = `
+					<input type="checkbox" ${subtask.completed ? 'checked' : ''}
+						onchange="toggleSubtaskCompletion('${task.id}', ${index})">
+					<span class="subtask-label">${subtask.text}</span>
+				`;
+				
+				subtasksContainer.appendChild(subtaskItem);
+			});
+
+			if (task.subtasks && task.subtasks.length > 0) {
+    			updateParentTaskCompletion(task.id, listId);
+			}
 
             // Append main task and subtasks to a container
             const taskContainer = document.createElement('div');
@@ -151,14 +189,23 @@ function setupListPageEvents(listId) {
 
 	// Checkbox functionality
 	document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
-		checkbox.addEventListener('change', function () {
+		checkbox.addEventListener('change', function() {
 			const appData = getAppData();
 			const taskId = this.id;
 			const list = appData.lists.find(l => l.id === listId);
 			const task = list.tasks.find(t => t.id === taskId);
 
 			if (task) {
-				task.completed = this.checked;
+				const newCompletedState = this.checked;
+				task.completed = newCompletedState;
+				
+				// Update all subtasks to match parent task state
+				if (task.subtasks && task.subtasks.length > 0) {
+					task.subtasks.forEach(subtask => {
+						subtask.completed = newCompletedState;
+					});
+				}
+				
 				localStorage.setItem('todoAppData', JSON.stringify(appData));
 				renderListPage(listId);
 			}
