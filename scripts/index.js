@@ -264,6 +264,7 @@ function setupSearch() {
 		searchInput.value = '';
 		searchClear.style.display = 'none';
 		renderHomepage();
+		setupHomepageEvents();
 	});
 }
 
