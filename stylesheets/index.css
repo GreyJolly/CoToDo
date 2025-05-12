@@ -217,6 +217,7 @@ body {
 	margin-right: 8px;
 	width: 18px;
 	height: 18px;
+	pointer-events: none;
 }
 
 .task-item label {
@@ -225,9 +226,10 @@ body {
 
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; /* Adjust based on your layout */
+    max-width: 150px;
     display: inline-block;
     vertical-align: middle;
+	pointer-events: none;
 }
 
 .bottom-elements-container {
