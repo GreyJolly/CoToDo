@@ -19,42 +19,42 @@ const defaultData = {
 				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'June 5, 2025', assignee: 'G', priority: 'high' },
 				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
 				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30, 2025', dueDate: 'June 5, 2025', assignee: 'G' },
-				{ id: 'task4', text: 'Eggs', completed: true, priority: 'high' }
+				{ id: 'task4', text: 'Eggs', completed: true, assignee: null, priority: 'high' }
 			]
 		},
 		{
 			id: 'list2',
 			title: 'To do list',
 			tasks: [
-				{ id: 'task5', text: 'Pay the bill', completed: false },
-				{ id: 'task6', text: 'Clean the house', completed: false },
-				{ id: 'task7', text: 'Descale the coffee pot', completed: false },
-				{ id: 'task8', text: 'Change alarm clock batteries', completed: false }
+				{ id: 'task5', text: 'Pay the bill', completed: false, assignee: null },
+				{ id: 'task6', text: 'Clean the house', completed: false, assignee: null },
+				{ id: 'task7', text: 'Descale the coffee pot', completed: false, assignee: null },
+				{ id: 'task8', text: 'Change alarm clock batteries', completed: false, assignee: null }
 			]
 		},
 		{
 			id: 'list3',
 			title: 'University project list',
 			tasks: [
-				{ id: 'task9', text: 'User stories', completed: false },
-				{ id: 'task10', text: 'Sketches', completed: false },
-				{ id: 'task11', text: 'Programming', completed: false }
+				{ id: 'task9', text: 'User stories', completed: false, assignee: null },
+				{ id: 'task10', text: 'Sketches', completed: false, assignee: null },
+				{ id: 'task11', text: 'Programming', completed: false, assignee: null }
 			]
 		},
 		{
 			id: 'list4',
 			title: 'Travel list',
 			tasks: [
-				{ id: 'task12', text: 'Research restaurants in Taranto', completed: false },
-				{ id: 'task13', text: 'Buy tickets for MArTA', completed: false }
+				{ id: 'task12', text: 'Research restaurants in Taranto', completed: false, assignee: null },
+				{ id: 'task13', text: 'Buy tickets for MArTA', completed: false, assignee: null }
 			]
 		},
 		{
 			id: 'list5',
 			title: 'Wish list',
 			tasks: [
-				{ id: 'task14', text: 'Learn to play piano', completed: false },
-				{ id: 'task15', text: 'Write a book', completed: false }
+				{ id: 'task14', text: 'Learn to play piano', completed: false, assignee: null },
+				{ id: 'task15', text: 'Write a book', completed: false, assignee: null }
 			]
 		}
 	]

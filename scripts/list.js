@@ -12,9 +12,24 @@ function getAppData() {
 
 	return appData;
 }
+// Add this to your list.js file or script section
 document.addEventListener('DOMContentLoaded', function () {
-	const listId = getCurrentListId();
-	renderListPage(listId);
+	const completeContainer = document.querySelector('.complete-container');
+	const toggleButton = document.querySelector('.toggle-complete');
+
+	if (completeContainer && toggleButton) {
+		completeContainer.addEventListener('click', function (e) {
+			if (e.target.closest('h3')) {
+				completeContainer.classList.toggle('collapsed');
+
+				// Update the icon
+				const icon = completeContainer.querySelector('.toggle-complete');
+				icon.classList.toggle('fa-chevron-right');
+				icon.classList.toggle('fa-chevron-down');
+			}
+		});
+	}
+	renderListPage(getCurrentListId());
 });
 
 function getCurrentListId() {
