@@ -418,7 +418,6 @@ let draggedIndex = null;
 function setupDragAndDrop() {
 	const notesContainer = document.querySelector('.notes-container');
 	const noteCards = document.querySelectorAll('.note-card');
-	var over_counter = 0;
 
 	noteCards.forEach((card, index) => {
 		card.setAttribute('draggable', 'true');
@@ -431,8 +430,6 @@ function setupDragAndDrop() {
 			this.classList.add('dragging');
 			e.dataTransfer.effectAllowed = 'move';
 			e.dataTransfer.setData('text/html', this.innerHTML);
-
-			// Hide the dragged item's content while dragging
 			this.style.opacity = '0.4';
 		});
 
@@ -457,39 +454,35 @@ function setupDragAndDrop() {
 		// Drag enter - visual feedback
 		card.addEventListener('dragenter', function (e) {
 			e.preventDefault();
-			over_counter++;
-			console.log(over_counter);
-			// Only add 'over' class if not the dragged item itself
 			if (this !== draggedItem) {
-			//	this.classList.add('over');
+				// Remove 'over' class from all cards first
+				document.querySelectorAll('.note-card').forEach(c => {
+					if (c !== this) c.classList.remove('over');
+				});
+				// Then add to current hovered card
+				this.classList.add('over');
 			}
 		});
 
 		// Drag leave - remove visual feedback
-		card.addEventListener('dragleave', function () {
-			over_counter--;
-			console.log(over_counter);
-			if (over_counter <= 0) {
-			//	this.classList.remove('over');
+		card.addEventListener('dragleave', function (e) {
+			// Only remove if we're not entering a child element
+			if (!this.contains(e.relatedTarget) && this !== draggedItem) {
+				this.classList.remove('over');
 			}
 		});
 
 		// Drop handler
 		card.addEventListener('drop', function (e) {
-			over_counter = 0;
-		
+			e.preventDefault();
+			e.stopPropagation();
+
 			// Remove any leftover over classes
 			document.querySelectorAll('.note-card').forEach(c => {
 				c.classList.remove('over');
 			});
 
-
-			e.preventDefault();
-			e.stopPropagation();
-
 			if (draggedItem && this !== draggedItem) {
-				this.classList.remove('over');
-
 				// Get the bounding rectangles
 				const targetRect = this.getBoundingClientRect();
 
@@ -523,7 +516,6 @@ function setupDragAndDrop() {
 					saveAppData();
 				}
 			}
-
 			return false;
 		});
 	});
@@ -537,7 +529,6 @@ function setupDragAndDrop() {
 
 	notesContainer.addEventListener('drop', function (e) {
 		e.preventDefault();
-		over_counter = 0;
 		if (draggedItem) {
 			// Remove any leftover over classes
 			document.querySelectorAll('.note-card').forEach(c => {
