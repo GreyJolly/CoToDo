@@ -38,81 +38,110 @@ function getCurrentListId() {
 }
 
 function renderListPage(listId) {
-	const appData = getAppData();
-	const list = appData.lists.find(l => l.id === listId);
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
 
-	if (!list) {
-		window.location.href = 'index.html';
-		return;
-	}
+    if (!list) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-	const listTitleElement = document.querySelector('.list-text');
-	listTitleElement.textContent = list.title || "New List";
-	listTitleElement.classList.toggle('placeholder', !list.title);
+    const listTitleElement = document.querySelector('.list-text');
+    listTitleElement.textContent = list.title || "New List";
+    listTitleElement.classList.toggle('placeholder', !list.title);
 
-	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
-	const completeContainer = document.querySelector('.complete-container .todo-list');
+    const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
+    const completeContainer = document.querySelector('.complete-container .todo-list');
 
-	incompleteContainer.innerHTML = '';
-	completeContainer.innerHTML = '';
+    incompleteContainer.innerHTML = '';
+    completeContainer.innerHTML = '';
 
-	list.tasks.forEach(task => {
-		const taskItem = document.createElement('div');
-		taskItem.className = 'task-item';
+    list.tasks.forEach(task => {
+        // Create main task item
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
 
-		// Determine priority class
-		let priorityClass = '';
-		if (task.priority) {
-			priorityClass = `priority-${task.priority.toLowerCase()}`;
-		}
+        // Determine priority class
+        let priorityClass = '';
+        if (task.priority) {
+            priorityClass = `priority-${task.priority.toLowerCase()}`;
+        }
 
-		let html = `
+        let html = `
             <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
             <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
             <div class="task-right-container">
         `;
 
-		// Add date if it exists
-		if (task.startDate && task.dueDate) {
-			html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-		} else if (task.startDate) {
-			html += `<span class="task-date">Due: ${task.startDate}</span>`;
-		} else if (task.dueDate) {
-			html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-		}
+        // Add date if it exists
+        if (task.startDate && task.dueDate) {
+            html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+        } else if (task.startDate) {
+            html += `<span class="task-date">Due: ${task.startDate}</span>`;
+        } else if (task.dueDate) {
+            html += `<span class="task-date">Start: ${task.dueDate}</span>`;
+        }
 
-		// Add avatar for assignee
-		if (task.assignee) {
-			if (task.assignee === 'me') {
-				// Current user (Me)
-				html += `<div class="task-avatar" style="background-color: #ee7300;">M</div>`;
-			} else {
-				// Find the contributor in the list's contributors
-				const contributor = list.contributors?.find(c => c.id === task.assignee);
-				if (contributor) {
-					html += `<div class="task-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>`;
-				} else {
-					// Fallback for unknown assignees
-					html += `<div class="task-avatar" style="background-color: #cccccc;">?</div>`;
-				}
-			}
-		} else {
-			html += '<div class="task-avatar-placeholder"></div>';
-		}
+        // Add avatar for assignee
+        if (task.assignee) {
+            if (task.assignee === 'me') {
+                html += `<div class="task-avatar" style="background-color: #ee7300;">M</div>`;
+            } else {
+                const contributor = list.contributors?.find(c => c.id === task.assignee);
+                if (contributor) {
+                    html += `<div class="task-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>`;
+                } else {
+                    html += `<div class="task-avatar" style="background-color: #cccccc;">?</div>`;
+                }
+            }
+        } else {
+            html += '<div class="task-avatar-placeholder"></div>';
+        }
 
-		html += `</div>`; // Close task-right-container
+        html += `</div>`; // Close task-right-container
 
-		taskItem.innerHTML = html;
+        taskItem.innerHTML = html;
 
-		if (task.completed) {
-			completeContainer.appendChild(taskItem);
-		} else {
-			incompleteContainer.appendChild(taskItem);
-		}
-	});
+        // Create subtasks container if there are subtasks
+        if (task.subtasks && task.subtasks.length > 0) {
+            const subtasksContainer = document.createElement('div');
+            subtasksContainer.className = 'subtasks-container';
 
-	setupListPageEvents(listId);
-	setupDragAndDrop(listId);
+            task.subtasks.forEach(subtask => {
+                const subtaskItem = document.createElement('div');
+                subtaskItem.className = 'subtask-item';
+                
+                subtaskItem.innerHTML = `
+                    <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+                    <span class="subtask-label">${subtask.text}</span>
+                `;
+                
+                subtasksContainer.appendChild(subtaskItem);
+            });
+
+            // Append main task and subtasks to a container
+            const taskContainer = document.createElement('div');
+            taskContainer.className = 'task-container';
+            taskContainer.appendChild(taskItem);
+            taskContainer.appendChild(subtasksContainer);
+
+            if (task.completed) {
+                completeContainer.appendChild(taskContainer);
+            } else {
+                incompleteContainer.appendChild(taskContainer);
+            }
+        } else {
+            // If no subtasks, just append the task
+            if (task.completed) {
+                completeContainer.appendChild(taskItem);
+            } else {
+                incompleteContainer.appendChild(taskItem);
+            }
+        }
+    });
+
+    setupListPageEvents(listId);
+    setupDragAndDrop(listId);
 }
 
 function setupListPageEvents(listId) {

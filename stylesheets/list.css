@@ -310,3 +310,27 @@ input[type="checkbox"]:checked::after {
 	justify-content: center;
 	gap: 50px;
 }
+
+.task-container {
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.subtask-item {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    margin-left: 20px;
+}
+
+.subtask-item input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.subtask-label {
+    font-size: 14px;
+    color: #666;
+}
