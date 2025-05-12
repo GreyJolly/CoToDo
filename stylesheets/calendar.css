@@ -137,13 +137,18 @@ body {
 	transform: translate(-50%, -50%);
 }
 
-.task-item.completed {
-	opacity: 0.7;
+.task-item.completed .task-list-name {
+	opacity: 1;
+	background-color: #cccccc;
 }
 
 .task-item.completed .task-label {
-	text-decoration: line-through;
 	color: #888;
+	opacity: 0.7;
+}
+
+.task-item.completed input[type="checkbox"] {
+	opacity: 0.7;
 }
 
 .task-label {

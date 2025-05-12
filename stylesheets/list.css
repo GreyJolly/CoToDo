@@ -173,7 +173,50 @@ input[type="checkbox"]:checked::after {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Popup Styles */
+.incomplete-container .task-item.completed .task-label {
+    color: #888;
+    opacity: 0.7;
+}
+
+.incomplete-container .task-item.completed input[type="checkbox"] {
+    opacity: 0.7;
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+.complete-container .task-item .task-label {
+    color: #888;
+    opacity: 0.7;
+}
+
+.complete-container .task-item input[type="checkbox"] {
+    opacity: 0.7;
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+.task-item.completed input[type="checkbox"].priority-high,
+.complete-container input[type="checkbox"].priority-high {
+    border-color: #ff9999 !important;
+}
+
+.task-item.completed input[type="checkbox"].priority-medium,
+.complete-container input[type="checkbox"].priority-medium {
+    border-color: #ffd699 !important;
+}
+
+.task-item.completed input[type="checkbox"].priority-low,
+.complete-container input[type="checkbox"].priority-low {
+    border-color: #80e080 !important;
+}
+
+.task-item.completed .task-date,
+.task-item.completed .task-avatar,
+.complete-container .task-date,
+.complete-container .task-avatar {
+    opacity: 1 !important;
+}
+
 .popup {
     position: fixed;
     top: 0;
