@@ -45,6 +45,7 @@ body {
 	width: 100%;
 	flex: 1;
 	overflow-y: auto;
+	margin-bottom: 90px;
 }
 
 .task-detail {
@@ -105,21 +106,20 @@ body {
 
 
 .task-dates {
-	color: #777;
 	font-size: 18px;
 	flex-grow: 1;
 	margin-left: 20px;
 	display: flex;
 	gap: 20%;
+	min-height: 70px;
+	color: #777;
 }
 
 .task-start-date,
 .task-due-date {
-    padding: 4px;
     border: none;
     border-radius: 8px;
-   	background-color: #eee;
-    color: #000;
+    color: #777;
 }
 
 .flag-icon {
