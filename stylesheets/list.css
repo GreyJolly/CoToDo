@@ -333,6 +333,12 @@ input[type="checkbox"]:checked::after {
 .subtask-label {
     font-size: 14px;
     color: #666;
+
+	white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    flex-grow: 1; 
+    min-width: 0; 
 }
 
 .task-item {
