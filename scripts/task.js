@@ -186,7 +186,8 @@ function setupTaskEvents() {
 			!e.target.matches('#flag-icon')) {
 			closePriorityPopup();
 		}
-		if (!e.target.closest('.calendar-days') &&
+		if (!e.target.closest('.calendar-header') &&
+			!e.target.closest('.calendar-days') &&
 			!e.target.closest('.calendar-day') &&
 			!e.target.closest('.task-dates') &&
 			!e.target.closest('.task-date-item')) {
