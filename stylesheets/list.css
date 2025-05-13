@@ -369,19 +369,7 @@ input[type="checkbox"]:checked::after {
     position: absolute;
     top: 50%;
     margin-left: -11px;
-    width: 10px; /* Length of the horizontal connector */
-    height: 2px;
-    background-color: #ccc;
-    z-index: 1;
-	transform: translateY(-50%);
-}
-
-.subtask-item::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    margin-left: -11px;
-    width: 10px; /* Length of the horizontal connector */
+    width: 10px;
     height: 2px;
     background-color: #ccc;
     z-index: 1;
@@ -405,9 +393,9 @@ input[type="checkbox"]:checked::after {
 /* Adjust checkbox alignment */
 .subtask-item input[type="checkbox"] {
     position: relative;
-    z-index: 2; /* Make sure checkboxes are above the line */
-    background-color: white; /* Cover the line behind the checkbox */
-    margin-left: 10px; /* Add some space for the connector */
+    z-index: 2;
+    background-color: white;
+    margin-left: 10px;
 }
 
 .subtask-item:first-child::before,
@@ -422,7 +410,7 @@ input[type="checkbox"]:checked::after {
     position: relative;
     z-index: 2;
     background-color: white;
-    margin-left: 12px; /* Space for the connector */
+    margin-left: 12px;
 }
 
 body > .footer {
