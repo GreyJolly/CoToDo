@@ -314,7 +314,6 @@ input[type="checkbox"]:checked::after {
 .task-container {
 	position: relative;
     margin-bottom: 12px;
-    border-radius: 8px;
     background-color: #ffffff;
 }
 
@@ -336,16 +335,14 @@ input[type="checkbox"]:checked::after {
     color: #666;
 }
 
-/* Add these styles to your CSS file */
-
 .task-item {
-    position: relative; /* Needed for absolute positioning of the connector */
+    position: relative;
 }
 
 .task-connector-line {
     position: absolute;
-    left: 9px; /* Half of checkbox width to center the line */
-    top: 28px; /* Height of the task item */
+    left: 9px;
+    top: 28px;
     bottom: 8px;
     width: 2px;
     background-color: #ccc;
@@ -354,18 +351,17 @@ input[type="checkbox"]:checked::after {
 
 .subtasks-container {
     position: relative;
-    padding-left: 20px; /* Space for the connector line */
+    padding-left: 20px;
 }
 
 .subtask-item {
     position: relative;
-    padding-left: 10px; /* Adjust as needed */
+    padding-left: 10px;
 	padding-bottom: 4px;
 }
 
-/* Adjust checkbox alignment */
 .subtask-item input[type="checkbox"] {
     position: relative;
-    z-index: 2; /* Make sure checkboxes are above the line */
-    background-color: white; /* Cover the line behind the checkbox */
+    z-index: 2;
+    background-color: white;
 }

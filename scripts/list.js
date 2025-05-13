@@ -131,7 +131,7 @@ function renderListPage(listId) {
             html += '<div class="task-avatar-placeholder"></div>';
         }
 
-        html += `</div>`; // Close task-right-container
+        html += `</div>`;
 
         taskItem.innerHTML = html;
 
