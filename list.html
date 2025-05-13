@@ -50,9 +50,11 @@
 
 	<footer class="footer">
 		<button id="delete-button" onclick="deleteList()"><i class="fa-solid fa-trash-can"></i></button>
-		<button id="contributors-button"
-			onclick="window.location.href='contributors.html?listId=' + getCurrentListId()"><i
-				class="fa-solid fa-user-group"></i></button>
+		<button id="contributors-button" class="assign-members-popup"
+    		onclick="window.location.href='contributors.html?listId=' + getCurrentListId()">
+    	<i class="fa-solid fa-user-group"></i>
+    	<span>Manage Contributors</span>
+		</button>
 		<button id="plus-task-button" onclick="newTask()"><i class="fa-solid fa-plus"></i></button>
 	</footer>
 </body>

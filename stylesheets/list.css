@@ -414,3 +414,41 @@ input[type="checkbox"]:checked::after {
 body > .footer {
     z-index: 3;
 }
+
+#contributors-button {
+    background-color: #515CC6;
+    min-height: 50px;
+    width: 180px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+}
+
+#contributors-button i {
+    font-size: 20px;
+}
+
+#contributors-button span {
+    color: white;
+	font-weight: bold;
+}
+
+.assign-members-popup {
+    display: flex !important;
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    z-index: auto;
+    overflow-y: visible;
+}
