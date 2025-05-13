@@ -393,3 +393,7 @@ input[type="checkbox"]:checked::after {
     background-color: white;
     margin-left: 12px; /* Space for the connector */
 }
+
+body > .footer {
+    z-index: 3;
+}
