@@ -564,17 +564,13 @@ body {
 }
 
 .subtasks-container {
-    display: none; /* Hidden by default */
+    display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 15px 25px;
     margin-top: 10px;
 }
 
-/* Show when visible class is added */
-.subtasks-container.visible {
-    display: flex;
-}
 
 .subtasks-list {
     display: flex;
@@ -614,14 +610,9 @@ body {
 }
 
 .add-subtask-container {
-    display: none; /* Hidden by default */
+    display: flex;
     align-items: center;
     gap: 10px;
-}
-
-/* Show when visible class is added */
-.add-subtask-container.visible {
-    display: flex;
 }
 
 .add-subtask-input {

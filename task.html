@@ -79,15 +79,13 @@
 			</div>
 			<div class="assign-members-popup" id="assignMembersPopup" hidden>
 			</div>
-			<!-- In your task.html, modify the subtasks container -->
-			<div class="subtasks-container" id="subtasksContainer" hidden>
+			<div class="subtasks-container" id="subtasksContainer">
 				<div class="subtasks-list" id="subtasksList"></div>
-				<div class="add-subtask-container" id="addSubtaskContainer" hidden>
+				<div class="add-subtask-container" id="addSubtaskContainer">
 					<input type="text" class="add-subtask-input" placeholder="Add a subtask" id="addSubtaskInput">
 				</div>
 			</div>
 		</div>
-		<!-- Delete Confirmation Popup -->
 		<div id="delete-confirm-popup" class="popup" style="display: none;">
 			<div class="popup-content">
 				<p>Are you sure you want to delete this task? This action cannot be undone.</p>
@@ -102,7 +100,6 @@
 	<footer class="footer">
 		<button id="delete-task-button" onclick="deleteTask()"><i class="fa-solid fa-trash-can"></i></button>
 		<div class="right-buttons">
-			<button id="bullet-list-button" onclick="openSublist()"><i class="fa-solid fa-list"></i></button>
 			<button id="user-list-button" onclick="openAssignMembers()"><i class="fa-solid fa-users"></i></button>
 		</div>
 	</footer>

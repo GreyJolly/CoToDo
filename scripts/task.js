@@ -73,12 +73,7 @@ function renderTaskPage() {
 		headerCheckbox.classList.add(`priority-${task.priority}`);
 	}
 
-	if (task.subtasks && task.subtasks.length > 0) {
-		const subtasksContainer = document.getElementById("subtasksContainer");
-		subtasksContainer.classList.add("visible");
-		subtasksContainer.hidden = false;
-		renderSubtasks();
-	}
+	renderSubtasks();
 
 	setupTaskEvents();
 }
@@ -205,13 +200,6 @@ function setupTaskEvents() {
 			if (assign) {
 				assign.classList.remove("visible");
 				assign.hidden = true;
-			}
-		}
-		if (!e.target.closest('.add-subtask-container') && !e.target.closest('#bullet-list-button')) {
-			const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-			if (addSubtaskContainer) {
-				addSubtaskContainer.classList.remove("visible");
-				addSubtaskContainer.hidden = true;
 			}
 		}
 	});
@@ -683,26 +671,6 @@ function debounce(func, wait) {
 	};
 }
 
-function openSublist() {
-	const subtasksContainer = document.getElementById("subtasksContainer");
-	const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-
-	if (subtasksContainer.hidden) {
-		subtasksContainer.classList.add("visible");
-		subtasksContainer.hidden = false;
-		renderSubtasks();
-	}
-
-	addSubtaskContainer.classList.toggle("visible");
-	addSubtaskContainer.hidden = !addSubtaskContainer.hidden;
-
-	if (!addSubtaskContainer.hidden) {
-		document.getElementById("addSubtaskInput").focus();
-	}
-
-	closeOtherPopups(null);
-}
-
 function renderSubtasks() {
 	const taskData = loadTaskData();
 	if (!taskData) return;
@@ -847,6 +815,17 @@ function deleteTask() {
 	};
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	renderTaskPage();
+document.addEventListener('DOMContentLoaded', function() {
+    renderTaskPage();
+    
+    // Set up subtask input
+    const addSubtaskInput = document.getElementById("addSubtaskInput");
+    if (addSubtaskInput) {
+        addSubtaskInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                addSubtask(this.value.trim());
+                this.value = '';
+            }
+        });
+    }
 });
