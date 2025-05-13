@@ -27,11 +27,11 @@
 			<div class="task-header">
 				<input type="checkbox" id="task-complete">
 				<div class="task-dates">
-					<div class="task-date-item" onclick="openCalendar('start')">
+					<div id="task-date-item-start" class="task-date-item" onclick="openCalendar('start')">
 						<span>Start:</span><br>
 						<span class="task-start-date">No date</span>
 					</div>
-					<div class="task-date-item" onclick="openCalendar('due')">
+					<div id="task-date-item-due" class="task-date-item" onclick="openCalendar('due')">
 						<span>Due:</span><br>
 						<span class="task-due-date">No date</span>
 					</div>
@@ -64,12 +64,8 @@
 				<div class="calendar-days"></div>
 				<div class="calendar-bottom-bar"></div>
 				<div class="date-selection-mode">
-					<label>
-						<input id="radio-start" type="radio" name="dateType" value="start"> Start Date
-					</label>
-					<label>
-						<input id="radio-due" type="radio" name="dateType" value="due" checked="checked"> Due Date
-					</label>
+					<input id="radio-start" type="radio" name="dateType" value="start" hidden>
+					<input id="radio-due" type="radio" name="dateType" value="due" checked="checked" hidden>
 				</div>
 			</div>
 
@@ -92,8 +88,8 @@
 				<div class="popup-buttons">
 					<button class="popup-button cancel-button">Cancel</button>
 					<button class="popup-button confirm-button">Delete</button>
-        		</div>
-    		</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

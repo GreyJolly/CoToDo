@@ -137,6 +137,7 @@ body {
 
 .empty-state p {
     max-width: 300px;
+	font-style: italic;
 }
 
 .notes-container {

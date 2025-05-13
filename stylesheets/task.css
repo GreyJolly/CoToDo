@@ -9,9 +9,9 @@ body {
 }
 
 .page-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 .wrapper {
@@ -89,37 +89,45 @@ body {
 	color: rgb(0, 0, 0);
 	font-size: 18px;
 	font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
+	font-weight: 900;
 }
 
 .task-header input[type="checkbox"].priority-high {
-    border-color: red !important;
+	border-color: red !important;
 }
 
 .task-header input[type="checkbox"].priority-medium {
-    border-color: orange !important;
+	border-color: orange !important;
 }
 
 .task-header input[type="checkbox"].priority-low {
-    border-color: limegreen !important;
+	border-color: limegreen !important;
 }
-
 
 .task-dates {
 	font-size: 18px;
 	flex-grow: 1;
 	margin-left: 20px;
 	display: flex;
-	gap: 20%;
+	gap: 10%;
 	min-height: 70px;
 	color: #777;
 }
 
-.task-start-date,
-.task-due-date {
-    border: none;
-    border-radius: 8px;
-    color: #777;
+#task-date-item-start{
+	padding: 10px;
+}
+
+#task-date-item-due{
+	padding: 10px;
+}
+
+.task-date-item.selecting {
+	padding: 10px;
+	border: none;
+	border-radius: 8px;
+	background-color: #6c757d;
+	color: white;
 }
 
 .flag-icon {
@@ -169,8 +177,8 @@ body {
 }
 
 .task-title:focus {
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .task-description {
@@ -184,8 +192,8 @@ body {
 }
 
 .task-description:focus {
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-popup {
@@ -193,9 +201,9 @@ body {
 	border-radius: 10px;
 	color: #333;
 	width: 90%;
-	max-width: 350px;
 	position: absolute;
-	top: 200px;
+	top: 220px;
+	bottom: 90px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 100;
@@ -345,31 +353,31 @@ body {
 }
 
 .enter-hint-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 15px 25px;
-    margin-top: 10px;
-    display: none;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 15px 25px;
+	margin-top: 10px;
+	display: none;
 }
 
 .enter-hint-container.visible {
-    display: flex;
+	display: flex;
 }
 
 .subtasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .subtask {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
-.subtask-checkbox{
+.subtask-checkbox {
 	appearance: none;
 	-webkit-appearance: none;
 	min-width: 18px;
@@ -390,60 +398,60 @@ body {
 	color: rgb(0, 0, 0);
 	font-size: 14px;
 	font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
+	font-weight: 900;
 }
 
 .subtask-text {
 	color: #777;
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    padding: 5px 0;
+	flex-grow: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	font-size: 16px;
+	padding: 5px 0;
 }
 
 .subtask-text:focus {
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .delete-subtask {
-    background: none;
-    border: none;
-    color: #999;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
+	background: none;
+	border: none;
+	color: #999;
+	cursor: pointer;
+	padding: 5px;
+	display: flex;
+	align-items: center;
 }
 
 .add-subtask-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .add-subtask-input {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    padding: 5px 0;
-    color: #aaa;
+	flex-grow: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	font-size: 16px;
+	padding: 5px 0;
+	color: #aaa;
 }
 
 .add-subtask-input:focus {
-    color: #000;
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	color: #000;
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .enter-hint-checkbox {
-    width: 20px;
-    height: 20px;
-    margin: 0;
+	width: 20px;
+	height: 20px;
+	margin: 0;
 }
 
 .assign-members-popup {
@@ -459,9 +467,10 @@ body {
 	position: fixed;
 
 	position: fixed;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* This does the actual centering */
+	top: 60%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	/* This does the actual centering */
 
 	z-index: 1000;
 	overflow-y: auto;
@@ -560,7 +569,7 @@ body {
 	margin: 0 10px;
 
 	position: relative;
-    top: 10px;
+	top: 10px;
 }
 
 .subtasks-container {
@@ -573,40 +582,40 @@ body {
 
 
 .subtasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .subtask {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .subtask-text {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    padding: 5px 0;
-    color: #777;
+	flex-grow: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	font-size: 16px;
+	padding: 5px 0;
+	color: #777;
 }
 
 .subtask-text:focus {
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .delete-subtask {
-    background: none;
-    border: none;
-    color: #999;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
+	background: none;
+	border: none;
+	color: #999;
+	cursor: pointer;
+	padding: 5px;
+	display: flex;
+	align-items: center;
 }
 
 .add-subtask-container {
@@ -616,78 +625,78 @@ body {
 }
 
 .add-subtask-input {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    padding: 5px 0;
-    color: #aaa;
+	flex-grow: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	font-size: 16px;
+	padding: 5px 0;
+	color: #aaa;
 }
 
 .add-subtask-input:focus {
-    color: #000;
-    background-color: #f0f0f0;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	color: #000;
+	background-color: #f0f0f0;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Popup Styles */
 .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
 }
 
 .popup-content {
-    background-color: #ffffff;
-    padding: 24px;
-    border: none;
-    border-radius: 40px;
-    width: 80%;
-    max-width: 320px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	background-color: #ffffff;
+	padding: 24px;
+	border: none;
+	border-radius: 40px;
+	width: 80%;
+	max-width: 320px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .popup h3 {
-    margin: 0 0 12px 0;
-    color: #1e1e1e;
-    font-size: 1.25rem;
+	margin: 0 0 12px 0;
+	color: #1e1e1e;
+	font-size: 1.25rem;
 }
 
 .popup p {
-    margin: 0 0 24px 0;
-    color: #6c757d;
-    line-height: 1.5;
+	margin: 0 0 24px 0;
+	color: #6c757d;
+	line-height: 1.5;
 }
 
 .popup-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
 }
 
 .popup-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9rem;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 0.9rem;
 }
 
 .cancel-button {
-    background-color: #6c757d;
-    color: white;
+	background-color: #6c757d;
+	color: white;
 }
 
 .confirm-button {
-    background-color: #ff0000;
-    color: white;
+	background-color: #ff0000;
+	color: white;
 }

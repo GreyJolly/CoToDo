@@ -170,7 +170,7 @@ function setupTaskEvents() {
 		// Only open calendar if not clicking on a specific date element
 		if (!e.target.classList.contains('task-start-date') &&
 			!e.target.classList.contains('task-due-date')) {
-			openCalendar();
+			openCalendar(getDateSelectionMode());
 		}
 	});
 
@@ -181,7 +181,8 @@ function setupTaskEvents() {
 			!e.target.matches('#flag-icon')) {
 			closePriorityPopup();
 		}
-		if (!e.target.closest('.calendar-popup') &&
+		if (!e.target.closest('.calendar-header') &&
+			!e.target.closest('.calendar-days') &&
 			!e.target.closest('.calendar-day') &&
 			!e.target.closest('.task-dates') &&
 			!e.target.closest('.task-date-item')) {
@@ -319,12 +320,25 @@ function openCalendar(start_or_due) {
 	else {
 		document.getElementById('radio-due').click();
 	}
+
+	if (getDateSelectionMode() == "start") {
+		document.getElementById("task-date-item-start").classList.add("selecting");
+		document.getElementById("task-date-item-due").classList.remove("selecting");
+	} else {
+		document.getElementById("task-date-item-due").classList.add("selecting");
+		document.getElementById("task-date-item-start").classList.remove("selecting");
+	}
+
+	// Do not proceed with the rendering if the calendar is already visible
+	if (calendarPopup.classList.contains("visible")) { return; }
+
 	calendarPopup.classList.toggle("visible");
 	calendarPopup.hidden = false;
 	closeOtherPopups(calendarPopup);
 
 	loadExistingDates();
 	generateCalendar();
+
 }
 
 function closeCalendar() {
@@ -333,6 +347,9 @@ function closeCalendar() {
 		calendarPopup.classList.remove("visible");
 		calendarPopup.hidden = true;
 	}
+	document.getElementById("task-date-item-start").classList.remove("selecting");
+	document.getElementById("task-date-item-due").classList.remove("selecting");
+
 }
 
 function closeOtherPopups(currentPopup) {
