@@ -212,13 +212,6 @@ function setupTaskEvents() {
 				assign.hidden = true;
 			}
 		}
-		if (!e.target.closest('.add-subtask-container') && !e.target.closest('#bullet-list-button')) {
-			const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-			if (addSubtaskContainer) {
-				addSubtaskContainer.classList.remove("visible");
-				addSubtaskContainer.hidden = true;
-			}
-		}
 	});
 
 	// Handle Escape key to close popups
@@ -705,26 +698,6 @@ function debounce(func, wait) {
 	};
 }
 
-function openSublist() {
-	const subtasksContainer = document.getElementById("subtasksContainer");
-	const addSubtaskContainer = document.getElementById("addSubtaskContainer");
-
-	if (subtasksContainer.hidden) {
-		subtasksContainer.classList.add("visible");
-		subtasksContainer.hidden = false;
-		renderSubtasks();
-	}
-
-	addSubtaskContainer.classList.toggle("visible");
-	addSubtaskContainer.hidden = !addSubtaskContainer.hidden;
-
-	if (!addSubtaskContainer.hidden) {
-		document.getElementById("addSubtaskInput").focus();
-	}
-
-	closeOtherPopups(null);
-}
-
 function renderSubtasks() {
 	const taskData = loadTaskData();
 	if (!taskData) return;
@@ -904,6 +877,52 @@ function updateAssigneeDisplay() {
 	}
 }
 
+function updateAssigneeDisplay() {
+	const taskData = loadTaskData();
+	if (!taskData) return;
+
+	const { task, list } = taskData;
+	const assigneeButton = document.getElementById('assigneeButton');
+	const assigneeAvatar = document.getElementById('assigneeAvatar');
+	const assigneeText = document.querySelector('.assignee-text');
+
+	if (task.assignee) {
+		if (task.assignee === 'me') {
+			assigneeAvatar.innerHTML = 'M';
+			assigneeAvatar.style.backgroundColor = '#ee7300';
+			assigneeText.textContent = 'Me';
+		} else {
+			const contributor = list.contributors?.find(c => c.id === task.assignee);
+			if (contributor) {
+				assigneeAvatar.innerHTML = contributor.initialLetter;
+				assigneeAvatar.style.backgroundColor = contributor.avatarColor;
+				assigneeText.textContent = contributor.name;
+			} else {
+				// Fallback for unknown assignee
+				assigneeAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+				assigneeAvatar.style.backgroundColor = '#cccccc';
+				assigneeText.textContent = 'Assigned';
+			}
+		}
+	} else {
+		// No assignee
+		assigneeAvatar.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
+		assigneeAvatar.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+		assigneeText.textContent = 'Assign to';
+	}
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	renderTaskPage();
+
+	// Set up subtask input
+	const addSubtaskInput = document.getElementById("addSubtaskInput");
+	if (addSubtaskInput) {
+		addSubtaskInput.addEventListener('keypress', function (e) {
+			if (e.key === 'Enter' && this.value.trim() !== '') {
+				addSubtask(this.value.trim());
+				this.value = '';
+			}
+		});
+	}
 });

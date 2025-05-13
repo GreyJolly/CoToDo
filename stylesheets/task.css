@@ -126,7 +126,7 @@ body {
 	padding: 10px;
 	border: none;
 	border-radius: 8px;
-	background-color: #6c757d;
+	background-color: #515cc6;
 	color: white;
 }
 
@@ -517,36 +517,6 @@ body {
 	font-size: 16px;
 }
 
-.right-buttons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-left: auto;
-	margin-right: 10px;
-}
-
-.right-buttons button {
-	background-color: white;
-	color: black;
-	border: none;
-	border-radius: 12px;
-	color: black !important;
-	padding: 0;
-	width: 0px;
-	height: 30px;
-	min-width: 30px;
-	min-height: 30px;
-	max-width: 30px;
-	max-height: 30px;
-	font-size: 24px;
-	cursor: pointer;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	text-decoration: none;
-	margin: 0 10px;
-}
-
 #delete-task-button {
 	margin: 0;
 
@@ -573,18 +543,13 @@ body {
 }
 
 .subtasks-container {
-	display: none;
-	/* Hidden by default */
-	flex-direction: column;
-	gap: 10px;
-	padding: 15px 25px;
-	margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 25px;
+    margin-top: 10px;
 }
 
-/* Show when visible class is added */
-.subtasks-container.visible {
-	display: flex;
-}
 
 .subtasks-list {
 	display: flex;
@@ -624,15 +589,9 @@ body {
 }
 
 .add-subtask-container {
-	display: none;
-	/* Hidden by default */
-	align-items: center;
-	gap: 10px;
-}
-
-/* Show when visible class is added */
-.add-subtask-container.visible {
-	display: flex;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .add-subtask-input {
