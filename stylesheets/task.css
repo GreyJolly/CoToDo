@@ -673,7 +673,7 @@ body {
 
 .assignee-container {
     position: fixed;
-    bottom: 80px;
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #515CC6;
