@@ -548,6 +548,7 @@ body {
     gap: 10px;
     padding: 15px 25px;
     margin-top: 10px;
+	margin-bottom: 20px;
 }
 
 
@@ -591,7 +592,8 @@ body {
 .add-subtask-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
+	margin-left: 5px;
 }
 
 .add-subtask-input {
@@ -673,7 +675,7 @@ body {
 
 .assignee-container {
     position: fixed;
-    bottom: 100px;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #515CC6;
@@ -691,7 +693,7 @@ body {
 .assignee-content {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 15px;
 }
 
 .assignee-avatar {
