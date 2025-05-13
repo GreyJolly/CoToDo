@@ -80,6 +80,8 @@ function renderTaskPage() {
 		renderSubtasks();
 	}
 
+	updateAssigneeDisplay();
+
 	setupTaskEvents();
 }
 
@@ -192,7 +194,6 @@ function setupTaskEvents() {
 			!e.target.closest('.task-dates') &&
 			!e.target.closest('.task-date-item')) {
 			closeCalendar();
-			console.log("BELLA: " + e.target.closest);
 		}
 		if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button') && !e.target.closest('.task-date-item')) {
 			const hint = document.getElementById("enterHintContainer");
@@ -201,7 +202,10 @@ function setupTaskEvents() {
 				hint.hidden = true;
 			}
 		}
-		if (!e.target.closest('.assign-members-popup') && !e.target.closest('#user-list-button')) {
+		if (!e.target.closest('.assign-members-popup') &&
+			!e.target.closest('#user-list-button') &&
+			!e.target.closest('.assignee-container')
+		) {
 			const assign = document.getElementById("assignMembersPopup");
 			if (assign) {
 				assign.classList.remove("visible");
@@ -679,14 +683,15 @@ function selectMember(memberId) {
 	// Save changes
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 
+	// Update the assignee display
+	updateAssigneeDisplay();
+
 	// Close the popup
 	const assignPopup = document.getElementById("assignMembersPopup");
 	if (assignPopup) {
 		assignPopup.classList.remove("visible");
 		assignPopup.hidden = true;
 	}
-
-	// TOBEDONE: update visual
 }
 
 function debounce(func, wait) {
@@ -862,6 +867,41 @@ function deleteTask() {
 			popup.style.display = 'none';
 		}
 	};
+}
+
+function updateAssigneeDisplay() {
+	const taskData = loadTaskData();
+	if (!taskData) return;
+
+	const { task, list } = taskData;
+	const assigneeButton = document.getElementById('assigneeButton');
+	const assigneeAvatar = document.getElementById('assigneeAvatar');
+	const assigneeText = document.querySelector('.assignee-text');
+
+	if (task.assignee) {
+		if (task.assignee === 'me') {
+			assigneeAvatar.innerHTML = 'M';
+			assigneeAvatar.style.backgroundColor = '#ee7300';
+			assigneeText.textContent = 'Me';
+		} else {
+			const contributor = list.contributors?.find(c => c.id === task.assignee);
+			if (contributor) {
+				assigneeAvatar.innerHTML = contributor.initialLetter;
+				assigneeAvatar.style.backgroundColor = contributor.avatarColor;
+				assigneeText.textContent = contributor.name;
+			} else {
+				// Fallback for unknown assignee
+				assigneeAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+				assigneeAvatar.style.backgroundColor = '#cccccc';
+				assigneeText.textContent = 'Assigned';
+			}
+		}
+	} else {
+		// No assignee
+		assigneeAvatar.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
+		assigneeAvatar.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+		assigneeText.textContent = 'Assign to';
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function () {
