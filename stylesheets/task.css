@@ -104,27 +104,23 @@ body {
 	border-color: limegreen !important;
 }
 
-
 .task-dates {
 	font-size: 18px;
 	flex-grow: 1;
 	margin-left: 20px;
 	display: flex;
-	gap: 20%;
+	gap: 10%;
 	min-height: 70px;
 	color: #777;
 }
 
-.task-dates {
-	font-size: 18px;
-	flex-grow: 1;
-	margin-left: 20px;
-	display: flex;
-	gap: 20%;
-	min-height: 70px;
-	color: #777;
+#task-date-item-start{
+	padding: 10px;
 }
 
+#task-date-item-due{
+	padding: 10px;
+}
 
 .task-date-item.selecting {
 	padding: 10px;
@@ -205,9 +201,9 @@ body {
 	border-radius: 10px;
 	color: #333;
 	width: 90%;
-	max-width: 350px;
 	position: absolute;
-	top: 200px;
+	top: 220px;
+	bottom: 90px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 100;
