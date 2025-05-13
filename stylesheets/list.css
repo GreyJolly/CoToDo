@@ -390,7 +390,6 @@ input[type="checkbox"]:checked::after {
     height: 2px;
 }
 
-/* Adjust checkbox alignment */
 .subtask-item input[type="checkbox"] {
     position: relative;
     z-index: 2;
@@ -405,7 +404,6 @@ input[type="checkbox"]:checked::after {
     height: 2px;
 }
 
-/* Adjust checkbox alignment */
 .subtask-item input[type="checkbox"] {
     position: relative;
     z-index: 2;
