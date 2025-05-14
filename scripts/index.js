@@ -6,60 +6,6 @@ if ('serviceWorker' in navigator) {
 	});
 }
 
-const defaultData = {
-	lists: [
-		{
-			id: 'list1',
-			title: 'Shopping list',
-			contributors: [
-				{ id: 1, name: "Alice", avatarColor: "#FF9AA2", initialLetter: "A" },
-				{ id: 5, name: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" }
-			],
-			tasks: [
-				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'Jun 5, 2025', assignee: 'G', priority: 'high' },
-				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
-				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30, 2025', dueDate: 'Jun 7, 2025', assignee: 'G' },
-				{ id: 'task4', text: 'Eggs', completed: true, assignee: null, priority: 'high' }
-			]
-		},
-		{
-			id: 'list2',
-			title: 'To do list',
-			tasks: [
-				{ id: 'task5', text: 'Pay the bill', completed: false, assignee: null },
-				{ id: 'task6', text: 'Clean the house', completed: false, assignee: null },
-				{ id: 'task7', text: 'Descale the coffee pot', completed: false, assignee: null },
-				{ id: 'task8', text: 'Change alarm clock batteries', completed: false, assignee: null }
-			]
-		},
-		{
-			id: 'list3',
-			title: 'University project list',
-			tasks: [
-				{ id: 'task9', text: 'User stories', completed: false, assignee: null },
-				{ id: 'task10', text: 'Sketches', completed: false, assignee: null },
-				{ id: 'task11', text: 'Programming', completed: false, assignee: null }
-			]
-		},
-		{
-			id: 'list4',
-			title: 'Travel list',
-			tasks: [
-				{ id: 'task12', text: 'Research restaurants in Taranto', completed: false, assignee: null },
-				{ id: 'task13', text: 'Buy tickets for MArTA', completed: false, assignee: null }
-			]
-		},
-		{
-			id: 'list5',
-			title: 'Wish list',
-			tasks: [
-				{ id: 'task14', text: 'Learn to play piano', completed: false, assignee: null },
-				{ id: 'task15', text: 'Write a book', completed: false, assignee: null }
-			]
-		}
-	]
-};
-
 function saveAppData() {
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
@@ -67,7 +13,13 @@ function saveAppData() {
 // Initialize or load data
 function initializeAppData() {
 	const savedData = localStorage.getItem('todoAppData');
-	return savedData ? JSON.parse(savedData) : defaultData;
+	if (savedData) {
+		return JSON.parse(savedData)
+	}
+	else {
+		const emptyData = { lists: [] }
+		return emptyData
+	}
 }
 
 let appData = initializeAppData();
@@ -421,6 +373,9 @@ let draggedIndex = null;
 function setupDragAndDrop() {
 	const notesContainer = document.querySelector('.notes-container');
 	const noteCards = document.querySelectorAll('.note-card');
+	if (!notesContainer || !noteCards) {
+		return;
+	}
 
 	noteCards.forEach((card, index) => {
 		card.setAttribute('draggable', 'true');
