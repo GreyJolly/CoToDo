@@ -503,6 +503,7 @@ body > .footer {
 
 .footer #delete-list-button {
     color: red !important;
+	font-size: 30px;
 }
 
 

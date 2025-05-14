@@ -6,13 +6,6 @@ body {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	background-color: #ffedc2;
-}
-
-.page-container {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
 }
 
 .wrapper {
@@ -48,8 +41,8 @@ body {
 	flex-direction: column;
 	width: 100%;
 	flex: 1;
-	overflow-y: auto;
-	margin-bottom: 100px;
+	padding-bottom: 150px; 
+    overflow-y: auto;
 }
 
 .task-detail {
@@ -203,7 +196,7 @@ body {
 	width: 90%;
 	position: absolute;
 	top: 220px;
-	bottom: 90px;
+	bottom: 130px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 100;
@@ -541,16 +534,17 @@ body {
 	min-height: 30px;
 	max-width: 30px;
 	max-height: 30px;
-	font-size: 24px;
+	font-size: 30px;
 	cursor: pointer;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	text-decoration: none;
-	margin: 0 10px;
 
-	position: relative;
-	top: 10px;
+	position: fixed;
+    bottom: 20px;  
+    left: 50%;    
+    transform: translateX(-50%);
 }
 
 .subtasks-container {
@@ -725,6 +719,7 @@ body {
 .footer {
 	bottom: 0;
 	z-index: 3;
+	min-height: 91px !important;
 	background-color: rgba(0,0,0,0);
 }
 
