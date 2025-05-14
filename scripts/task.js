@@ -699,19 +699,19 @@ function debounce(func, wait) {
 }
 
 function renderSubtasks() {
-	const taskData = loadTaskData();
-	if (!taskData) return;
+    const taskData = loadTaskData();
+    if (!taskData) return;
 
-	const { task } = taskData;
-	const subtasksList = document.getElementById("subtasksList");
+    const { task } = taskData;
+    const subtasksList = document.getElementById("subtasksList");
 
-	subtasksList.innerHTML = '';
+    subtasksList.innerHTML = '';
 
-	if (task.subtasks && task.subtasks.length > 0) {
-		task.subtasks.forEach((subtask, index) => {
-			const subtaskElement = document.createElement('div');
-			subtaskElement.className = 'subtask';
-			subtaskElement.innerHTML = `
+    if (task.subtasks && task.subtasks.length > 0) {
+        task.subtasks.forEach((subtask, index) => {
+            const subtaskElement = document.createElement('div');
+            subtaskElement.className = 'subtask';
+            subtaskElement.innerHTML = `
                 <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
                     data-index="${index}" onchange="toggleSubtaskCompletion(${index})">
                 <input type="text" class="subtask-text" value="${subtask.text}" 
@@ -720,22 +720,29 @@ function renderSubtasks() {
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
-			subtasksList.appendChild(subtaskElement);
+            subtasksList.appendChild(subtaskElement);
 
-			if (subtask.completed) {
-				subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
-			}
-		});
-	}
+            // Add blur event listener to handle empty input
+            subtaskElement.querySelector('.subtask-text').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    deleteSubtask(index);
+                }
+            });
 
-	const addSubtaskInput = document.getElementById("addSubtaskInput");
-	addSubtaskInput.value = '';
-	addSubtaskInput.addEventListener('keypress', function (e) {
-		if (e.key === 'Enter' && this.value.trim() !== '') {
-			addSubtask(this.value.trim());
-			this.value = '';
-		}
-	});
+            if (subtask.completed) {
+                subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
+            }
+        });
+    }
+
+    const addSubtaskInput = document.getElementById("addSubtaskInput");
+    addSubtaskInput.value = '';
+    addSubtaskInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' && this.value.trim() !== '') {
+            addSubtask(this.value.trim());
+            this.value = '';
+        }
+    });
 }
 
 function addSubtask(text) {
@@ -782,19 +789,27 @@ function toggleSubtaskCompletion(index) {
 }
 
 function updateSubtaskText(index) {
-	const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
-	if (!subtaskText) return;
+    const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
+    if (!subtaskText) return;
 
-	const newText = subtaskText.value;
-	const taskData = loadTaskData();
-	if (!taskData) return;
+    const newText = subtaskText.value;
+    const taskData = loadTaskData();
+    if (!taskData) return;
 
-	const { appData, task } = taskData;
+    const { appData, task } = taskData;
 
-	if (task.subtasks && task.subtasks[index]) {
-		task.subtasks[index].text = newText;
-		localStorage.setItem('todoAppData', JSON.stringify(appData));
-	}
+    if (task.subtasks && task.subtasks[index]) {
+        if (newText.trim() === '') {
+            // If the text is empty, remove the subtask
+            task.subtasks.splice(index, 1);
+        } else {
+            // Otherwise update the text as normal
+            task.subtasks[index].text = newText;
+        }
+        
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        renderSubtasks(); // Re-render to reflect changes
+    }
 }
 
 function deleteSubtask(index) {
