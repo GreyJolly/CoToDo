@@ -178,12 +178,21 @@ function setupSearch() {
 
 	// Update search placeholder when tab changes (without changing content)
 	friendsTab.addEventListener('click', () => {
+		const currentText = searchTextElement.textContent.trim();
+		if (currentText === 'Search pending requests' || currentText === '') {
+			searchTextElement.textContent = 'Search new friends';
+		}
 		searchTextElement.setAttribute('placeholder', 'Search new friends');
 	});
 
 	pendingTab.addEventListener('click', () => {
+		const currentText = searchTextElement.textContent.trim();
+		if (currentText === 'Search new friends' || currentText === '') {
+			searchTextElement.textContent = 'Search pending requests';
+		}
 		searchTextElement.setAttribute('placeholder', 'Search pending requests');
 	});
+
 }
 
 // Perform search based on active tab
