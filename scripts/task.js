@@ -1,6 +1,14 @@
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const monthNamesAbbrv = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+window.addEventListener('pageshow', function (event) {
+	// Check if page is loaded from cache
+	if (event.persisted) {
+		// Update your content
+		loadFreshContent();
+	}
+});
+
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
 	return data ? JSON.parse(data) : { lists: [] };
