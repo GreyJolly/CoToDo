@@ -387,6 +387,7 @@ body {
 	outline: none;
 	cursor: pointer;
 	position: relative;
+	margin: 0 3px 0 0;
 }
 
 .subtask-checkbox:checked::after {
@@ -429,8 +430,11 @@ body {
 .add-subtask-container {
 	display: flex;
 	align-items: center;
+	gap: 15px;
+    padding: 5px 0;
 	gap: 10px;
-}
+	color: #999;
+} 
 
 .add-subtask-input {
 	flex-grow: 1;
@@ -446,6 +450,12 @@ body {
 	color: #000;
 	background-color: #f0f0f0;
 	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.add-subtask-container i.fa-plus {
+    color: #999;
+    margin-left: 3px;
+    font-size: 16px;
 }
 
 .enter-hint-checkbox {
@@ -552,7 +562,8 @@ body {
 .subtasks-list {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 15px;
+    padding: 5px 0;
 }
 
 .subtask {
@@ -584,12 +595,6 @@ body {
 	padding: 5px;
 	display: flex;
 	align-items: center;
-}
-
-.add-subtask-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
 }
 
 .add-subtask-input {
