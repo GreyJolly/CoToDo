@@ -155,16 +155,13 @@ body {
 	border-radius: 20px;
 	cursor: pointer;
 	font-size: 14px;
+	font-weight: bold;
 	margin-left: 10px;
 }
 
 .add-friend-btn {
-	background-color: #4CAF50;
+	background-color: #515CC6;
 	color: white;
-}
-
-.add-friend-btn:hover {
-	background-color: #45a049;
 }
 
 .cancel-request-btn {
@@ -172,8 +169,9 @@ body {
 	color: white;
 }
 
-.cancel-request-btn:hover {
-	background-color: #d32f2f;
+.add-friend-btn i,
+.cancel-request-btn i {
+    margin-right: 8px;
 }
 
 .no-results-msg,
@@ -185,7 +183,7 @@ body {
 }
 
 .confirmation-msg {
-	color: #4CAF50;
+	color: #515CC6;
 	font-weight: bold;
 }
 

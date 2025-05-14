@@ -223,7 +223,7 @@ function showFriendSearchResults(searchText) {
 			resultItem.innerHTML = `
 				<div class="friend-avatar" style="background-color: ${account.avatarColor};">${account.initialLetter}</div>
 				<div class="friend-name">${account.name}</div>
-				<button class="add-friend-btn">Add</button>
+				<button class="add-friend-btn"><i class="fa-solid fa-user-plus"></i> Send request</button>
 			`;
 			friendList.appendChild(resultItem);
 

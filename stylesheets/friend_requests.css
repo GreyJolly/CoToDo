@@ -139,7 +139,7 @@ body {
 }
 
 .accept-btn {
-	background-color: #42d152;
+	background-color: #515CC6;
 }
 
 .reject-btn {
@@ -157,7 +157,7 @@ body {
 .add-friend-btn {
 	margin-left: auto;
 	padding: 5px 10px;
-	background-color: #4CAF50;
+	background-color: #515CC6;
 	color: white;
 	border: none;
 	border-radius: 4px;
@@ -165,7 +165,7 @@ body {
 }
 
 .add-friend-btn:hover {
-	background-color: #45a049;
+	background-color: #515CC6;
 }
 
 .no-results-msg,
@@ -177,7 +177,7 @@ body {
 }
 
 .confirmation-msg {
-	color: #4CAF50;
+	color: #515CC6;
 	font-weight: bold;
 }
 
