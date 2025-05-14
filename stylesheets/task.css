@@ -48,7 +48,7 @@ body {
 	width: 100%;
 	flex: 1;
 	overflow-y: auto;
-	margin-bottom: 90px;
+	margin-bottom: 100px;
 }
 
 .task-detail {
@@ -693,7 +693,7 @@ body {
     cursor: pointer;
     position: fixed;
     bottom: 80px;
-    left: 50%;
+    left: 80px;
     transform: translateX(-50%);
     z-index: 2;
     padding: 0 16px;
@@ -718,8 +718,9 @@ body {
 }
 
 .assignee-text {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+	color: white !important;
 }
 
 .footer {
