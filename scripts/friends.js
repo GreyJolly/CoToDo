@@ -15,13 +15,7 @@ const availableAccounts = [
 // Initialize local storage
 function initializeStorage() {
 	if (!localStorage.getItem('friends')) {
-		localStorage.setItem('friends', JSON.stringify([
-			{ id: 1, name: "Alice", avatarColor: "#FF9AA2", initialLetter: "A" },
-			{ id: 2, name: "Alexander", avatarColor: "#FFB347", initialLetter: "A" },
-			{ id: 3, name: "Audrey", avatarColor: "#B5EAD7", initialLetter: "A" },
-			{ id: 5, name: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" },
-			{ id: 6, name: "Mary", avatarColor: "#b0ff30", initialLetter: "M" }
-		]));
+		localStorage.setItem('friends', JSON.stringify([]));
 	}
 	if (!localStorage.getItem('pendingRequests')) {
 		localStorage.setItem('pendingRequests', JSON.stringify([]));
@@ -43,7 +37,7 @@ function loadFriends() {
 	if (friends.length === 0) {
 		const emptyMsg = document.createElement('div');
 		emptyMsg.className = 'no-results-msg';
-		emptyMsg.textContent = 'No friends yet. Search for friends to add!';
+		emptyMsg.textContent = 'No friends yet, you can search for friends to add';
 		friendList.appendChild(emptyMsg);
 		return;
 	}

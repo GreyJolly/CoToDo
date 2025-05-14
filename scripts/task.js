@@ -272,7 +272,7 @@ function openAssignMembers() {
 	if (!assignPopup) return;
 
 	// Clear existing options
-	assignPopup.innerHTML = '<div class="assign-to-header">Assign to:</div>';
+	assignPopup.innerHTML = '<div class="assign-to-header">Assign to a list contributor:</div>';
 
 	const taskData = loadTaskData();
 	if (!taskData) return;
