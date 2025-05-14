@@ -38,152 +38,152 @@ function getCurrentListId() {
 }
 
 function updateParentTaskCompletion(taskId, listId) {
-    const appData = getAppData();
-    const list = appData.lists.find(l => l.id === listId);
-    const task = list.tasks.find(t => t.id === taskId);
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+	const task = list.tasks.find(t => t.id === taskId);
 
-    if (!task || !task.subtasks || task.subtasks.length === 0) return;
+	if (!task || !task.subtasks || task.subtasks.length === 0) return;
 
-    // Check if all subtasks are completed
-    const allSubtasksCompleted = task.subtasks.every(subtask => subtask.completed);
-    
-    // Only update if there's a change
-    if (task.completed !== allSubtasksCompleted) {
-        task.completed = allSubtasksCompleted;
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        renderListPage(listId); // Re-render to show the updated state
-    }
+	// Check if all subtasks are completed
+	const allSubtasksCompleted = task.subtasks.every(subtask => subtask.completed);
+
+	// Only update if there's a change
+	if (task.completed !== allSubtasksCompleted) {
+		task.completed = allSubtasksCompleted;
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		renderListPage(listId); // Re-render to show the updated state
+	}
 }
 
 function toggleSubtaskCompletion(taskId, subtaskIndex) {
-    const appData = getAppData();
-    const listId = getCurrentListId();
-    const list = appData.lists.find(l => l.id === listId);
-    const task = list.tasks.find(t => t.id === taskId);
+	const appData = getAppData();
+	const listId = getCurrentListId();
+	const list = appData.lists.find(l => l.id === listId);
+	const task = list.tasks.find(t => t.id === taskId);
 
-    if (task && task.subtasks && task.subtasks[subtaskIndex]) {
-        // Toggle the subtask status
-        task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        
-        // Update parent task completion
-        updateParentTaskCompletion(taskId, listId);
-    }
+	if (task && task.subtasks && task.subtasks[subtaskIndex]) {
+		// Toggle the subtask status
+		task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+
+		// Update parent task completion
+		updateParentTaskCompletion(taskId, listId);
+	}
 }
 function renderListPage(listId) {
-    const appData = getAppData();
-    const list = appData.lists.find(l => l.id === listId);
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
 
-    if (!list) {
-        window.location.href = 'index.html';
-        return;
-    }
+	if (!list) {
+		window.location.href = 'index.html';
+		return;
+	}
 
-    const listTitleElement = document.querySelector('.list-text');
-    listTitleElement.textContent = list.title || "New List";
-    listTitleElement.classList.toggle('placeholder', !list.title);
+	const listTitleElement = document.querySelector('.list-text');
+	listTitleElement.textContent = list.title || "New List";
+	listTitleElement.classList.toggle('placeholder', !list.title);
 
-    const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
-    const completeContainer = document.querySelector('.complete-container .todo-list');
+	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
+	const completeContainer = document.querySelector('.complete-container .todo-list');
 
-    incompleteContainer.innerHTML = '';
-    completeContainer.innerHTML = '';
+	incompleteContainer.innerHTML = '';
+	completeContainer.innerHTML = '';
 
-    list.tasks.forEach(task => {
-        // Create main task item
-        const taskItem = document.createElement('div');
-        taskItem.className = 'task-item';
+	list.tasks.forEach(task => {
+		// Create main task item
+		const taskItem = document.createElement('div');
+		taskItem.className = 'task-item';
 
-        // Determine priority class
-        let priorityClass = '';
-        if (task.priority) {
-            priorityClass = `priority-${task.priority.toLowerCase()}`;
-        }
+		// Determine priority class
+		let priorityClass = '';
+		if (task.priority) {
+			priorityClass = `priority-${task.priority.toLowerCase()}`;
+		}
 
-        let html = `
+		let html = `
             <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="${priorityClass}">
             <span class="task-label" data-task-id="${task.id}">${task.text || 'New Task'}</span>
             <div class="task-right-container">
         `;
 
-        // Add date if it exists
-        if (task.startDate && task.dueDate) {
-            html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
-        } else if (task.startDate) {
-            html += `<span class="task-date">Due: ${task.startDate}</span>`;
-        } else if (task.dueDate) {
-            html += `<span class="task-date">Start: ${task.dueDate}</span>`;
-        }
+		// Add date if it exists
+		if (task.startDate && task.dueDate) {
+			html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
+		} else if (task.startDate) {
+			html += `<span class="task-date">Due: ${task.startDate}</span>`;
+		} else if (task.dueDate) {
+			html += `<span class="task-date">Start: ${task.dueDate}</span>`;
+		}
 
-        // Add avatar for assignee
-        if (task.assignee) {
-            if (task.assignee === 'me') {
-                html += `<div class="task-avatar" style="background-color: #ee7300;">M</div>`;
-            } else {
-                const contributor = list.contributors?.find(c => c.id === task.assignee);
-                if (contributor) {
-                    html += `<div class="task-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>`;
-                } else {
-                    html += `<div class="task-avatar" style="background-color: #cccccc;">?</div>`;
-                }
-            }
-        } else {
-            html += '<div class="task-avatar-placeholder"></div>';
-        }
+		// Add avatar for assignee
+		if (task.assignee) {
+			if (task.assignee === 'me') {
+				html += `<div class="task-avatar" style="background-color: #ee7300;">M</div>`;
+			} else {
+				const contributor = list.contributors?.find(c => c.id === task.assignee);
+				if (contributor) {
+					html += `<div class="task-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>`;
+				} else {
+					html += `<div class="task-avatar" style="background-color: #cccccc;">?</div>`;
+				}
+			}
+		} else {
+			html += '<div class="task-avatar-placeholder"></div>';
+		}
 
-        html += `</div>`;
+		html += `</div>`;
 
-        taskItem.innerHTML = html;
+		taskItem.innerHTML = html;
 
-        // Create subtasks container if there are subtasks
-        if (task.subtasks && task.subtasks.length > 0) {
-            const subtasksContainer = document.createElement('div');
-            subtasksContainer.className = 'subtasks-container';
+		// Create subtasks container if there are subtasks
+		if (task.subtasks && task.subtasks.length > 0) {
+			const subtasksContainer = document.createElement('div');
+			subtasksContainer.className = 'subtasks-container';
 
 			const connectorLine = document.createElement('div');
-    		connectorLine.className = 'task-connector-line';
-   			subtasksContainer.appendChild(connectorLine);
+			connectorLine.className = 'task-connector-line';
+			subtasksContainer.appendChild(connectorLine);
 
 			task.subtasks.forEach((subtask, index) => {
 				const subtaskItem = document.createElement('div');
 				subtaskItem.className = 'subtask-item';
-				
+
 				subtaskItem.innerHTML = `
 					<input type="checkbox" ${subtask.completed ? 'checked' : ''}
 						onchange="toggleSubtaskCompletion('${task.id}', ${index})">
 					<span class="subtask-label">${subtask.text}</span>
 				`;
-				
+
 				subtasksContainer.appendChild(subtaskItem);
 			});
 
 			if (task.subtasks && task.subtasks.length > 0) {
-    			updateParentTaskCompletion(task.id, listId);
+				updateParentTaskCompletion(task.id, listId);
 			}
 
-            // Append main task and subtasks to a container
-            const taskContainer = document.createElement('div');
-            taskContainer.className = 'task-container';
-            taskContainer.appendChild(taskItem);
-            taskContainer.appendChild(subtasksContainer);
+			// Append main task and subtasks to a container
+			const taskContainer = document.createElement('div');
+			taskContainer.className = 'task-container';
+			taskContainer.appendChild(taskItem);
+			taskContainer.appendChild(subtasksContainer);
 
-            if (task.completed) {
-                completeContainer.appendChild(taskContainer);
-            } else {
-                incompleteContainer.appendChild(taskContainer);
-            }
-        } else {
-            // If no subtasks, just append the task
-            if (task.completed) {
-                completeContainer.appendChild(taskItem);
-            } else {
-                incompleteContainer.appendChild(taskItem);
-            }
-        }
-    });
+			if (task.completed) {
+				completeContainer.appendChild(taskContainer);
+			} else {
+				incompleteContainer.appendChild(taskContainer);
+			}
+		} else {
+			// If no subtasks, just append the task
+			if (task.completed) {
+				completeContainer.appendChild(taskItem);
+			} else {
+				incompleteContainer.appendChild(taskItem);
+			}
+		}
+	});
 
-    setupListPageEvents(listId);
-    setupDragAndDrop(listId);
+	setupListPageEvents(listId);
+	setupDragAndDrop(listId);
 }
 
 function setupListPageEvents(listId) {
@@ -193,7 +193,7 @@ function setupListPageEvents(listId) {
 
 	// Checkbox functionality
 	document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
-		checkbox.addEventListener('change', function() {
+		checkbox.addEventListener('change', function () {
 			const appData = getAppData();
 			const taskId = this.id;
 			const list = appData.lists.find(l => l.id === listId);
@@ -202,14 +202,14 @@ function setupListPageEvents(listId) {
 			if (task) {
 				const newCompletedState = this.checked;
 				task.completed = newCompletedState;
-				
+
 				// Update all subtasks to match parent task state
 				if (task.subtasks && task.subtasks.length > 0) {
 					task.subtasks.forEach(subtask => {
 						subtask.completed = newCompletedState;
 					});
 				}
-				
+
 				localStorage.setItem('todoAppData', JSON.stringify(appData));
 				renderListPage(listId);
 			}
@@ -270,14 +270,26 @@ function setupListPageEvents(listId) {
 
 	// Task item click - just navigate to task editor
 	document.querySelectorAll('.task-item').forEach(taskItem => {
+		const taskId = taskItem.querySelector('input').id;
+		const listId = getCurrentListId();
 		taskItem.addEventListener('click', function (e) {
 			// Don't navigate if clicking the checkbox
 			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
 				return;
 			}
+			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
+		});
+	});
 
-			const taskId = taskItem.querySelector('input').id;
-			const listId = getCurrentListId();
+	// Task container click, for handling subtasks - just navigate to task editor
+	document.querySelectorAll('.task-container').forEach(taskContainer => {
+		const taskId = taskContainer.querySelector('input').id;
+		const listId = getCurrentListId();
+		taskContainer.addEventListener('click', function (e) {
+			// Don't navigate if clicking the checkbox
+			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
+				return;
+			}
 			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
 		});
 	});
@@ -345,6 +357,8 @@ function setupDragAndDrop(listId) {
 		container.addEventListener('dragover', e => {
 			e.preventDefault();
 			const draggable = document.querySelector('.dragging');
+			if (!draggable) return;
+
 			const isDraggingComplete = draggable.querySelector('input').checked;
 			const isTargetComplete = container === completeContainer;
 
@@ -352,10 +366,16 @@ function setupDragAndDrop(listId) {
 			if (isDraggingComplete === isTargetComplete) {
 				const afterElement = getDragAfterElement(container, e.clientY);
 
+				// If dragging a task with subtasks, we need to move the entire container
+				const taskContainer = draggable.closest('.task-container');
+				const elementToMove = taskContainer || draggable;
+
 				if (afterElement == null) {
-					container.appendChild(draggable);
+					container.appendChild(elementToMove);
 				} else {
-					container.insertBefore(draggable, afterElement);
+					const afterTaskContainer = afterElement.closest('.task-container');
+					const referenceElement = afterTaskContainer || afterElement;
+					container.insertBefore(elementToMove, referenceElement);
 				}
 
 				// Visual feedback
@@ -380,6 +400,12 @@ function setupDragAndDrop(listId) {
 
 		task.addEventListener('dragstart', () => {
 			task.classList.add('dragging');
+
+			// If this task has subtasks, we need to hide the subtasks while dragging
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer && taskContainer.querySelector('.subtasks-container')) {
+				taskContainer.style.opacity = '0.5';
+			}
 		});
 
 		task.addEventListener('dragend', () => {
@@ -387,13 +413,98 @@ function setupDragAndDrop(listId) {
 			document.querySelectorAll('.task-item.over').forEach(item => {
 				item.classList.remove('over');
 			});
+
+			// Restore subtasks visibility
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer) {
+				taskContainer.style.opacity = '';
+			}
+
+			updateTaskOrder(listId);
+		});
+	});
+}
+
+function setupDragAndDrop(listId) {
+	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
+	const completeContainer = document.querySelector('.complete-container .todo-list');
+
+	// Make containers drop zones with type checking
+	[incompleteContainer, completeContainer].forEach(container => {
+		container.addEventListener('dragover', e => {
+			e.preventDefault();
+			const draggable = document.querySelector('.dragging');
+			if (!draggable) return;
+
+			const isDraggingComplete = draggable.querySelector('input').checked;
+			const isTargetComplete = container === completeContainer;
+
+			// Only allow drop if completion status matches
+			if (isDraggingComplete === isTargetComplete) {
+				const afterElement = getDragAfterElement(container, e.clientY);
+
+				// If dragging a task with subtasks, we need to move the entire container
+				const taskContainer = draggable.closest('.task-container');
+				const elementToMove = taskContainer || draggable;
+
+				if (afterElement == null) {
+					container.appendChild(elementToMove);
+				} else {
+					const afterTaskContainer = afterElement.closest('.task-container');
+					const referenceElement = afterTaskContainer || afterElement;
+					container.insertBefore(elementToMove, referenceElement);
+				}
+
+				// Visual feedback
+				const taskItems = container.querySelectorAll('.task-item:not(.dragging)');
+				taskItems.forEach(item => item.classList.remove('over'));
+
+				if (afterElement) {
+					afterElement.classList.add('over');
+				}
+			}
+		});
+
+		container.addEventListener('dragleave', () => {
+			const taskItems = container.querySelectorAll('.task-item');
+			taskItems.forEach(item => item.classList.remove('over'));
+		});
+	});
+
+	// Make tasks draggable
+	document.querySelectorAll('.task-item').forEach(task => {
+		task.setAttribute('draggable', true);
+
+		task.addEventListener('dragstart', () => {
+			task.classList.add('dragging');
+
+			// If this task has subtasks, we need to hide the subtasks while dragging
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer && taskContainer.querySelector('.subtasks-container')) {
+				taskContainer.style.opacity = '0.5';
+			}
+		});
+
+		task.addEventListener('dragend', () => {
+			task.classList.remove('dragging');
+			document.querySelectorAll('.task-item.over').forEach(item => {
+				item.classList.remove('over');
+			});
+
+			// Restore subtasks visibility
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer) {
+				taskContainer.style.opacity = '';
+			}
+
 			updateTaskOrder(listId);
 		});
 	});
 }
 
 function getDragAfterElement(container, y) {
-	const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging)')];
+	// Get all draggable elements (either task-items or task-containers)
+	const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging), .task-container:not(.dragging)')];
 
 	return draggableElements.reduce((closest, child) => {
 		const box = child.getBoundingClientRect();
@@ -420,14 +531,155 @@ function updateTaskOrder(listId) {
 	// Rebuild the tasks array in the new order
 	const newTasks = [];
 
-	incompleteTasks.forEach(taskEl => {
-		const taskId = taskEl.querySelector('input').id;
+	// Helper function to extract task ID from either a task-item or task-container
+	const getTaskId = (element) => {
+		const taskItem = element.classList.contains('task-item') ? element : element.querySelector('.task-item');
+		return taskItem?.querySelector('input')?.id;
+	};
+
+	incompleteTasks.forEach(element => {
+		const taskId = getTaskId(element);
+		if (!taskId) return;
+
 		const task = list.tasks.find(t => t.id === taskId);
 		if (task) newTasks.push(task);
 	});
 
-	completeTasks.forEach(taskEl => {
-		const taskId = taskEl.querySelector('input').id;
+	completeTasks.forEach(element => {
+		const taskId = getTaskId(element);
+		if (!taskId) return;
+
+		const task = list.tasks.find(t => t.id === taskId);
+		if (task) newTasks.push({ ...task, completed: true });
+	});
+
+	// Update the list and save
+	list.tasks = newTasks;
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
+} function setupDragAndDrop(listId) {
+	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
+	const completeContainer = document.querySelector('.complete-container .todo-list');
+
+	// Make containers drop zones with type checking
+	[incompleteContainer, completeContainer].forEach(container => {
+		container.addEventListener('dragover', e => {
+			e.preventDefault();
+			const draggable = document.querySelector('.dragging');
+			if (!draggable) return;
+
+			const isDraggingComplete = draggable.querySelector('input').checked;
+			const isTargetComplete = container === completeContainer;
+
+			// Only allow drop if completion status matches
+			if (isDraggingComplete === isTargetComplete) {
+				const afterElement = getDragAfterElement(container, e.clientY);
+
+				// If dragging a task with subtasks, we need to move the entire container
+				const taskContainer = draggable.closest('.task-container');
+				const elementToMove = taskContainer || draggable;
+
+				if (afterElement == null) {
+					container.appendChild(elementToMove);
+				} else {
+					const afterTaskContainer = afterElement.closest('.task-container');
+					const referenceElement = afterTaskContainer || afterElement;
+					container.insertBefore(elementToMove, referenceElement);
+				}
+
+				// Visual feedback
+				const taskItems = container.querySelectorAll('.task-item:not(.dragging)');
+				taskItems.forEach(item => item.classList.remove('over'));
+
+				if (afterElement) {
+					afterElement.classList.add('over');
+				}
+			}
+		});
+
+		container.addEventListener('dragleave', () => {
+			const taskItems = container.querySelectorAll('.task-item');
+			taskItems.forEach(item => item.classList.remove('over'));
+		});
+	});
+
+	// Make tasks draggable
+	document.querySelectorAll('.task-item').forEach(task => {
+		task.setAttribute('draggable', true);
+
+		task.addEventListener('dragstart', () => {
+			task.classList.add('dragging');
+
+			// If this task has subtasks, we need to hide the subtasks while dragging
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer && taskContainer.querySelector('.subtasks-container')) {
+				taskContainer.style.opacity = '0.5';
+			}
+		});
+
+		task.addEventListener('dragend', () => {
+			task.classList.remove('dragging');
+			document.querySelectorAll('.task-item.over').forEach(item => {
+				item.classList.remove('over');
+			});
+
+			// Restore subtasks visibility
+			const taskContainer = task.closest('.task-container');
+			if (taskContainer) {
+				taskContainer.style.opacity = '';
+			}
+
+			updateTaskOrder(listId);
+		});
+	});
+}
+
+function getDragAfterElement(container, y) {
+	// Get all draggable elements (either task-items or task-containers)
+	const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging), .task-container:not(.dragging)')];
+
+	return draggableElements.reduce((closest, child) => {
+		const box = child.getBoundingClientRect();
+		const offset = y - box.top - box.height / 2;
+
+		if (offset < 0 && offset > closest.offset) {
+			return { offset: offset, element: child };
+		} else {
+			return closest;
+		}
+	}, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function updateTaskOrder(listId) {
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+
+	if (!list) return;
+
+	// Get all tasks in their current DOM order
+	const incompleteTasks = Array.from(document.querySelector('.incomplete-container .todo-list').children);
+	const completeTasks = Array.from(document.querySelector('.complete-container .todo-list').children);
+
+	// Rebuild the tasks array in the new order
+	const newTasks = [];
+
+	// Helper function to extract task ID from either a task-item or task-container
+	const getTaskId = (element) => {
+		const taskItem = element.classList.contains('task-item') ? element : element.querySelector('.task-item');
+		return taskItem?.querySelector('input')?.id;
+	};
+
+	incompleteTasks.forEach(element => {
+		const taskId = getTaskId(element);
+		if (!taskId) return;
+
+		const task = list.tasks.find(t => t.id === taskId);
+		if (task) newTasks.push(task);
+	});
+
+	completeTasks.forEach(element => {
+		const taskId = getTaskId(element);
+		if (!taskId) return;
+
 		const task = list.tasks.find(t => t.id === taskId);
 		if (task) newTasks.push({ ...task, completed: true });
 	});
