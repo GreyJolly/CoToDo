@@ -91,6 +91,23 @@ function renderListPage(listId) {
 	incompleteContainer.innerHTML = '';
 	completeContainer.innerHTML = '';
 
+	// Check if there are no tasks
+    if (list.tasks.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-list-message';
+        emptyMessage.innerHTML = `
+            <p>No tasks for this list, press on the "+" to add one</p>
+        `;
+        incompleteContainer.appendChild(emptyMessage);
+        
+        // Hide the complete container when there are no tasks
+        document.querySelector('.complete-container').style.display = 'none';
+        return;
+    } else {
+        // Make sure complete container is visible when there are tasks
+        document.querySelector('.complete-container').style.display = 'block';
+    }
+
 	list.tasks.forEach(task => {
 		// Create main task item
 		const taskItem = document.createElement('div');
