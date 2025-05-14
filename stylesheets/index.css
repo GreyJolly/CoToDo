@@ -150,7 +150,7 @@ body {
 /* Note cards */
 .note-card {
 	position: relative;
-	background-color: white;
+	background-color: #fff8e8;
 	border-radius: 8px;
 	padding: 15px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -252,6 +252,7 @@ body {
 	width: 18px;
 	height: 18px;
 	pointer-events: none;
+	background-color: white;
 }
 
 .task-item label {

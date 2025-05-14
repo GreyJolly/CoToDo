@@ -6,6 +6,7 @@ body {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
+	background-color: #fff8e8;
 }
 
 .wrapper {
@@ -101,6 +102,7 @@ body {
 	margin-right: 8px;
 	width: 18px;
 	height: 18px;
+	background-color: white;
 }
 
 .task-item label {
@@ -158,6 +160,7 @@ input[type="checkbox"]:checked::after {
 	font-size: 14px;
 	font-family: 'Font Awesome 6 Free';
     font-weight: 900;
+	background-color: white;
 }
 
 .task-date {
@@ -331,6 +334,7 @@ input[type="checkbox"]:checked::after {
     margin-right: 8px;
     width: 16px;
     height: 16px;
+	background-color: white;
 }
 
 .subtask-label {
@@ -499,9 +503,11 @@ body > .footer {
 }
 
 .footer #delete-list-button {
-    background-color: white !important;
     color: red !important;
 	font-size: 30px;
 }
 
 
+.footer {
+	background-color: rgba(0,0,0,0) !important;
+}
