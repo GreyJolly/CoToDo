@@ -709,30 +709,56 @@ function renderSubtasks() {
                 <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
                     data-index="${index}" onchange="toggleSubtaskCompletion(${index})">
                 <input type="text" class="subtask-text" value="${subtask.text}" 
-                    data-index="${index}" onchange="updateSubtaskText(${index})">
+                    data-index="${index}">
                 <button class="delete-subtask" onclick="deleteSubtask(${index})">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
 			subtasksList.appendChild(subtaskElement);
 
-			// Add blur event listener to handle empty input
-			subtaskElement.querySelector('.subtask-text').addEventListener('blur', function () {
-				if (this.value.trim() === '') {
+			const subtaskInput = subtaskElement.querySelector('.subtask-text');
+
+			// Handle blur event (clicking outside)
+			subtaskInput.addEventListener('blur', function () {
+				if (this.value.trim() !== '') {
+					updateSubtaskText(index);
+				} else {
 					deleteSubtask(index);
 				}
 			});
 
+			// Handle Enter key
+			subtaskInput.addEventListener('keypress', function (e) {
+				if (e.key === 'Enter') {
+					if (this.value.trim() !== '') {
+						updateSubtaskText(index);
+					} else {
+						deleteSubtask(index);
+					}
+					this.blur(); // Remove focus
+				}
+			});
+
 			if (subtask.completed) {
-				subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
+				subtaskInput.style.color = '#aaa';
 			}
 		});
 	}
 
+	// Handle the "Add subtask" input
 	const addSubtaskInput = document.getElementById("addSubtaskInput");
 	addSubtaskInput.value = '';
+
 	addSubtaskInput.addEventListener('keypress', function (e) {
 		if (e.key === 'Enter' && this.value.trim() !== '') {
+			addSubtask(this.value.trim());
+			this.value = '';
+		}
+	});
+
+	// Handle blur for the "Add subtask" input
+	addSubtaskInput.addEventListener('blur', function () {
+		if (this.value.trim() !== '') {
 			addSubtask(this.value.trim());
 			this.value = '';
 		}
@@ -793,14 +819,7 @@ function updateSubtaskText(index) {
 	const { appData, task } = taskData;
 
 	if (task.subtasks && task.subtasks[index]) {
-		if (newText.trim() === '') {
-			// If the text is empty, remove the subtask
-			task.subtasks.splice(index, 1);
-		} else {
-			// Otherwise update the text as normal
-			task.subtasks[index].text = newText;
-		}
-
+		task.subtasks[index].text = newText;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 		renderSubtasks(); // Re-render to reflect changes
 	}
