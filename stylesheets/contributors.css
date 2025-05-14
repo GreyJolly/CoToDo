@@ -200,3 +200,11 @@ input:checked + .slider:before {
     text-align: center;
     color: #666;
 }
+
+.friends-prompt {
+	padding: 15px;
+    text-align: center;
+    color: #666;
+	margin-top: 25px;
+	padding: 30px;
+}
