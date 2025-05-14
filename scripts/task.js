@@ -1,4 +1,5 @@
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthNamesAbbrv = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
@@ -558,14 +559,14 @@ function saveSelectedDates() {
 	// Format dates as "Month Day, Year" (e.g., "May 15, 2025")
 
 	if (tempStartDate) {
-		const formattedStartDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
+		const formattedStartDate = `${monthNamesAbbrv[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
 		task.startDate = formattedStartDate;
 	} else {
 		delete task.startDate;
 	}
 
 	if (tempDueDate) {
-		const formattedDueDate = `${monthNames[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
+		const formattedDueDate = `${monthNamesAbbrv[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
 		task.dueDate = formattedDueDate;
 	} else {
 		delete task.dueDate;
@@ -583,14 +584,14 @@ function updateDateDisplays() {
 	const dueDateElement = document.querySelector('.task-due-date');
 
 	if (startDateElement && tempStartDate) {
-		const formattedDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
+		const formattedDate = `${monthNamesAbbrv[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
 		startDateElement.textContent = formattedDate;
 	} else {
 		startDateElement.textContent = "No date";
 	}
 
 	if (dueDateElement && tempDueDate) {
-		const formattedDate = `${monthNames[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
+		const formattedDate = `${monthNamesAbbrv[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
 		dueDateElement.textContent = formattedDate;
 	} else {
 		dueDateElement.textContent = "No date";
@@ -607,7 +608,7 @@ function loadExistingDates() {
 	if (task.startDate) {
 		const dateMatch = task.startDate.match(/(\w+) (\d+), (\d+)/);
 		if (dateMatch) {
-			const selectedMonth = monthNames.indexOf(dateMatch[1]);
+			const selectedMonth = monthNamesAbbrv.indexOf(dateMatch[1]);
 			const selectedDay = parseInt(dateMatch[2]);
 			const selectedYear = parseInt(dateMatch[3]);
 
@@ -619,7 +620,7 @@ function loadExistingDates() {
 	if (task.dueDate) {
 		const dateMatch = task.dueDate.match(/(\w+) (\d+), (\d+)/);
 		if (dateMatch) {
-			const selectedMonth = monthNames.indexOf(dateMatch[1]);
+			const selectedMonth = monthNamesAbbrv.indexOf(dateMatch[1]);
 			const selectedDay = parseInt(dateMatch[2]);
 			const selectedYear = parseInt(dateMatch[3]);
 

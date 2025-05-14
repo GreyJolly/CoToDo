@@ -16,9 +16,9 @@ const defaultData = {
 				{ id: 5, name: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" }
 			],
 			tasks: [
-				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'June 5, 2025', assignee: 'G', priority: 'high' },
+				{ id: 'task1', text: 'Meat', completed: false, dueDate: 'Jun 5, 2025', assignee: 'G', priority: 'high' },
 				{ id: 'task2', text: 'T-shirt', completed: false, assignee: 'W', priority: 'low' },
-				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30, 2025', dueDate: 'June 5, 2025', assignee: 'G' },
+				{ id: 'task3', text: 'Apples', completed: false, startDate: 'May 30, 2025', dueDate: 'Jun 7, 2025', assignee: 'G' },
 				{ id: 'task4', text: 'Eggs', completed: true, assignee: null, priority: 'high' }
 			]
 		},
