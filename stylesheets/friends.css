@@ -196,19 +196,3 @@ body {
 	content: attr(placeholder);
 	color: #aaa;
 }
-
-.footer {
-	color: white;
-	text-align: center;
-	padding: 20px;
-	font-size: 16px;
-	font-family: Arial, sans-serif;
-	flex-shrink: 0;
-	display: flex;
-	justify-content: center;
-	gap: 60px;
-}
-
-.footer-button button.active {
-	color: #515CC6;
-}
