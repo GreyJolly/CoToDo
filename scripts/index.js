@@ -90,7 +90,7 @@ function renderHomepage() {
 	if (appData.lists.length === 0) {
 		mainContent.innerHTML = `
             <div class="empty-state">
-                <p>No lists saved, press on the "+" icon to create one!</p>
+                <p>No lists saved press on the "+" icon to create one</p>
             </div>
         `;
 		return;
