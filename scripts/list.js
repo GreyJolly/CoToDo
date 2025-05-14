@@ -94,7 +94,7 @@ function renderListPage(listId) {
 	// Check if there are no tasks
     if (list.tasks.length === 0) {
         const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'empty-list-message';
+        emptyMessage.className = 'no-results-msg';
         emptyMessage.innerHTML = `
             <p>No tasks for this list, press on the "+" to add one</p>
         `;
