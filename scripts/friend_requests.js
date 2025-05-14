@@ -1,3 +1,11 @@
+window.addEventListener('pageshow', function(event) {
+  // Check if page is loaded from cache
+  if (event.persisted) {
+    // Update your content
+    loadFreshContent();
+  }
+});
+
 function loadFriendRequests() {
 	const friendRequests = JSON.parse(localStorage.getItem('friendRequests'));
 	const friendList = document.querySelector('.friend-list');
