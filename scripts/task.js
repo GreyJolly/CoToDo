@@ -50,7 +50,7 @@ function renderTaskPage() {
 
 	// Set the list title
 	const listTitleElement = document.querySelector('.list-text');
-	listTitleElement.textContent = list.title || "Untitled List";
+	listTitleElement.textContent = list.title || "New List";
 
 	if (!task.subtasks) {
 		task.subtasks = [];

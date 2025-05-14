@@ -117,7 +117,7 @@ function getTasksForDate(date) {
                     tasks.push({
                         ...task,
                         listId: list.id,
-                        listTitle: list.title || "Untitled List",
+                        listTitle: list.title || "New List",
                         listColor: list.color || "#cccccc"
                     });
                 }
@@ -128,7 +128,7 @@ function getTasksForDate(date) {
                     tasks.push({
                         ...task,
                         listId: list.id,
-                        listTitle: list.title || "Untitled List",
+                        listTitle: list.title || "New List",
                         listColor: list.color || "#cccccc"
                     });
                 }

@@ -144,7 +144,7 @@ body {
 	grid-template-columns: 1fr 1fr;
 	gap: 15px;
 	margin-bottom: 70px;
-
+	align-items: stretch;
 }
 
 /* Note cards */
@@ -162,6 +162,7 @@ body {
 	transition: transform 0.2s, box-shadow 0.2s;
     cursor: grab;
     user-select: none;
+	overflow: hidden;
 }
 
 .note-card.dragging {
@@ -195,6 +196,8 @@ body {
 	margin-bottom: 12px;
 	font-size: 18px;
 	font-weight: bold;
+	overflow-wrap: break-word;
+	white-space: normal;
 }
 
 /* Contributors styling */
