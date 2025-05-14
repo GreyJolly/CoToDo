@@ -1,3 +1,5 @@
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
 	return data ? JSON.parse(data) : { lists: [] };
@@ -44,6 +46,10 @@ function renderTaskPage() {
 
 	const { task, list } = taskData;
 	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
+
+	// Set the list title
+	const listTitleElement = document.querySelector('.list-text');
+	listTitleElement.textContent = list.title || "Untitled List";
 
 	if (!task.subtasks) {
 		task.subtasks = [];
@@ -397,8 +403,6 @@ function generateCalendar() {
 	// Set the month and year display
 	const monthYearText = document.querySelector('.calendar-month-year');
 	if (monthYearText) {
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-			'July', 'August', 'September', 'October', 'November', 'December'];
 		monthYearText.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
 	}
 
@@ -552,8 +556,6 @@ function saveSelectedDates() {
 	const { appData, task } = taskData;
 
 	// Format dates as "Month Day, Year" (e.g., "May 15, 2025")
-	const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-		'July', 'August', 'September', 'October', 'November', 'December'];
 
 	if (tempStartDate) {
 		const formattedStartDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
@@ -581,8 +583,6 @@ function updateDateDisplays() {
 	const dueDateElement = document.querySelector('.task-due-date');
 
 	if (startDateElement && tempStartDate) {
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-			'July', 'August', 'September', 'October', 'November', 'December'];
 		const formattedDate = `${monthNames[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
 		startDateElement.textContent = formattedDate;
 	} else {
@@ -590,8 +590,6 @@ function updateDateDisplays() {
 	}
 
 	if (dueDateElement && tempDueDate) {
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-			'July', 'August', 'September', 'October', 'November', 'December'];
 		const formattedDate = `${monthNames[tempDueDate.getMonth()]} ${tempDueDate.getDate()}, ${tempDueDate.getFullYear()}`;
 		dueDateElement.textContent = formattedDate;
 	} else {
@@ -609,8 +607,6 @@ function loadExistingDates() {
 	if (task.startDate) {
 		const dateMatch = task.startDate.match(/(\w+) (\d+), (\d+)/);
 		if (dateMatch) {
-			const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-				'July', 'August', 'September', 'October', 'November', 'December'];
 			const selectedMonth = monthNames.indexOf(dateMatch[1]);
 			const selectedDay = parseInt(dateMatch[2]);
 			const selectedYear = parseInt(dateMatch[3]);
@@ -623,8 +619,6 @@ function loadExistingDates() {
 	if (task.dueDate) {
 		const dateMatch = task.dueDate.match(/(\w+) (\d+), (\d+)/);
 		if (dateMatch) {
-			const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-				'July', 'August', 'September', 'October', 'November', 'December'];
 			const selectedMonth = monthNames.indexOf(dateMatch[1]);
 			const selectedDay = parseInt(dateMatch[2]);
 			const selectedYear = parseInt(dateMatch[3]);
@@ -698,19 +692,19 @@ function debounce(func, wait) {
 }
 
 function renderSubtasks() {
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { task } = taskData;
-    const subtasksList = document.getElementById("subtasksList");
+	const { task } = taskData;
+	const subtasksList = document.getElementById("subtasksList");
 
-    subtasksList.innerHTML = '';
+	subtasksList.innerHTML = '';
 
-    if (task.subtasks && task.subtasks.length > 0) {
-        task.subtasks.forEach((subtask, index) => {
-            const subtaskElement = document.createElement('div');
-            subtaskElement.className = 'subtask';
-            subtaskElement.innerHTML = `
+	if (task.subtasks && task.subtasks.length > 0) {
+		task.subtasks.forEach((subtask, index) => {
+			const subtaskElement = document.createElement('div');
+			subtaskElement.className = 'subtask';
+			subtaskElement.innerHTML = `
                 <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} 
                     data-index="${index}" onchange="toggleSubtaskCompletion(${index})">
                 <input type="text" class="subtask-text" value="${subtask.text}" 
@@ -719,29 +713,29 @@ function renderSubtasks() {
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
-            subtasksList.appendChild(subtaskElement);
+			subtasksList.appendChild(subtaskElement);
 
-            // Add blur event listener to handle empty input
-            subtaskElement.querySelector('.subtask-text').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    deleteSubtask(index);
-                }
-            });
+			// Add blur event listener to handle empty input
+			subtaskElement.querySelector('.subtask-text').addEventListener('blur', function () {
+				if (this.value.trim() === '') {
+					deleteSubtask(index);
+				}
+			});
 
-            if (subtask.completed) {
-                subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
-            }
-        });
-    }
+			if (subtask.completed) {
+				subtaskElement.querySelector('.subtask-text').style.color = '#aaa';
+			}
+		});
+	}
 
-    const addSubtaskInput = document.getElementById("addSubtaskInput");
-    addSubtaskInput.value = '';
-    addSubtaskInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' && this.value.trim() !== '') {
-            addSubtask(this.value.trim());
-            this.value = '';
-        }
-    });
+	const addSubtaskInput = document.getElementById("addSubtaskInput");
+	addSubtaskInput.value = '';
+	addSubtaskInput.addEventListener('keypress', function (e) {
+		if (e.key === 'Enter' && this.value.trim() !== '') {
+			addSubtask(this.value.trim());
+			this.value = '';
+		}
+	});
 }
 
 function addSubtask(text) {
@@ -788,27 +782,27 @@ function toggleSubtaskCompletion(index) {
 }
 
 function updateSubtaskText(index) {
-    const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
-    if (!subtaskText) return;
+	const subtaskText = document.querySelector(`.subtask-text[data-index="${index}"]`);
+	if (!subtaskText) return;
 
-    const newText = subtaskText.value;
-    const taskData = loadTaskData();
-    if (!taskData) return;
+	const newText = subtaskText.value;
+	const taskData = loadTaskData();
+	if (!taskData) return;
 
-    const { appData, task } = taskData;
+	const { appData, task } = taskData;
 
-    if (task.subtasks && task.subtasks[index]) {
-        if (newText.trim() === '') {
-            // If the text is empty, remove the subtask
-            task.subtasks.splice(index, 1);
-        } else {
-            // Otherwise update the text as normal
-            task.subtasks[index].text = newText;
-        }
-        
-        localStorage.setItem('todoAppData', JSON.stringify(appData));
-        renderSubtasks(); // Re-render to reflect changes
-    }
+	if (task.subtasks && task.subtasks[index]) {
+		if (newText.trim() === '') {
+			// If the text is empty, remove the subtask
+			task.subtasks.splice(index, 1);
+		} else {
+			// Otherwise update the text as normal
+			task.subtasks[index].text = newText;
+		}
+
+		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		renderSubtasks(); // Re-render to reflect changes
+	}
 }
 
 function deleteSubtask(index) {
