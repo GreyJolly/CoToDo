@@ -270,14 +270,26 @@ function setupListPageEvents(listId) {
 
 	// Task item click - just navigate to task editor
 	document.querySelectorAll('.task-item').forEach(taskItem => {
+		const taskId = taskItem.querySelector('input').id;
+		const listId = getCurrentListId();
 		taskItem.addEventListener('click', function (e) {
 			// Don't navigate if clicking the checkbox
 			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
 				return;
 			}
+			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
+		});
+	});
 
-			const taskId = taskItem.querySelector('input').id;
-			const listId = getCurrentListId();
+	// Task container click, for handling subtasks - just navigate to task editor
+	document.querySelectorAll('.task-container').forEach(taskContainer => {
+		const taskId = taskContainer.querySelector('input').id;
+		const listId = getCurrentListId();
+		taskContainer.addEventListener('click', function (e) {
+			// Don't navigate if clicking the checkbox
+			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
+				return;
+			}
 			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
 		});
 	});
