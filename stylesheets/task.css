@@ -6,6 +6,7 @@ body {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
+	background-color: #ffedc2;
 }
 
 .wrapper {
@@ -720,7 +721,7 @@ body {
 	bottom: 0;
 	z-index: 3;
 	min-height: 91px !important;
-	background-color: rgba(0,0,0,0);
+	background-color: rgba(0,0,0,0) !important;
 }
 
 .task-item {
