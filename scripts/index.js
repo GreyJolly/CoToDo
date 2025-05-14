@@ -242,6 +242,7 @@ function setupSearch() {
 
 		if (searchTerm === '') {
 			renderHomepage();
+			setupHomepageEvents();
 			return;
 		}
 
