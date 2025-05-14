@@ -693,8 +693,7 @@ body {
     cursor: pointer;
     position: fixed;
     bottom: 80px;
-    left: 80px;
-    transform: translateX(-50%);
+    left: 20px;
     z-index: 2;
     padding: 0 16px;
     margin: 0;
