@@ -89,7 +89,6 @@ function setPriorityFlag(priority) {
 	const flagIcon = document.getElementById('flag-icon');
 	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
-	// Remove all priority classes first
 	flagIcon.className = 'flag-icon fa-regular fa-flag';
 	flagIcon.style.color = '';
 	headerCheckbox.classList.remove('priority-high', 'priority-medium', 'priority-low');

@@ -470,8 +470,6 @@ body {
 	top: 60%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	/* This does the actual centering */
-
 	z-index: 1000;
 	overflow-y: auto;
 	display: none;
@@ -548,7 +546,6 @@ body {
     gap: 10px;
     padding: 15px 25px;
     margin-top: 10px;
-	margin-bottom: 20px;
 }
 
 
@@ -592,8 +589,7 @@ body {
 .add-subtask-container {
     display: flex;
     align-items: center;
-    gap: 15px;
-	margin-left: 5px;
+    gap: 10px;
 }
 
 .add-subtask-input {
@@ -675,7 +671,7 @@ body {
 
 .assignee-container {
     position: fixed;
-    bottom: 90px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #515CC6;
@@ -693,7 +689,7 @@ body {
 .assignee-content {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
 }
 
 .assignee-avatar {
