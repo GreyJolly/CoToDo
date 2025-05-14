@@ -1,3 +1,5 @@
+const MAX_TITLE_LENGTH = 30;
+
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
 	const defaultData = { lists: [] };
@@ -231,7 +233,14 @@ function setupListPageEvents(listId) {
 
 	// Blur handler to save changes
 	listTitleElement.addEventListener('blur', function () {
-		const newTitle = this.textContent.trim();
+		let newTitle = this.textContent.trim();
+
+		// Ensure we don't save more than than the allowed amount characters
+		if (newTitle.length > MAX_TITLE_LENGTH) {
+			newTitle = newTitle.substring(0, MAX_TITLE_LENGTH);
+			this.textContent = newTitle;
+		}
+
 		list.title = newTitle;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 
@@ -244,8 +253,20 @@ function setupListPageEvents(listId) {
 		}
 	});
 
-	// Enter key handler
+	// Keypresses handler
 	listTitleElement.addEventListener('keydown', function (e) {
+		// If we're at the limit, prevent certain keys
+		if (this.textContent.length >= MAX_TITLE_LENGTH) {
+			// Allow deletion, navigation, and Enter key
+			if (![
+				'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
+				'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'
+			].includes(e.key)) {
+				e.preventDefault();
+				return;
+			}
+		}
+
 		if (e.key === 'Enter') {
 			e.preventDefault();
 			// Remove placeholder class immediately when user starts typing
@@ -264,6 +285,26 @@ function setupListPageEvents(listId) {
 			// If the content is still the placeholder text, clear it
 			if (this.textContent.trim() === 'New List') {
 				this.textContent = '';
+			}
+		}
+
+		// Enforce character limit by preventing further input
+		if (this.textContent.length > MAX_TITLE_LENGTH) {
+			// Get the current selection
+			const selection = window.getSelection();
+			const range = selection.getRangeAt(0);
+
+			// If we're at the limit and trying to type more, prevent it
+			if (range.startOffset >= MAX_TITLE_LENGTH) {
+				// Move cursor back to the last position
+				range.setStart(this.firstChild, MAX_TITLE_LENGTH);
+				range.setEnd(this.firstChild, MAX_TITLE_LENGTH);
+				selection.removeAllRanges();
+				selection.addRange(range);
+
+				// Trim any excess characters (in case of paste)
+				this.textContent = this.textContent.substring(0, MAX_TITLE_LENGTH);
+				return;
 			}
 		}
 	});
