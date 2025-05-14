@@ -1,13 +1,5 @@
 const MAX_TITLE_LENGTH = 30;
 
-window.addEventListener('pageshow', function(event) {
-  // Check if page is loaded from cache
-  if (event.persisted) {
-    // Update your content
-    loadFreshContent();
-  }
-});
-
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
 	const defaultData = { lists: [] };
