@@ -224,10 +224,10 @@ body {
 .no-tasks {
 	text-align: center;
 	padding: 30px 20px;
-	color: #888;
-	font-style: italic;
+	color: #666;
 	background-color: white;
 	border-radius: 10px;
+	font-size: 16px;
 }
 
 @media (max-width: 480px) {

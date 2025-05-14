@@ -129,7 +129,7 @@ body {
     height: 200px;
     text-align: center;
     color: #666;
-    font-size: 1.2rem;
+    font-size: 16px;
     padding: 20px;
     border-radius: 10px;
     margin: 20px 0;
@@ -137,7 +137,6 @@ body {
 
 .empty-state p {
     max-width: 300px;
-	font-style: italic;
 }
 
 .notes-container {
