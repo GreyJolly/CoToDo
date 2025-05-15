@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cotodo-cache-v7';
+const CACHE_NAME = 'cotodo-cache-v8';
 
 const urlsToCache = [
 	'./',
@@ -10,6 +10,8 @@ const urlsToCache = [
 	'./friends.html',
 	'./friend_requests.html',
 	',/task.html',
+	'./login.html',
+	'./signup.html',
 	'./stylesheets/index.css',
 	'./stylesheets/footer.css',
 	'./stylesheets/profile.css',
@@ -18,6 +20,8 @@ const urlsToCache = [
 	'./stylesheets/friend_requests.css',
 	'./stylesheets/friends.css',
 	'./stylesheets/list.css',
+	'./stylesheets/login.css',
+	'./stylesheets/signup.css',
 	'./stylesheets/task.js',
 	'./scripts/index.js',
 	'./scripts/calendar.js',
@@ -28,6 +32,8 @@ const urlsToCache = [
 	'./scripts/list.js',
 	'./scripts/profile.js',
 	'./scripts/task.js',
+	'./scripts/login.js',
+	'./scripts/signup.js',
 	'./images/icon-512.png',
 	'./images/icon-192.png'
 ];

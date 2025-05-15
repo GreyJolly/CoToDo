@@ -1,0 +1,173 @@
+html,
+body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #f2f1f6;
+    color: #333;
+}
+
+/* Signup container */
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Signup form */
+.signup-form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e4e3e8;
+}
+
+.form-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Form elements */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.required {
+    color: #ff3333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    background-color: #e4e3e8;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+.form-control:focus {
+    border-color: #0030ee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-hint {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* Continue button */
+.btn-continue {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #ffffff;
+    background-color: #0030ee;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 50px;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-continue:hover {
+    background-color: #0026cc;
+}
+
+.arrow {
+    margin-left: 8px;
+}
+
+/* Terms text */
+.terms-text {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e4e3e8;
+}
+
+a {
+    color: #0030ee;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Error messages */
+.error-message {
+    color: #ff3333;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+.error-input {
+    border-color: #ff3333 !important;
+}
+
+.error-input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 51, 51, 0.3) !important;
+}
+
+/* Animation for form submission */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+    .signup-form {
+        padding: 20px;
+        border-radius: 4px;
+    }
+    
+    .form-title {
+        font-size: 20px;
+    }
+    
+    .btn-continue {
+        height: 44px;
+    }
+}
