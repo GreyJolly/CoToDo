@@ -29,6 +29,7 @@ body {
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	font-family: Arial, sans-serif;
 	position: relative;
+	margin: 0 auto;
 }
 
 .search-input {
@@ -90,7 +91,8 @@ body {
 }
 
 .account {
-	position: right;
+	margin-left: auto;
+	flex-shrink: 0;
 }
 
 .account-avatar {
@@ -108,7 +110,7 @@ body {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	line-height: 1;
     text-align: center;
-    padding: 0;
+    flex-shrink: 0;
 }
 
 /* Main content area */
