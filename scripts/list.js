@@ -129,9 +129,9 @@ function renderListPage(listId) {
 		if (task.startDate && task.dueDate) {
 			html += `<span class="task-date">${task.startDate} - ${task.dueDate}</span>`;
 		} else if (task.startDate) {
-			html += `<span class="task-date">Due: ${task.startDate}</span>`;
+			html += `<span class="task-date">Start: ${task.startDate}</span>`;
 		} else if (task.dueDate) {
-			html += `<span class="task-date">Start: ${task.dueDate}</span>`;
+			html += `<span class="task-date">Due: ${task.dueDate}</span>`;
 		}
 
 		// Add avatar for assignee

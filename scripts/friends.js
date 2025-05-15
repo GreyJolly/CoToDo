@@ -314,7 +314,7 @@ function sendFriendRequest(account) {
 
 	// If account is friendly, set up auto-accept after random delay
 	if (account.isFriendly) {
-		const delay = Math.floor(Math.random() * 8000) + 2000; // 2-10 seconds
+		const delay = 0; // Math.floor(Math.random() * 8000) + 2000; // 2-10 seconds
 		setTimeout(() => {
 			acceptFriendRequest(account);
 		}, delay);
