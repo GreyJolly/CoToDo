@@ -13,11 +13,9 @@ let currentCalendarMonth = currentDate.getMonth();
 let currentCalendarYear = currentDate.getFullYear();
 
 document.addEventListener('DOMContentLoaded', function () {
-    const today = new Date();
     const monthElement = document.querySelector('.month');
     const prevBtn = document.querySelector('.fa-angle-left');
     const nextBtn = document.querySelector('.fa-angle-right');
-    const todoListContainer = document.querySelector('.todo-list');
     const calendarHeader = document.querySelector('.calendar-header');
 
     if (monthElement) {
@@ -70,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function formatDate(date) {
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('en-GB', { month: 'long' });
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
 }
