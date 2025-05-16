@@ -6,7 +6,7 @@ body {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	background-color: #ffffff;
+	background-color: #f2f1f6; 
 }
 
 .wrapper {
@@ -16,6 +16,7 @@ body {
 	margin-top: 40px;
 	position: relative;
 	padding-bottom: 10px;
+	background-color: rgba(0,0,0,0);
 }
 
 .calendar-text {
@@ -39,7 +40,6 @@ body {
 	align-items: center;
 	gap: 10px;
 	padding: 15px;
-	background-color: white;
 	margin-bottom: 15px;
 }
 
@@ -235,35 +235,6 @@ body {
     max-width: 80%;
 }
 
-@media (max-width: 480px) {
-	.calendar-header {
-		padding: 12px;
-	}
-
-	.calendar-nav i {
-		font-size: 18px;
-		padding: 6px 12px;
-	}
-
-	.calendar-nav .month {
-		font-size: 16px;
-		margin: 0 15px;
-	}
-
-	.task-item {
-		padding: 10px 12px;
-	}
-
-	.task-label {
-		font-size: 15px;
-	}
-
-	.today-btn {
-		padding: 6px 15px;
-		font-size: 13px;
-	}
-}
-
 .calendar-popup {
 	background-color: white;
 	border-radius: 10px;
@@ -281,11 +252,6 @@ body {
 
 .calendar-popup.visible {
 	display: block;
-}
-
-.calendar-header {
-	padding: 15px;
-	background-color: #ffffff;
 }
 
 .calendar-nav {

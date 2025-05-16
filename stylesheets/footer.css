@@ -40,7 +40,7 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background-color: #ffffff;
+	background-color: #f2f1f6; 
 	min-height: 50px;
 	text-align: center;
 	padding: 20px;
@@ -93,7 +93,7 @@
 	bottom: 88px;
 	height: 60px;
 	background: linear-gradient(to top,
-			rgba(255, 255, 255, 1),
+			#f2f1f6,
 			rgba(255, 255, 255, 0));
 	pointer-events: none;
 	z-index: 10;

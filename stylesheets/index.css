@@ -6,6 +6,7 @@ body {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
+	background-color: #f2f1f6;
 }
 
 .wrapper {
@@ -15,6 +16,8 @@ body {
 	min-width: 75px;
 	padding-top: 20px;
 	padding-bottom: 10px;
+	background-color: rgba(0, 0, 0, 0);
+
 }
 
 .searchbar {
@@ -109,8 +112,8 @@ body {
 	border: 1px solid #000000;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	line-height: 1;
-    text-align: center;
-    flex-shrink: 0;
+	text-align: center;
+	flex-shrink: 0;
 }
 
 /* Main content area */
@@ -124,20 +127,20 @@ body {
 }
 
 .empty-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    text-align: center;
-    color: #666;
-    font-size: 16px;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 200px;
+	text-align: center;
+	color: #666;
+	font-size: 16px;
+	padding: 20px;
+	border-radius: 10px;
+	margin: 20px 0;
 }
 
 .empty-state p {
-    max-width: 300px;
+	max-width: 300px;
 }
 
 .notes-container {
@@ -151,7 +154,7 @@ body {
 /* Note cards */
 .note-card {
 	position: relative;
-	background-color: #f2f1f6;
+	background-color: white;
 	border-radius: 8px;
 	padding: 15px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -160,20 +163,20 @@ body {
 	flex-direction: column;
 	position: relative;
 	transition: transform 0.2s, box-shadow 0.2s;
-    cursor: grab;
-    user-select: none;
+	cursor: grab;
+	user-select: none;
 	overflow: hidden;
 }
 
 .note-card.dragging {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0.8;
-    cursor: grabbing;
+	transform: scale(1.02);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	opacity: 0.8;
+	cursor: grabbing;
 }
 
 .note-card.over {
-    border: 2px dashed #000;
+	border: 2px dashed #000;
 }
 
 .note-card::after {
@@ -259,29 +262,29 @@ body {
 	font-size: 16px;
 	color: #333;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px;
-    display: inline-block;
-    vertical-align: middle;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 150px;
+	display: inline-block;
+	vertical-align: middle;
 	pointer-events: none;
 }
 
 .bottom-elements-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
 }
 
 .bottom-left-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .more-tasks-indicator {
-    font-size: 12px;
-    color: #999;
+	font-size: 12px;
+	color: #999;
 	opacity: 0.7;
 }
 
@@ -339,4 +342,3 @@ input[type="checkbox"] {
 	cursor: pointer;
 	position: relative;
 }
-
