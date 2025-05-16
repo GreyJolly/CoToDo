@@ -264,17 +264,37 @@ document.addEventListener('DOMContentLoaded', function () {
     
     document.getElementById('delete-profile-button')?.addEventListener('click', function () {
         if (!currentUser) return;
-        
-        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-            try {
-                deleteAllUserData(currentUser.id);
-                deleteUserAccount(currentUser.id);
-                alert('Your account has been deleted successfully.');
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Account deletion failed:', error);
-                alert('Failed to delete account. Please try again.');
-            }
+    
+        // Show the confirmation popup
+        const popup = document.getElementById('delete-confirm-popup');
+        if (popup) {
+            popup.style.display = 'flex';
+            
+            // Setup event listeners for the buttons
+            popup.querySelector('.cancel-popup-button').onclick = function () {
+                popup.style.display = 'none';
+            };
+
+            popup.querySelector('.confirm-button').onclick = function () {
+                try {
+                    deleteAllUserData(currentUser.id);
+                    deleteUserAccount(currentUser.id);
+                    popup.style.display = 'none';
+                    alert('Your account has been deleted successfully.');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Account deletion failed:', error);
+                    alert('Failed to delete account. Please try again.');
+                    popup.style.display = 'none';
+                }
+            };
+
+            // Close popup when clicking outside
+            popup.onclick = function (e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            };
         }
     });
 });
