@@ -1,177 +1,180 @@
-html, body {
-    font-family: Arial, sans-serif;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
+html,
+body {
+	font-family: Arial, sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	background-color: #f2f1f6;
 }
 
 .wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    position: relative;
-    background-color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 0;
+	position: relative;
+	background-color: white;
+	background-color: rgba(0, 0, 0, 0);
+
 }
 
 .backto-index i {
-    font-size: 30px;
-    color: #000000;
-    margin-left: 25px;
-    cursor: pointer;
+	font-size: 30px;
+	color: #000000;
+	margin-left: 25px;
+	cursor: pointer;
 }
 
 .profile-text {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: #000000;
-    font-size: 26px;
-    font-weight: bold;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+	color: #000000;
+	font-size: 26px;
+	font-weight: bold;
 }
 
 .logout i {
-    font-size: 30px;
-    color: #ff0000;
-    margin-right: 25px;
-    cursor: pointer;
+	font-size: 30px;
+	color: #ff0000;
+	margin-right: 25px;
+	cursor: pointer;
 }
 
 .main-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    position: relative;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	position: relative;
 }
 
 .profile-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    overflow: hidden;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	overflow: hidden;
 }
 
 .profile-circle {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: #515CC6;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
+	position: absolute;
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	background-color: #515CC6;
+	top: 20%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
 }
 
 .profile-ellipse {
-    position: absolute;
-    width: 100%;
-    height: 150px;
-    background-color: #515CC6;
-    border-radius: 50%;
-    top: calc(20% + 75px);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+	position: absolute;
+	width: 100%;
+	height: 150px;
+	background-color: #515CC6;
+	border-radius: 50%;
+	top: calc(20% + 75px);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 2;
 }
 
 .profile-rectangle {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 200px);
-    background-color: #515CC6;
-    top: calc(20% + 150px);
-    z-index: 3;
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 200px);
+	background-color: #515CC6;
+	top: calc(20% + 150px);
+	z-index: 3;
 }
 
 .profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-    max-width: 400px;
-    position: absolute;
-    z-index: 4;
-    background-color: transparent;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 90%;
+	max-width: 400px;
+	position: absolute;
+	z-index: 4;
+	background-color: transparent;
 	top: calc(20% + 25px);
 }
 
 .account-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #ee7300;
-    color: white;
-    font-size: 48px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    border: 3px solid white;
-    position: relative;
-    z-index: 5;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	background-color: #ee7300;
+	color: white;
+	font-size: 48px;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 15px;
+	border: 3px solid white;
+	position: relative;
+	z-index: 5;
 }
 
 .profile-name {
-    font-size: 40px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 30px;
-    position: relative;
-    z-index: 5;
+	font-size: 40px;
+	font-weight: bold;
+	color: white;
+	margin-bottom: 30px;
+	position: relative;
+	z-index: 5;
 }
 
 .options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    position: relative;
-    z-index: 5;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+	position: relative;
+	z-index: 5;
 }
 
 .options button {
-    background-color: transparent;
-    border: 2px solid white;
-    border-radius: 25px;
-    color: white;
-    padding: 12px 20px 12px 30px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    transition: all 0.3s ease;
-    justify-content: flex-start;
+	background-color: transparent;
+	border: 2px solid white;
+	border-radius: 25px;
+	color: white;
+	padding: 12px 20px 12px 30px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	transition: all 0.3s ease;
+	justify-content: flex-start;
 	height: 50px;
 }
 
 .options button:active {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transform: translateY(-5px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .options button i {
-    font-size: 18px;
+	font-size: 18px;
 }
 
 #delete-profile-button {
-    background-color: #E35452;
-    border: 2px solid white;
+	background-color: #E35452;
+	border: 2px solid white;
 }
 
 #delete-profile-button:active {
 	transform: translateY(-5px);
-    background-color: #c23331;
+	background-color: #c23331;
 }

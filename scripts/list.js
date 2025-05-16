@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const titleInput = document.querySelector('.list-title');
 	if (titleInput.value == '') {
 		titleInput.focus();
+		setTimeout(titleInput.focus(), 300);
 	}
 });
 
