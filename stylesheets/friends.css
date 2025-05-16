@@ -45,13 +45,13 @@ body {
 .searchbar {
 	width: 80%;
 	min-height: 50px;
-	background-color: #f0f0f0;
+	background-color: #e2e1e5;
 	border-radius: 25px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding: 0 15px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 	font-family: Arial, sans-serif;
 	margin-top: 0;
 	margin-bottom: 20px;
@@ -60,26 +60,22 @@ body {
 .searchbar i {
 	font-size: 20px;
 	margin-right: 20px;
-	color: #777;
+	color: #807f84;
 }
 
 .searchbar span {
 	flex-grow: 1;
 	text-align: left;
-	color: #888;
+	color: #807f84;
 	font-size: 16px;
 }
 
 .search-clear {
 	font-size: 18px;
-	color: #777;
+	color: #807f84;
 	cursor: pointer;
 	margin-right: 8px;
 	transition: color 0.2s;
-}
-
-.search-clear:hover {
-	color: #333;
 }
 
 .tabs {
@@ -180,10 +176,25 @@ body {
 
 .no-results-msg,
 .confirmation-msg {
-	padding: 15px;
-	text-align: center;
-	color: #666;
-	font-size: 16px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 30px 20px;
+    color: #666;
+    border-radius: 10px;
+    font-size: 16px;
+    width: max-content;
+    max-width: 80%;
+}
+
+@media (max-height: 440px) {
+    .no-results-msg,
+    .confirmation-msg {
+        top: 50%; 
+        transform: translate(-50%, 0); 
+    }
 }
 
 .confirmation-msg {
