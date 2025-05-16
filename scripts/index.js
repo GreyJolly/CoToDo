@@ -27,6 +27,16 @@ saveAppData();
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+
+	// Set user avatar
+	const currentUser = getCurrentUser();
+	if (currentUser) {
+		const avatarElement = document.getElementById('user-avatar');
+		if (avatarElement) {
+			avatarElement.textContent = currentUser.displayName.charAt(0).toUpperCase();
+		}
+	}
+
 	renderHomepage();
 	setupHomepageEvents();
 	setupSearch();
