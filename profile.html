@@ -55,9 +55,9 @@
 					<i class="fa-solid fa-pen"></i>
 					<span>Change password</span>
 				</button>
-				<button id="support-button">
-					<i class="fa-solid fa-headphones"></i>
-					<span>Support</span>
+				<button id="change-username-button">
+					<i class="fa-solid fa-user-edit"></i>
+					<span>Change username</span>
 				</button>
 				<button id="delete-profile-button">
 					<i class="fa-solid fa-trash-can"></i>
@@ -154,6 +154,42 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Change Username Modal -->
+	<div id="change-username-modal" class="modal">
+		<div class="modal-overlay"></div>
+		<div class="change-username-container">
+			<div class="change-username-form">
+				<div class="modal-header">
+					<h1 class="form-title">Change Username</h1>
+					<button class="close-modal"><i class="fa-solid fa-times"></i></button>
+				</div>
+				<form id="change-username-form">
+					<div class="form-group">
+						<label for="current-username">Current username</label>
+						<input type="text" id="current-username" name="current-username" class="form-control" readonly>
+					</div>
+					<div class="form-group">
+						<label for="new-username">New username</label>
+						<input type="text" id="new-username" name="new-username" class="form-control" required>
+						<div class="error-message" id="username-error">Username must be 3-20 characters and contain only letters, numbers, and underscores</div>
+					</div>
+					<div class="form-group password-group">
+						<label for="username-password">Password</label>
+						<input type="password" id="username-password" name="username-password" class="form-control" 
+							autocomplete="current-password" required>
+					</div>
+					<div class="form-actions">
+						<button type="submit" id="change-username-button" class="change-username-button">Update username</button>
+					</div>
+				</form>
+				<div class="form-success-message">
+					Username updated successfully!
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 
 </html>

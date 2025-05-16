@@ -284,9 +284,113 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    document.getElementById('support-button')?.addEventListener('click', () => {
-        alert('Support functionality would go here');
-    });
+    // CHANGE USERNAME MODAL
+    const usernameModal = document.getElementById('change-username-modal');
+    const usernameModalOverlay = usernameModal?.querySelector('.modal-overlay');
+    const usernameCloseModalBtn = usernameModal?.querySelector('.close-modal');
+    const usernameCancelBtn = usernameModal?.querySelector('.cancel-button');
+    const changeUsernameForm = document.getElementById('change-username-form');
+    const currentUsernameInput = document.getElementById('current-username');
+    const newUsernameInput = document.getElementById('new-username');
+    const usernameError = document.getElementById('username-error');
+    
+    // Username validation
+    function validateUsername(username) {
+        const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+        const isValid = usernameRegex.test(username);
+        
+        if (newUsernameInput && usernameError) {
+            if (!isValid) {
+                usernameError.style.display = 'block';
+                newUsernameInput.classList.add('error-input');
+                return false;
+            } else {
+                usernameError.style.display = 'none';
+                newUsernameInput.classList.remove('error-input');
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    if (newUsernameInput) {
+        newUsernameInput.addEventListener('input', function() {
+            validateUsername(this.value);
+        });
+    }
+    
+    function closeUsernameModal() {
+        if (usernameModal) {
+            usernameModal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (changeUsernameForm) changeUsernameForm.reset();
+            
+            if (usernameError) usernameError.style.display = 'none';
+            if (newUsernameInput) newUsernameInput.classList.remove('error-input');
+        }
+    }
+    
+    // Add click handler for change username button
+    const changeUsernameBtn = document.getElementById('change-username-button');
+    if (changeUsernameBtn) {
+        changeUsernameBtn.addEventListener('click', function() {
+            if (currentUser && currentUser.displayName && currentUsernameInput) {
+                currentUsernameInput.value = currentUser.displayName;
+            }
+            
+            if (usernameModal) {
+                usernameModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+    
+    if (usernameCloseModalBtn) {
+        usernameCloseModalBtn.addEventListener('click', closeUsernameModal);
+    }
+    
+    
+    // Close username modal when clicking outside the form
+    if (usernameModalOverlay) {
+        usernameModalOverlay.addEventListener('click', function(e) {
+            if (e.target === usernameModalOverlay) {
+                closeUsernameModal();
+            }
+        });
+    }
+    
+    // Handle username form submission
+    if (changeUsernameForm) {
+        changeUsernameForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newUsername = newUsernameInput.value;
+            const password = document.getElementById('username-password').value;
+            
+            if (!validateUsername(newUsername)) {
+                return;
+            }
+            
+            try {
+                const profileName = document.querySelector('.profile-name');
+                const avatarElement = document.querySelector('.account-avatar');
+                
+                if (profileName) profileName.textContent = newUsername;
+                if (avatarElement) avatarElement.textContent = newUsername.charAt(0);
+                
+                const successMessage = usernameModal.querySelector('.form-success-message');
+                if (successMessage) successMessage.style.display = 'block';
+                
+                if (newUsernameInput) newUsernameInput.value = '';
+                const passwordInput = document.getElementById('username-password');
+                if (passwordInput) passwordInput.value = '';
+                
+                setTimeout(closeUsernameModal, 3000);
+            } catch (error) {
+                console.error('Failed to update username:', error);
+            }
+        });
+    }
     
     document.getElementById('delete-profile-button')?.addEventListener('click', function () {
         if (!currentUser) return;
