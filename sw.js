@@ -38,6 +38,7 @@ const urlsToCache = [
 	'./images/icon-512.png',
 	'./images/icon-192.png'
 ];
+
 self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(CACHE_NAME)
