@@ -503,3 +503,16 @@ body {
 	background-color: #ff0000;
 	color: white;
 }
+
+.password-input-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 35px;
+    transform: translateY(60%);
+    cursor: pointer;
+    color: #000000;
+    z-index: 2;
+}

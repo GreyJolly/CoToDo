@@ -99,6 +99,7 @@
 						<label for="password">Password</label>
 						<input type="password" id="password" name="password" class="form-control" 
 							autocomplete="current-password" required>
+						<i class="fa-solid fa-eye toggle-password" data-target="password"></i>
 					</div>
 					<div class="form-actions">
 						<button type="submit" id="change-email-button" class="change-email-button">Update email</button>
@@ -124,10 +125,12 @@
 					<div class="form-group">
 						<label for="current-password">Current password</label>
 						<input type="password" id="current-password" name="current-password" class="form-control" required>
+						<i class="fa-solid fa-eye toggle-password" data-target="current-password"></i>
 					</div>
 					<div class="form-group">
 						<label for="new-password">New password</label>
 						<input type="password" id="new-password" name="new-password" class="form-control" required>
+						<i class="fa-solid fa-eye toggle-password" data-target="new-password"></i>
 						<div class="password-strength">
 							<div class="strength-bar">
 								<div class="strength-progress"></div>
@@ -138,6 +141,7 @@
 					<div class="form-group">
 						<label for="confirm-password">Confirm new password</label>
 						<input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+						<i class="fa-solid fa-eye toggle-password" data-target="confirm-password"></i>
 						<div class="error-message" id="password-match-error">Passwords do not match</div>
 					</div>
 					<div class="form-actions">
