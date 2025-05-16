@@ -20,7 +20,7 @@
 	<div class="wrapper">
 		<div class="backto-index" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i>
 		</div>
-		<span class="list-text" contenteditable="true"></span>
+		<input type="text" class="list-title" placeholder="New List">
 	</div>
 
 	<div class="main-content">
@@ -47,13 +47,13 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<footer class="footer">
 		<div class="top-buttons">
 			<button id="contributors-button" class="assign-members-popup"
-    		onclick="window.location.href='contributors.html?listId=' + getCurrentListId()">
-			<i class="fa-solid fa-user-group"></i>
-			<span>Contributors</span>
+				onclick="window.location.href='contributors.html?listId=' + getCurrentListId()">
+				<i class="fa-solid fa-user-group"></i>
+				<span>Contributors</span>
 			</button>
 			<button id="plus-list-button" onclick="newTask()"><i class="fas fa-plus"></i></button>
 		</div>
