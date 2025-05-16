@@ -33,10 +33,12 @@ body {
 	font-family: Arial, sans-serif;
 	position: relative;
 	margin: 0 auto;
+	gap: 8px;
 }
 
 .search-input {
-	flex-grow: 1;
+	flex: 1;
+	min-width: 50px;
 	border: none;
 	background: transparent;
 	outline: none;
@@ -46,13 +48,24 @@ body {
 	margin: 0 8px;
 }
 
-.searchbar .fa-bars {
-	margin-right: 8px;
+.searchbar .fa-magnifying-glass {
+    font-size: 18px;
+    color: #777;
+    flex-shrink: 0;
+}
+
+.searchbar .fa-xmark {
+    font-size: 18px;
+    color: #777;
+    flex-shrink: 0;
+    margin-right: auto; /* Pushes xmark left, account right */
+    cursor: pointer;
+    margin-left: -8px; /* Compensates for gap */
 }
 
 .searchbar i {
 	font-size: 20px;
-	margin-right: 10px;
+	margin-left: auto;
 	color: #777;
 }
 
@@ -110,8 +123,10 @@ body {
 }
 
 .account {
-	margin-left: auto;
-	flex-shrink: 0;
+	display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .account-avatar {
