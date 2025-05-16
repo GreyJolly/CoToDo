@@ -18,9 +18,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const nextBtn = document.querySelector('.fa-angle-right');
     const calendarHeader = document.querySelector('.calendar-header');
 
-    if (monthElement) {
-        monthElement.style.cursor = 'pointer';
-        monthElement.addEventListener('click', openCalendar);
+    const calendarDaysButton = document.getElementById('calendar-days-button');
+    if (calendarDaysButton) {
+        calendarDaysButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (calendarOpen) {
+                closeCalendar();
+            } else {
+                openCalendar();
+            }
+        });
     }
 
     const todayBtn = document.createElement('button');
