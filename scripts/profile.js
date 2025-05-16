@@ -108,9 +108,155 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    document.getElementById('modify-password-button')?.addEventListener('click', () => {
-        alert('Change password functionality would go here');
-    });
+    // CHANGE PASSWORD MODAL
+    const passwordModal = document.getElementById('change-password-modal');
+    const passwordModalOverlay = passwordModal?.querySelector('.modal-overlay');
+    const passwordCloseModalBtn = passwordModal?.querySelector('.close-modal');
+    const passwordCancelBtn = passwordModal?.querySelector('.cancel-button');
+    const changePasswordForm = document.getElementById('change-password-form');
+    const currentPasswordInput = document.getElementById('current-password');
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordMatchError = document.getElementById('password-match-error');
+    const strengthProgress = passwordModal?.querySelector('.strength-progress');
+    const strengthText = passwordModal?.querySelector('.strength-text span');
+    
+    function checkPasswordStrength(password) {
+        let strength = 0;
+
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+        
+        if (/[0-9]/.test(password)) strength += 1;
+        if (/[a-z]/.test(password)) strength += 1;
+        if (/[A-Z]/.test(password)) strength += 1;
+        if (/[^0-9a-zA-Z]/.test(password)) strength += 1;
+        
+        if (strengthProgress && strengthText) {
+            if (strength < 3) {
+                strengthProgress.className = 'strength-progress weak';
+                strengthText.textContent = 'Weak';
+            } else if (strength < 5) {
+                strengthProgress.className = 'strength-progress medium';
+                strengthText.textContent = 'Medium';
+            } else if (strength < 6) {
+                strengthProgress.className = 'strength-progress strong';
+                strengthText.textContent = 'Strong';
+            } else {
+                strengthProgress.className = 'strength-progress very-strong';
+                strengthText.textContent = 'Very Strong';
+            }
+        }
+        
+        return strength;
+    }
+    
+    function validatePasswords() {
+        if (newPasswordInput && confirmPasswordInput && passwordMatchError) {
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                passwordMatchError.style.display = 'block';
+                confirmPasswordInput.classList.add('error-input');
+                return false;
+            } else {
+                passwordMatchError.style.display = 'none';
+                confirmPasswordInput.classList.remove('error-input');
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            if (confirmPasswordInput && confirmPasswordInput.value) {
+                validatePasswords();
+            }
+        });
+    }
+    
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', validatePasswords);
+    }
+    
+    // Close password modal function
+    function closePasswordModal() {
+        if (passwordModal) {
+            passwordModal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (changePasswordForm) changePasswordForm.reset();
+            
+            if (strengthProgress) {
+                strengthProgress.className = 'strength-progress';
+                strengthProgress.style.width = '0%';
+            }
+            if (strengthText) {
+                strengthText.textContent = 'Weak';
+            }
+            
+            if (passwordMatchError) passwordMatchError.style.display = 'none';
+            if (confirmPasswordInput) confirmPasswordInput.classList.remove('error-input');
+        }
+    }
+    
+    const modifyPasswordBtn = document.getElementById('modify-password-button');
+    if (modifyPasswordBtn) {
+        modifyPasswordBtn.addEventListener('click', function() {
+            if (passwordModal) {
+                passwordModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+    
+    if (passwordCloseModalBtn) {
+        passwordCloseModalBtn.addEventListener('click', closePasswordModal);
+    }
+    
+    if (passwordModalOverlay) {
+        passwordModalOverlay.addEventListener('click', function(e) {
+            if (e.target === passwordModalOverlay) {
+                closePasswordModal();
+            }
+        });
+    }
+    
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validatePasswords()) {
+                return;
+            }
+            
+            const currentPassword = currentPasswordInput.value;
+            const newPassword = newPasswordInput.value;
+            
+            const strength = checkPasswordStrength(newPassword);
+            if (strength < 3) {
+                alert('Please choose a stronger password');
+                return;
+            }
+            try {
+                const successMessage = passwordModal.querySelector('.form-success-message');
+                if (successMessage) successMessage.style.display = 'block';
+                
+                if (changePasswordForm) changePasswordForm.reset();
+            
+                if (strengthProgress) {
+                    strengthProgress.className = 'strength-progress';
+                    strengthProgress.style.width = '0%';
+                }
+                if (strengthText) {
+                    strengthText.textContent = 'Weak';
+                }
+                
+                setTimeout(closePasswordModal, 3000);
+            } catch (error) {
+                console.error('Failed to update password:', error);
+            }
+        });
+    }
     
     document.getElementById('support-button')?.addEventListener('click', () => {
         alert('Support functionality would go here');

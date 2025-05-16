@@ -91,6 +91,46 @@
 			</div>
 		</div>
 	</div>
+
+	<!--  Password Modal -->
+	<div id="change-password-modal" class="modal">
+		<div class="modal-overlay"></div>
+		<div class="change-password-container">
+			<div class="change-password-form">
+				<div class="modal-header">
+					<h1 class="form-title">Change Password</h1>
+					<button class="close-modal"><i class="fa-solid fa-times"></i></button>
+				</div>
+				<form id="change-password-form">
+					<div class="form-group">
+						<label for="current-password">Current password</label>
+						<input type="password" id="current-password" name="current-password" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="new-password">New password</label>
+						<input type="password" id="new-password" name="new-password" class="form-control" required>
+						<div class="password-strength">
+							<div class="strength-bar">
+								<div class="strength-progress"></div>
+							</div>
+							<div class="strength-text">Password strength: <span>Weak</span></div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="confirm-password">Confirm new password</label>
+						<input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+						<div class="error-message" id="password-match-error">Passwords do not match</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit" id="change-password-button" class="change-password-button">Update password</button>
+					</div>
+				</form>
+				<div class="form-success-message">
+					Password updated successfully!
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>

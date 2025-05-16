@@ -359,3 +359,87 @@ body {
 .error-input:focus {
     box-shadow: 0 0 0 3px rgba(255, 51, 51, 0.3) !important;
 }
+
+.password-strength {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.strength-bar {
+    height: 4px;
+    background-color: #e4e3e8;
+    border-radius: 2px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.strength-progress {
+    height: 100%;
+    width: 0%;
+    background-color: #ff3333;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-progress.weak {
+    width: 25%;
+    background-color: #ff3333;
+}
+
+.strength-progress.medium {
+    width: 50%;
+    background-color: #ffa500;
+}
+
+.strength-progress.strong {
+    width: 75%;
+    background-color: #2ea44f;
+}
+
+.strength-progress.very-strong {
+    width: 100%;
+    background-color: #0026cc;
+}
+
+.strength-text {
+    color: #666;
+}
+
+.change-password-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    z-index: 1001;
+}
+
+.change-password-form {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e4e3e8;
+    position: relative;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.change-password-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #515CC6;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    flex: 2;
+    height: 40px;
+    transition: background-color 0.2s;
+}
+
+.change-password-button:hover {
+    background-color: #0026cc;
+}
