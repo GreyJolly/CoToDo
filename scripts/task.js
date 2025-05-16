@@ -49,7 +49,7 @@ function renderTaskPage() {
 	const headerCheckbox = document.querySelector('.task-header input[type="checkbox"]');
 
 	// Set the list title
-	const listTitleElement = document.querySelector('.list-text');
+	const listTitleElement = document.querySelector('.list-title');
 	listTitleElement.textContent = list.title || "New List";
 
 	if (!task.subtasks) {
@@ -953,4 +953,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	}
+
+	const titleInput = document.querySelector('.task-title');
+	if (titleInput.value == '') {
+		titleInput.focus();
+	}
+
 });

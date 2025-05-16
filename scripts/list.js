@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 	renderListPage(getCurrentListId());
+
+	const titleInput = document.querySelector('.list-title');
+	if (titleInput.value == '') {
+		titleInput.focus();
+	}
 });
 
 function getCurrentListId() {
@@ -81,9 +86,9 @@ function renderListPage(listId) {
 		return;
 	}
 
-	const listTitleElement = document.querySelector('.list-text');
-	listTitleElement.textContent = list.title || "New List";
-	listTitleElement.classList.toggle('placeholder', !list.title);
+	const listTitleElement = document.querySelector('.list-title');
+	listTitleElement.value = list.title || "";
+	listTitleElement.placeholder = "New List";
 
 	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
 	const completeContainer = document.querySelector('.complete-container .todo-list');
@@ -92,21 +97,21 @@ function renderListPage(listId) {
 	completeContainer.innerHTML = '';
 
 	// Check if there are no tasks
-    if (list.tasks.length === 0) {
-        const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'no-results-msg';
-        emptyMessage.innerHTML = `
+	if (list.tasks.length === 0) {
+		const emptyMessage = document.createElement('div');
+		emptyMessage.className = 'no-results-msg';
+		emptyMessage.innerHTML = `
             <p>No tasks for this list, press on the "+" to add one</p>
         `;
-        incompleteContainer.appendChild(emptyMessage);
-        
-        // Hide the complete container when there are no tasks
-        document.querySelector('.complete-container').style.display = 'none';
-        return;
-    } else {
-        // Make sure complete container is visible when there are tasks
-        document.querySelector('.complete-container').style.display = 'block';
-    }
+		incompleteContainer.appendChild(emptyMessage);
+
+		// Hide the complete container when there are no tasks
+		document.querySelector('.complete-container').style.display = 'none';
+		return;
+	} else {
+		// Make sure complete container is visible when there are tasks
+		document.querySelector('.complete-container').style.display = 'block';
+	}
 
 	list.tasks.forEach(task => {
 		// Create main task item
@@ -235,95 +240,35 @@ function setupListPageEvents(listId) {
 		});
 	});
 
-	const listTitleElement = document.querySelector('.list-text');
+	const listTitleElement = document.querySelector('.list-title');
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
 
-	// Focus handler to select all text when editing
-	listTitleElement.addEventListener('focus', function () {
-		const range = document.createRange();
-		range.selectNodeContents(this);
-		const selection = window.getSelection();
-		selection.removeAllRanges();
-		selection.addRange(range);
-	});
+	// Input handler to save changes
+	listTitleElement.addEventListener('input', debounce(function () {
+		let newTitle = this.value.trim();
 
-	// Blur handler to save changes
-	listTitleElement.addEventListener('blur', function () {
-		let newTitle = this.textContent.trim();
-
-		// Ensure we don't save more than than the allowed amount characters
+		// Ensure we don't save more than the allowed amount of characters
 		if (newTitle.length > MAX_TITLE_LENGTH) {
 			newTitle = newTitle.substring(0, MAX_TITLE_LENGTH);
-			this.textContent = newTitle;
+			this.value = newTitle;
 		}
 
 		list.title = newTitle;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
+	}, 300));
 
-		// Update placeholder style based on whether there's content
-		if (newTitle === '') {
-			this.textContent = 'New List'; // Reset to placeholder text
-			this.classList.add('placeholder');
-		} else {
-			this.classList.remove('placeholder');
-		}
-	});
-
-	// Keypresses handler
+	// Keypress handler for Enter key
 	listTitleElement.addEventListener('keydown', function (e) {
-		// If we're at the limit, prevent certain keys
-		if (this.textContent.length >= MAX_TITLE_LENGTH) {
-			// Allow deletion, navigation, and Enter key
-			if (![
-				'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
-				'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'
-			].includes(e.key)) {
-				e.preventDefault();
-				return;
-			}
-		}
-
 		if (e.key === 'Enter') {
 			e.preventDefault();
-			// Remove placeholder class immediately when user starts typing
-			if (this.classList.contains('placeholder')) {
-				this.textContent = ''; // Clear placeholder text
-				this.classList.remove('placeholder');
-			}
 			this.blur();
 		}
 	});
 
-	listTitleElement.addEventListener('input', function () {
-		// Remove placeholder style as soon as user starts typing
-		if (this.classList.contains('placeholder')) {
-			this.classList.remove('placeholder');
-			// If the content is still the placeholder text, clear it
-			if (this.textContent.trim() === 'New List') {
-				this.textContent = '';
-			}
-		}
-
-		// Enforce character limit by preventing further input
-		if (this.textContent.length > MAX_TITLE_LENGTH) {
-			// Get the current selection
-			const selection = window.getSelection();
-			const range = selection.getRangeAt(0);
-
-			// If we're at the limit and trying to type more, prevent it
-			if (range.startOffset >= MAX_TITLE_LENGTH) {
-				// Move cursor back to the last position
-				range.setStart(this.firstChild, MAX_TITLE_LENGTH);
-				range.setEnd(this.firstChild, MAX_TITLE_LENGTH);
-				selection.removeAllRanges();
-				selection.addRange(range);
-
-				// Trim any excess characters (in case of paste)
-				this.textContent = this.textContent.substring(0, MAX_TITLE_LENGTH);
-				return;
-			}
-		}
+	// Focus handler to select all text when editing
+	listTitleElement.addEventListener('focus', function () {
+		this.select();
 	});
 
 	// Task item click - just navigate to task editor
@@ -355,34 +300,33 @@ function setupListPageEvents(listId) {
 	// Back button
 	document.querySelector('.backto-index')?.addEventListener('click', function (e) {
 		e.preventDefault();
-		document.querySelector('.backto-index')?.addEventListener('click', function (e) {
-			e.preventDefault();
 
-			const fromCalendar = localStorage.getItem('lastCalendarView');
-			const lastCalendarDate = localStorage.getItem('lastCalendarDate');
-
-			const urlParams = new URLSearchParams(window.location.search);
-			const fromCalendarParam = urlParams.get('fromCalendar');
-
-			if ((fromCalendar === 'true' || fromCalendarParam === 'true') && lastCalendarDate) {
-				localStorage.removeItem('lastCalendarView');
-				localStorage.removeItem('lastCalendarDate');
-
-				window.location.href = `calendar.html?date=${lastCalendarDate}`;
-			} else {
-				window.location.href = 'index.html';
-			}
-		});
-
-		// Check if we came from the calendar
+		const fromCalendar = localStorage.getItem('lastCalendarView');
 		const lastCalendarDate = localStorage.getItem('lastCalendarDate');
-		if (lastCalendarDate) {
+
+		const urlParams = new URLSearchParams(window.location.search);
+		const fromCalendarParam = urlParams.get('fromCalendar');
+
+		if ((fromCalendar === 'true' || fromCalendarParam === 'true') && lastCalendarDate) {
+			localStorage.removeItem('lastCalendarView');
 			localStorage.removeItem('lastCalendarDate');
 			window.location.href = `calendar.html?date=${lastCalendarDate}`;
 		} else {
 			window.location.href = 'index.html';
 		}
 	});
+}
+
+// Add this debounce function if not already present
+function debounce(func, wait) {
+	let timeout;
+	return function () {
+		const context = this, args = arguments;
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			func.apply(context, args);
+		}, wait);
+	};
 }
 
 function newTask() {
