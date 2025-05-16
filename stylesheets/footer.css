@@ -1,6 +1,7 @@
 .button,
 #plus-button,
-#plus-list-button {
+#plus-list-button,
+#calendar-days-button {
 	background-color: #515CC6;
 	border: none;
 	border-radius: 20px;	
@@ -19,6 +20,14 @@
 }
 
 #plus-button {
+	position: absolute;
+	right: 20px;
+	bottom: 15px;
+	z-index: 1000;
+    pointer-events: auto;
+}
+
+#calendar-days-button {
 	position: absolute;
 	right: 20px;
 	bottom: 15px;
