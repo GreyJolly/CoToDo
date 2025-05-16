@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="./stylesheets/footer.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/index.js"></script>
+	<script src="./scripts/auth.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +24,7 @@
 			<input type="text" class="search-input" placeholder="Search your notes">
 			<i class="fa-solid fa-xmark search-clear" style="display: none;"></i>
 			<div class="account" onclick="window.location.href='profile.html'">
-				<div class="account-avatar">M</div>
+				<div class="account-avatar" id="user-avatar"></div>
 			</div>
 		</div>
 	</div>

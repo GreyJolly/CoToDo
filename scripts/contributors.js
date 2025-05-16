@@ -105,8 +105,8 @@ function renderFriendList(listId, friends, searchTerm = '', currentContributors 
 	const meItem = document.createElement('div');
 	meItem.className = 'friend-item owner';
 	meItem.innerHTML = `
-        <div class="friend-avatar" style="background-color: #ee7300;">M</div>
-        <div class="friend-name">Me</div>
+        <div class="friend-avatar" style="background-color: #ee7300;">${getCurrentUser().displayName.charAt(0).toUpperCase()}</div>
+        <div class="friend-name">${getCurrentUser().displayName}</div>
         <div class="contributor-status">Owner</div>
     `;
 	friendListContainer.appendChild(meItem);
