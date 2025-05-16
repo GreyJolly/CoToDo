@@ -139,10 +139,20 @@ function getTasksForDate(date) {
 
 function renderTasksForDate(tasks) {
     const todoListContainer = document.querySelector('.todo-list');
+    const mainContent = document.querySelector('.main-content'); // Get the main content area
     todoListContainer.innerHTML = '';
 
+    // Remove any existing no-tasks message first
+    const existingNoTasks = mainContent.querySelector('.no-tasks');
+    if (existingNoTasks) {
+        mainContent.removeChild(existingNoTasks);
+    }
+
     if (tasks.length === 0) {
-        todoListContainer.innerHTML = '<div class="no-tasks">No tasks for this date</div>';
+        const noTasksDiv = document.createElement('div');
+        noTasksDiv.className = 'no-tasks';
+        noTasksDiv.textContent = 'No tasks for this date';
+        mainContent.appendChild(noTasksDiv);
         return;
     }
 
