@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="./stylesheets/footer.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/task.js"></script>
+	<script src="./scripts/auth.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -95,13 +96,13 @@
 	</div>
 	<footer class="footer">
 		<div class="assignee-container" id="assigneeButton" onclick="openAssignMembers()">
-		<div class="assignee-content">
-			<div class="assignee-avatar" id="assigneeAvatar">
-				<i class="fa-solid fa-user-plus"></i>
+			<div class="assignee-content">
+				<div class="assignee-avatar" id="assigneeAvatar">
+					<i class="fa-solid fa-user-plus"></i>
+				</div>
+				<span class="assignee-text">Assign to</span>
 			</div>
-			<span class="assignee-text">Assign to</span>
 		</div>
-	</div>
 		<button id="delete-task-button" onclick="deleteTask()"><i class="fa-solid fa-trash-can"></i></button>
 	</footer>
 </body>

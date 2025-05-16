@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cotodo-cache-v8';
+const CACHE_NAME = 'cotodo-cache-v9';
 
 const urlsToCache = [
 	'./',
@@ -22,7 +22,8 @@ const urlsToCache = [
 	'./stylesheets/list.css',
 	'./stylesheets/login.css',
 	'./stylesheets/signup.css',
-	'./stylesheets/task.js',
+	'./stylesheets/task.css',
+	'.scripts/auth.js',
 	'./scripts/index.js',
 	'./scripts/calendar.js',
 	'./scripts/contributors.js',
@@ -37,6 +38,7 @@ const urlsToCache = [
 	'./images/icon-512.png',
 	'./images/icon-192.png'
 ];
+
 self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(CACHE_NAME)

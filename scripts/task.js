@@ -297,8 +297,8 @@ function openAssignMembers() {
 	meOption.className = 'member-option';
 	meOption.onclick = () => selectMember('me');
 	meOption.innerHTML = `
-        <div class="member-avatar" style="background-color: #ee7300;">M</div>
-        <span class="member-name">Me</span>
+        <div class="member-avatar" style="background-color: #ee7300;">${getCurrentUser().displayName.charAt(0).toUpperCase()}</div>
+        <span class="member-name">${getCurrentUser().displayName}</span>
         ${task.assignee === 'me' ? '<i class="fa-solid fa-check"></i>' : ''}
     `;
 	assignPopup.appendChild(meOption);
