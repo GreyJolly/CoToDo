@@ -9,12 +9,38 @@ document.addEventListener('DOMContentLoaded', function () {
         if (name) name.textContent = currentUser.displayName;
     }
     
-    // Handle logout
+    // Handle logout with popup
     const logoutButton = document.querySelector('.logout');
     if (logoutButton) {
         logoutButton.addEventListener('click', function () {
-            logoutUser();
-            window.location.href = 'login.html';
+            // Show the logout confirmation popup
+            const popup = document.getElementById('logout-confirm-popup');
+            if (popup) {
+                popup.style.display = 'flex';
+                
+                // Setup event listeners for the buttons
+                popup.querySelector('.cancel-popup-button').onclick = function () {
+                    popup.style.display = 'none';
+                };
+
+                popup.querySelector('.confirm-button').onclick = function () {
+                    try {
+                        logoutUser();
+                        popup.style.display = 'none';
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Logout failed:', error);
+                        popup.style.display = 'none';
+                    }
+                };
+
+                // Close popup when clicking outside
+                popup.onclick = function (e) {
+                    if (e.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                };
+            }
         });
     }
     
