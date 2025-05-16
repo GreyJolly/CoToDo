@@ -47,4 +47,21 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	}
+
+	// Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            
+            if (passwordInput) {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Cambia l'icona
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            }
+        });
+    });
 });
