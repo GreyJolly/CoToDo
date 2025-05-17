@@ -295,27 +295,6 @@ body {
     margin-top: 20px;
 }
 
-.cancel-button {
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #666;
-    background-color: #e4e3e8;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    flex: 1;
-    margin-right: 10px;
-    height: 40px;
-    transition: background-color 0.2s;
-}
-
-.cancel-button:hover {
-    background-color: #d4d3d8;
-}
-
 .change-email-button {
     padding: 8px 16px;
     font-size: 14px;
@@ -328,10 +307,6 @@ body {
     flex: 2;
     height: 40px;
     transition: background-color 0.2s;
-}
-
-.change-email-button:hover {
-    background-color: #0026cc;
 }
 
 .form-success-message {
@@ -440,10 +415,6 @@ body {
     transition: background-color 0.2s;
 }
 
-.change-password-button:hover {
-    background-color: #0026cc;
-}
-
 .popup {
 	position: fixed;
 	top: 0;
@@ -494,11 +465,6 @@ body {
 	font-size: 0.9rem;
 }
 
-.cancel-popup-button {
-	background-color: #6c757d;
-	color: white;
-}
-
 .confirm-button {
 	background-color: #ff0000;
 	color: white;
@@ -513,7 +479,7 @@ body {
     right: 35px;
     transform: translateY(60%);
     cursor: pointer;
-    color: #000000;
+    color: #6c757d;
     z-index: 2;
 }
 
@@ -556,8 +522,4 @@ body {
     flex: 2;
     height: 40px;
     transition: background-color 0.2s;
-}
-
-.change-username-button:hover {
-    background-color: #0026cc;
 }
