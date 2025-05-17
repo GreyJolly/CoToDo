@@ -179,9 +179,9 @@ body {
 }
 
 .toggle-password {
-    position: absolute;
-    right: 52px;
-    transform: translateY(60%);
+    position: relative;
+    left: calc(100% - 30px);
+    transform: translateY(-180%);
     cursor: pointer;
     color: #6c757d;
     z-index: 2;
