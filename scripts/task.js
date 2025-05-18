@@ -237,6 +237,20 @@ function setupTaskEvents() {
 			}
 		}
 	});
+
+	document.querySelector('.fa-plus')?.addEventListener('click', function() {
+        const addSubtaskInput = document.getElementById("addSubtaskInput");
+        if (addSubtaskInput) {
+            addSubtaskInput.focus();
+            
+            // Show the hint if you have one
+            const hint = document.getElementById("enterHintContainer");
+            if (hint) {
+                hint.classList.add("visible");
+                hint.hidden = false;
+            }
+        }
+    });
 }
 function saveTaskChanges() {
 	const taskData = loadTaskData();
