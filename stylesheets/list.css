@@ -9,17 +9,6 @@ body {
 	background-color: #f2f1f6;
 }
 
-.wrapper {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-top: 20px;
-	position: relative;
-	padding-bottom: 10px;
-	background-color: rgba(0, 0, 0, 0);
-
-}
-
 .backto-index i {
 	font-size: 30px;
 	color: #000000;
@@ -27,22 +16,56 @@ body {
 	cursor: pointer;
 }
 
+/* Remove or modify these existing styles */
 .list-title {
-	background-color: white;
-	padding: 2px;
-	border-radius: 5px;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	text-align: center;
-	color: #000000;
-	font-size: 26px;
-	max-width: 70%;
-	overflow-wrap: break-word;
-	white-space: normal;
-	color: inherit;
-	outline: none;
-	border: none;
+    background-color: white;
+    padding: 2px;
+    border-radius: 5px;
+    /* Remove these absolute positioning properties */
+    /* position: absolute; */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    text-align: center;
+    color: #000000;
+    font-size: 26px;
+    max-width: 70%;
+    overflow-wrap: break-word;
+    white-space: normal;
+    color: inherit;
+    outline: none;
+    border: none;
+    /* Add flex-grow to allow input to take available space */
+    flex-grow: 1;
+}
+
+/* Add these new styles */
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+.edit-icon {
+    margin-left: 8px;
+    color: #666;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    position: relative;
+    padding-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.backto-index {
+    flex-shrink: 0; /* Prevent the back button from shrinking */
 }
 
 .list-title:focus {
@@ -526,4 +549,33 @@ body>.footer {
 
 .footer {
 	background-color: rgba(0, 0, 0, 0) !important;
+}
+
+@media (max-width: 450px) {
+    .wrapper {
+        gap: 5px; 
+    }
+    
+    .list-title {
+        max-width: 65%;
+    }
+    
+    .edit-icon {
+        margin-left: 6px; 
+    }
+}
+
+@media (max-width: 430px) {
+    .wrapper {
+        gap: 2px; 
+    }
+
+	.title-container {
+        margin-left: -15px; 
+        padding: 0; 
+    }
+    
+    .edit-icon {
+        margin-left: 4px; 
+    }
 }
