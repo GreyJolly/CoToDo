@@ -177,6 +177,23 @@ body {
 	cursor: pointer;
 }
 
+.task-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+	padding: 0 25px;
+}
+
+.edit-icon {
+    position: absolute;
+    right: 35px; 
+    color: #666;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 .task-title {
 	text-align: center;
 	font-size: 32px;
@@ -185,12 +202,14 @@ body {
 	outline: none;
 	background: transparent;
 	padding: 5px 0;
-	width: 90%;
+	width: 80%;
+	margin: 0 auto;
 }
 
 .task-title:focus {
 	background-color: #f0f0f0;
 	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	pointer-events: auto;
 }
 
 .task-description {
