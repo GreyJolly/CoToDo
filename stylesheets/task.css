@@ -53,12 +53,14 @@ body {
 	padding: 20px 25px;
 	gap: 15px;
 	margin-top: 10px;
+	align-items: center;
 }
 
 .task-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	width: 100%;
 }
 
 .task-header input[type="checkbox"] {
@@ -106,22 +108,23 @@ body {
 	display: flex;
 	gap: 10%;
 	min-height: 70px;
-	color: #777;
+	color: #000;
 }
 
-#task-date-item-start {
-	padding: 10px;
-}
-
+#task-date-item-start,
 #task-date-item-due {
 	padding: 10px;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	width: 30%;
+	background-color: white;
 }
 
 .task-date-item.selecting {
 	padding: 10px;
-	border: none;
+	border: none !important;
 	border-radius: 8px;
-	background-color: #515cc6;
+	background-color: #515cc6 !important; 
 	color: white;
 }
 
@@ -169,6 +172,7 @@ body {
 	outline: none;
 	background: transparent;
 	padding: 5px 0;
+	width: 90%;
 }
 
 .task-title:focus {
@@ -184,6 +188,7 @@ body {
 	outline: none;
 	background: transparent;
 	padding: 5px 0;
+	width: 90%;
 }
 
 .task-description:focus {
@@ -402,7 +407,7 @@ body {
 }
 
 .subtask-text {
-	color: #999;
+	color: black;
 	flex-grow: 1;
 	border: none;
 	outline: none;
@@ -555,6 +560,8 @@ body {
 	gap: 10px;
 	padding: 15px 25px;
 	margin-top: 10px;
+	background-color: white;
+	border-radius: 8px;
 }
 
 
@@ -578,7 +585,7 @@ body {
 	background: transparent;
 	font-size: 20px;
 	padding: 5px 0;
-	color: #999;
+	color: black;
 }
 
 .subtask-text:focus {
@@ -603,7 +610,7 @@ body {
 	background: transparent;
 	font-size: 16px;
 	padding: 5px 0;
-	color: #999;
+	color: #333;
 }
 
 .add-subtask-input:focus {
