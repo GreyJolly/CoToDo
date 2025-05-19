@@ -34,11 +34,9 @@ body {
     color: inherit;
     outline: none;
     border: none;
-    /* Add flex-grow to allow input to take available space */
     flex-grow: 1;
 }
 
-/* Add these new styles */
 .title-container {
     display: flex;
     align-items: center;
