@@ -37,6 +37,20 @@ body {
 	font-weight: bold;
 }
 
+.logout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.logout-label {
+  font-size: 14px;
+  color: #ff0000;
+  letter-spacing: 0.5px;
+  margin-right: 25px;
+}
+
 .logout i {
 	font-size: 30px;
 	color: #ff0000;
