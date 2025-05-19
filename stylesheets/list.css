@@ -579,3 +579,35 @@ body>.footer {
         margin-left: 4px; 
     }
 }
+
+@media (max-width: 400px) {
+	.title-container {
+        margin-left: -20px; 
+        padding: 0; 
+    }
+    
+    .edit-icon {
+        margin-left: 4px; 
+    }
+}
+
+@media (max-width: 390px) {
+	.title-container {
+        margin-left: -25px; 
+        padding: 0; 
+    }
+}
+
+@media (max-width: 380px) {
+	.title-container {
+        margin-left: -30px; 
+        padding: 0; 
+    }
+}
+
+@media (max-width: 360px) {
+	.title-container {
+        margin-left: -35px; 
+        padding: 0; 
+    }
+}
