@@ -102,8 +102,8 @@ body {
 }
 
 .friend-avatar {
-	width: 50px;
-	height: 50px;
+	min-width: 50px;
+	min-height: 50px;
 	border-radius: 50%;
 	color: white;
 	font-size: 24px;
@@ -211,4 +211,21 @@ input:checked+.slider:before {
 	color: #666;
 	margin-top: 25px;
 	padding: 30px;
+}
+
+.invite-btn {
+	background-color: #515CC6;
+	color: white;
+	padding: 5px 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+@media (max-width: 360px) {
+	.invite-btn {
+		max-width: 120px;
+		padding: 2px 5px;
+	}
 }
