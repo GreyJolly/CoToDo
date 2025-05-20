@@ -184,7 +184,8 @@ function setupHomepageEvents() {
 		const newList = {
 			id: newListId,
 			title: '',
-			tasks: []
+			tasks: [],
+			ownerId: getCurrentUser().id
 		};
 		appData.lists.push(newList);
 		saveAppData();
@@ -370,9 +371,7 @@ function highlightCurrentPage() {
 		document.getElementById('list-button').classList.add('active');
 	} else if (currentPage === 'calendar.html') {
 		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'friends.html') {
-		document.getElementById('friends-button').classList.add('active');
-	} else if (currentPage === 'friend_requests.html') {
+	} else if (currentPage === 'inbox.html') {
 		document.getElementById('inbox-button1').classList.add('active');
 	}
 }
