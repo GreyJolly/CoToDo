@@ -34,7 +34,8 @@ body {
     color: inherit;
     outline: none;
     border: none;
-    flex-grow: 1;
+    flex-grow: 0; 
+    margin: 0 auto;
 }
 
 .title-container {
@@ -43,14 +44,15 @@ body {
     justify-content: center;
     width: 100%;
     position: relative;
-	pointer-events: none;
+	margin-left: 0;
 }
 
 .edit-icon {
-    margin-left: 8px;
     color: #666;
     cursor: pointer;
     font-size: 20px;
+	position: absolute; /* Position absolutely relative to title-container */
+    left: calc(50% + (min(70%, 300px)/2) + 8px);
 }
 
 .wrapper {
@@ -64,6 +66,8 @@ body {
 }
 
 .backto-index {
+	position: absolute;
+    z-index: 1;
     flex-shrink: 0; /* Prevent the back button from shrinking */
 }
 
@@ -550,6 +554,8 @@ body>.footer {
 	background-color: rgba(0, 0, 0, 0) !important;
 }
 
+/*
+
 @media (max-width: 450px) {
     .wrapper {
         gap: 5px; 
@@ -608,5 +614,19 @@ body>.footer {
 	.title-container {
         margin-left: -35px; 
         padding: 0; 
+    }
+}
+
+*/
+
+@media (max-width: 400px) {
+	.list-title {
+        max-width: 65%;
+    }
+}
+
+@media (max-width: 350px) {
+	.list-title {
+        max-width: 60%;
     }
 }
