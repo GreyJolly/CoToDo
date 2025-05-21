@@ -179,10 +179,50 @@ function displayRequests(requests, container) {
 	});
 }
 
+/*
 function formatTimestamp(timestamp) {
 	const date = new Date(timestamp);
 	return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
 }
+*/
+
+function formatTimestamp(timestamp) {
+    const now = new Date();
+    const date = new Date(timestamp);
+    const seconds = Math.floor((now - date) / 1000);
+    
+    // Calculate time differences
+    const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+    };
+    
+    // If more than a week ago, show date
+    if (seconds > intervals.week) {
+        return date.toLocaleDateString();
+    }
+    
+    // Calculate time ago
+    if (seconds > intervals.day * 2) {
+        const days = Math.floor(seconds / intervals.day);
+        return `${days} days ago`;
+    } else if (seconds > intervals.day) {
+        return 'Yesterday';
+    } else if (seconds > intervals.hour) {
+        const hours = Math.floor(seconds / intervals.hour);
+        return hours === 1 ? 'An hour ago' : `${hours} hours ago`;
+    } else if (seconds > intervals.minute) {
+        const minutes = Math.floor(seconds / intervals.minute);
+        return minutes === 1 ? 'A minute ago' : `${minutes} minutes ago`;
+    } else {
+        return 'Just now';
+    }
+}
+
 
 function highlightCurrentPage() {
 	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
