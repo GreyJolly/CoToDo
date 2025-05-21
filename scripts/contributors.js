@@ -1,128 +1,199 @@
 const availableAccounts = [
-	{ id: 1, displayName: "Alice", avatarColor: "#FF9AA2", initialLetter: "A" },
-	{ id: 2, displayName: "Alexander", avatarColor: "#FFB347", initialLetter: "A" },
-	{ id: 3, displayName: "Audrey", avatarColor: "#B5EAD7", initialLetter: "A" },
-	{ id: 4, displayName: "Ava", avatarColor: "#C7CEEA", initialLetter: "A" },
-	{ id: 5, displayName: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" },
-	{ id: 6, displayName: "Mary", avatarColor: "#b0ff30", initialLetter: "M" },
-	{ id: 7, displayName: "Hazel", avatarColor: "#5df7ff", initialLetter: "H" },
-	{ id: 8, displayName: "William", avatarColor: "#e4e128", initialLetter: "W" },
-	{ id: 9, displayName: "Ted", avatarColor: "#b89aff", initialLetter: "T" },
-	{ id: 10, displayName: "John", avatarColor: "#92c1ff", initialLetter: "J" }
+    { id: 1, displayName: "Alice", avatarColor: "#FF9AA2", initialLetter: "A" },
+    { id: 2, displayName: "Alexander", avatarColor: "#FFB347", initialLetter: "A" },
+    { id: 3, displayName: "Audrey", avatarColor: "#B5EAD7", initialLetter: "A" },
+    { id: 4, displayName: "Ava", avatarColor: "#C7CEEA", initialLetter: "A" },
+    { id: 5, displayName: "Bob", avatarColor: "#FFDAC1", initialLetter: "B" },
+    { id: 6, displayName: "Mary", avatarColor: "#b0ff30", initialLetter: "M" },
+    { id: 7, displayName: "Hazel", avatarColor: "#5df7ff", initialLetter: "H" },
+    { id: 8, displayName: "William", avatarColor: "#e4e128", initialLetter: "W" },
+    { id: 9, displayName: "Ted", avatarColor: "#b89aff", initialLetter: "T" },
+    { id: 10, displayName: "John", avatarColor: "#92c1ff", initialLetter: "J" }
 ];
 
+const AUTO_ACCEPT_DELAY = 50;
+const AUTO_ACCEPT_STORAGE_KEY = 'todoApp_autoAccept';
+const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
+const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
+const autoAcceptTimers = {};
+let currentListId = '';
+
+function showDebugToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'auto-accept-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        document.body.removeChild(toast);
+    }, 5000);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-	const listId = getCurrentListId();
-	renderContributorsPage(listId);
-	// Back button
-	document.querySelector('.backto-list')?.addEventListener('click', function (e) {
-		e.preventDefault();
-		const listId = getCurrentListId();
-		window.location.href = `list.html?id=${listId}`;
-	});
+    console.log("Contributors page initialized");
+    
+    currentListId = getCurrentListId();
+    console.log("Current list ID:", currentListId);
+    
+    document.querySelector('.backto-list')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.location.href = `list.html?id=${currentListId}`;
+    });
+
+    processOfflineAutoAccepts();
+    
+    setupAutoAcceptTimers();
+    
+    renderContributorsPage(currentListId);
+    
+    setInterval(() => {
+        checkForAutoAccepts();
+    }, 2000);
+    
+    localStorage.setItem(LAST_CHECK_TIME_KEY, Date.now().toString());
 });
 
 function getCurrentListId() {
-	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get('listId') || 'list1';
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('listId') || 'list1';
 }
 
 function getAppData() {
-	const data = localStorage.getItem('todoAppData');
-	return data ? JSON.parse(data) : { lists: [] };
+    const data = localStorage.getItem('todoAppData');
+    return data ? JSON.parse(data) : { lists: [] };
+}
+
+function getCurrentUser() {
+    return {
+        id: 0,
+        displayName: "Current User",
+        avatarColor: "#4285F4",
+        initialLetter: "C"
+    };
 }
 
 function getAllUsers() {
-	const users = JSON.parse(localStorage.getItem('users')) || [];
-	const currentUser = getCurrentUser();
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const currentUser = getCurrentUser();
 
-	// Combine real users with our fictional accounts
-	const allUsers = [...users, ...availableAccounts];
+    const allUsers = [...users, ...availableAccounts];
 
-	return allUsers.filter(user => user.id !== currentUser.id); // Exclude current user
+    return allUsers.filter(user => user.id !== currentUser.id);
+}
+
+function processOfflineAutoAccepts() {
+    console.log("Processing offline auto-accepts");
+    
+    const autoAcceptData = getAutoAcceptData();
+    const now = Date.now();
+    const lastCheckTime = parseInt(localStorage.getItem(LAST_CHECK_TIME_KEY) || '0');
+    
+    const expiredItems = autoAcceptData.filter(item => item.acceptTime <= now && item.acceptTime > lastCheckTime);
+    
+    if (expiredItems.length > 0) {
+        console.log(`Found ${expiredItems.length} expired auto-accepts to process`);
+        
+        expiredItems.forEach(item => {
+            console.log(`Processing auto-accept for user ${item.userId}, invitation ${item.invitationId}`);
+            acceptInvitation(item.userId, item.invitationId);
+        });
+        
+        const remainingItems = autoAcceptData.filter(item => item.acceptTime > now);
+        saveAutoAcceptData(remainingItems);
+        
+        showDebugToast(`Processed ${expiredItems.length} pending auto-accepts`);
+    }
+}
+
+function checkForAutoAccepts() {
+    const recentlyAdded = getRecentlyAdded();
+    
+    if (recentlyAdded.length > 0 && recentlyAdded.some(item => item.listId === currentListId)) {
+        console.log("Found recently added contributors, refreshing view");
+        
+        renderContributorsPage(currentListId);
+        
+        clearRecentlyAdded();
+    }
 }
 
 function renderContributorsPage(listId) {
-	const appData = getAppData();
-	const list = appData.lists.find(l => l.id === listId);
-	const currentUser = getCurrentUser();
+    console.log("Rendering contributors page for list:", listId);
+    
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
+    const currentUser = getCurrentUser();
 
-	if (!list) {
-		window.location.href = 'index.html';
-		return;
-	}
+    if (!list) {
+        console.error("List not found, redirecting to index");
+        window.location.href = 'index.html';
+        return;
+    }
 
-	// Initialize contributors if not exists
-	if (!list.contributors) {
-		list.contributors = [];
-		localStorage.setItem('todoAppData', JSON.stringify(appData));
-	}
+    if (!list.contributors) {
+        list.contributors = [];
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+    }
 
-	// Add owner to contributors if not already present
-	const isOwnerInContributors = list.contributors.some(c => c.id === list.ownerId);
-	if (!isOwnerInContributors && list.ownerId) {
-		const owner = {
-			id: list.ownerId,
-			name: currentUser.displayName,
-			avatarColor: currentUser.avatarColor,
-			initialLetter: currentUser.displayName.charAt(0).toUpperCase()
-		};
-		list.contributors.unshift(owner); // Add owner first
-		localStorage.setItem('todoAppData', JSON.stringify(appData));
-	}
+    const isOwnerInContributors = list.contributors.some(c => c.id === list.ownerId);
+    if (!isOwnerInContributors && list.ownerId) {
+        console.log("Adding owner to contributors list");
+        
+        const owner = {
+            id: list.ownerId,
+            name: currentUser.displayName,
+            avatarColor: currentUser.avatarColor,
+            initialLetter: currentUser.displayName.charAt(0).toUpperCase()
+        };
+        list.contributors.unshift(owner);
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+    }
 
-	// Setup search functionality
-	setupSearch(listId);
+    setupSearch(listId);
 
-	// Render current contributors
-	renderUserList(listId, '', list.contributors, list.ownerId);
+    renderUserList(listId, '', list.contributors, list.ownerId);
 }
 
 function setupSearch(listId) {
-	const searchTextElement = document.querySelector('.search-friends-text');
-	const searchButton = document.querySelector('.search-button');
+    const searchTextElement = document.querySelector('.search-friends-text');
+    const searchButton = document.querySelector('.search-button');
 
-	// Make search text editable and set placeholder behavior
-	searchTextElement.contentEditable = true;
-	searchTextElement.setAttribute('placeholder', 'Search users');
+    searchTextElement.contentEditable = true;
+    searchTextElement.setAttribute('placeholder', 'Search users');
 
-	// Clear placeholder on focus
-	searchTextElement.addEventListener('focus', () => {
-		if (searchTextElement.textContent === 'Search users') {
-			searchTextElement.textContent = '';
-		}
-	});
+    searchTextElement.addEventListener('focus', () => {
+        if (searchTextElement.textContent === 'Search users') {
+            searchTextElement.textContent = '';
+        }
+    });
 
-	// Restore placeholder if empty on blur
-	searchTextElement.addEventListener('blur', () => {
-		if (searchTextElement.textContent === '') {
-			searchTextElement.textContent = 'Search users';
-		}
-	});
+    searchTextElement.addEventListener('blur', () => {
+        if (searchTextElement.textContent === '') {
+            searchTextElement.textContent = 'Search users';
+        }
+    });
 
-	// Handle input events for dynamic search
-	searchTextElement.addEventListener('input', () => {
-		const searchText = searchTextElement.textContent.toLowerCase().trim();
-		const appData = getAppData();
-		const list = appData.lists.find(l => l.id === listId);
+    searchTextElement.addEventListener('input', () => {
+        const searchText = searchTextElement.textContent.toLowerCase().trim();
+        const appData = getAppData();
+        const list = appData.lists.find(l => l.id === listId);
 
-		if (searchText === 'search users' || searchText === '') {
-			renderUserList(listId, '', list?.contributors || []);
-			return;
-		}
+        if (searchText === 'search users' || searchText === '') {
+            renderUserList(listId, '', list?.contributors || [], list?.ownerId);
+            return;
+        }
 
-		renderUserList(listId, searchText, list?.contributors || []);
-	});
+        renderUserList(listId, searchText, list?.contributors || [], list?.ownerId);
+    });
 
-	// Keep the search button click handler as fallback
-	searchButton.addEventListener('click', () => {
-		const searchText = searchTextElement.textContent.toLowerCase().trim();
-		const appData = getAppData();
-		const list = appData.lists.find(l => l.id === listId);
+    searchButton.addEventListener('click', () => {
+        const searchText = searchTextElement.textContent.toLowerCase().trim();
+        const appData = getAppData();
+        const list = appData.lists.find(l => l.id === listId);
 
-		if (searchText === 'search users' || searchText === '') return;
-		renderUserList(listId, searchText, list?.contributors || []);
-	});
+        if (searchText === 'search users' || searchText === '') return;
+        renderUserList(listId, searchText, list?.contributors || [], list?.ownerId);
+    });
 }
 
 function renderUserList(listId, searchTerm = '', currentContributors = [], ownerId) {
@@ -131,16 +202,22 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
     const allUsers = getAllUsers();
     const appData = getAppData();
     const list = appData.lists.find(l => l.id === listId);
+    const currentUser = getCurrentUser();
+    
+    const recentlyAdded = getRecentlyAdded().filter(item => item.listId === listId)
+                                          .map(item => item.userId);
 
-    // Create sections
     const currentSection = document.createElement('div');
     currentSection.className = 'contributors-section';
     currentSection.innerHTML = '<div class="section-title">Current Contributors</div>';
     
+    const pendingSection = document.createElement('div');
+    pendingSection.className = 'contributors-section pending-section';
+    pendingSection.innerHTML = '<div class="section-title">Pending Invitations</div>';
+    
     const searchSection = document.createElement('div');
     searchSection.className = 'search-section';
     
-    // Show owner first
     const owner = currentContributors.find(c => c.id === ownerId);
     if (owner) {
         const ownerItem = document.createElement('div');
@@ -150,48 +227,139 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
             <div class="friend-name">${owner.name}</div>
             <div class="contributor-status">Owner</div>
         `;
-        currentSection.appendChild(ownerItem);
+        
+        if (!searchTerm || searchTerm === '' || owner.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            currentSection.appendChild(ownerItem);
+        }
     }
 
-    // Add current contributors (excluding owner)
-    currentContributors
-        .filter(c => c.id !== ownerId)
-        .forEach(contributor => {
-            const contributorItem = document.createElement('div');
+    const contributorsToShow = !searchTerm || searchTerm === '' 
+        ? currentContributors.filter(c => c.id !== ownerId)
+        : currentContributors.filter(c => 
+            c.id !== ownerId && 
+            c.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        
+    contributorsToShow.forEach(contributor => {
+        const contributorItem = document.createElement('div');
+        
+        if (recentlyAdded.includes(contributor.id)) {
+            contributorItem.className = 'friend-item contributor new-contributor';
+        } else {
             contributorItem.className = 'friend-item contributor';
-            contributorItem.innerHTML = `
-                <div class="friend-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>
-                <div class="friend-name">${contributor.name}</div>
+        }
+        
+        contributorItem.innerHTML = `
+            <div class="friend-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>
+            <div class="friend-name">${contributor.name}</div>
+            <div class="contributor-toggle">
+                <button class="remove-btn" data-user-id="${contributor.id}">
+                    <i class="fa-solid fa-user-minus"></i> Remove
+                </button>
+            </div>
+        `;
+
+        const removeBtn = contributorItem.querySelector('.remove-btn');
+        removeBtn.addEventListener('click', () => {
+            removeContributor(listId, contributor.id);
+            contributorItem.remove();
+        });
+        currentSection.appendChild(contributorItem);
+    });
+    
+    if (searchTerm && searchTerm !== '' && contributorsToShow.length === 0 && 
+        (!owner || !owner.name.toLowerCase().includes(searchTerm.toLowerCase()))) {
+        const noMatchesMsg = document.createElement('div');
+        noMatchesMsg.className = 'no-matches-msg';
+        noMatchesMsg.textContent = `No contributors match "${searchTerm}"`;
+        currentSection.appendChild(noMatchesMsg);
+    }
+
+    const sentInvitations = [];
+    allUsers.forEach(user => {
+        const userInvitations = JSON.parse(localStorage.getItem(`collaborationRequests_${user.id}`)) || [];
+        const listInvitations = userInvitations.filter(inv => 
+            inv.listId === listId && 
+            inv.fromUserId === currentUser.id
+        );
+        
+        listInvitations.forEach(inv => {
+            sentInvitations.push({
+                ...inv,
+                toUserId: user.id,
+                toUserName: user.displayName,
+                toUserAvatarColor: user.avatarColor,
+                toUserInitialLetter: user.displayName.charAt(0).toUpperCase()
+            });
+        });
+    });
+
+    if (sentInvitations.length > 0) {
+        sentInvitations.forEach(invitation => {
+            const invitationItem = document.createElement('div');
+            invitationItem.className = 'friend-item invitation';
+            invitationItem.id = `invitation-${invitation.toUserId}-${invitation.id}`;
+            
+            const autoAcceptData = getAutoAcceptData();
+            const autoAcceptItem = autoAcceptData.find(item => 
+                item.userId === invitation.toUserId && item.invitationId === invitation.id);
+            
+            let autoAcceptInfo = '';
+            if (autoAcceptItem) {
+                const now = Date.now();
+                const timeLeft = Math.max(0, Math.ceil((autoAcceptItem.acceptTime - now) / 1000));
+                if (timeLeft > 0) {
+                    autoAcceptInfo = `<div class="auto-accept-timer">(Auto-accepts in ${timeLeft} seconds)</div>`;
+                }
+            }
+            
+            invitationItem.innerHTML = `
+                <div class="friend-avatar" style="background-color: ${invitation.toUserAvatarColor || '#ccc'};">${invitation.toUserInitialLetter}</div>
+                <div class="friend-name">${invitation.toUserName}</div>
+                <div class="invitation-status">Invitation Sent ${autoAcceptInfo}</div>
                 <div class="contributor-toggle">
-                    <label class="switch">
-                        <input type="checkbox" checked data-user-id="${contributor.id}">
-                        <span class="slider round"></span>
-                    </label>
+                    <button class="cancel-invite-btn" data-user-id="${invitation.toUserId}" data-invite-id="${invitation.id}">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </button>
                 </div>
             `;
 
-            const toggle = contributorItem.querySelector('input[type="checkbox"]');
-            toggle.addEventListener('change', () => toggleContributor(listId, contributor.id, toggle.checked));
-            currentSection.appendChild(contributorItem);
+            const cancelBtn = invitationItem.querySelector('.cancel-invite-btn');
+            cancelBtn.addEventListener('click', () => {
+                cancelInvitation(invitation.toUserId, invitation.id);
+                invitationItem.remove();
+                
+                clearAutoAcceptTimer(invitation.toUserId, invitation.id);
+            });
+            pendingSection.appendChild(invitationItem);
         });
+    } else if (!searchTerm || searchTerm === '') {
+        const noInvitationsMsg = document.createElement('div');
+        noInvitationsMsg.className = 'no-results-msg';
+        noInvitationsMsg.textContent = 'No pending invitations';
+        pendingSection.appendChild(noInvitationsMsg);
+    }
 
     userListContainer.appendChild(currentSection);
+    
+    if (!searchTerm || searchTerm === '') {
+        userListContainer.appendChild(pendingSection);
+    }
 
-    // Only show search section if there's a search term
     if (searchTerm && searchTerm !== 'search users') {
         searchSection.innerHTML = '<div class="section-title">Search Results</div>';
         
-        // Filter users based on search term
         const filteredUsers = allUsers.filter(user =>
             user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            user.id !== ownerId && // Don't show owner
-            !currentContributors.some(c => c.id === user.id) // Don't show existing contributors
+            user.id !== ownerId &&
+            !currentContributors.some(c => c.id === user.id) && 
+            !sentInvitations.some(inv => inv.toUserId === user.id)
         );
 
         if (filteredUsers.length === 0) {
             const noResultsMsg = document.createElement('div');
             noResultsMsg.className = 'no-results-msg';
-            noResultsMsg.textContent = 'No matching users found';
+            noResultsMsg.textContent = `No users found matching "${searchTerm}"`;
             searchSection.appendChild(noResultsMsg);
         } else {
             filteredUsers.forEach(user => {
@@ -209,6 +377,7 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
                 inviteBtn.addEventListener('click', () => {
                     sendCollaborationInvite(listId, user.id, list.title || 'Untitled List');
                     userItem.remove();
+                    renderUserList(listId, '', list.contributors, list.ownerId);
                 });
 
                 searchSection.appendChild(userItem);
@@ -217,7 +386,6 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
         
         userListContainer.appendChild(searchSection);
     } else if (!searchTerm) {
-        // Show prompt when no search is active
         const prompt = document.createElement('div');
         prompt.className = 'friends-prompt';
         prompt.textContent = 'Search for users to invite as collaborators';
@@ -225,67 +393,245 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
     }
 }
 
-function toggleContributor(listId, userId, isContributor) {
-	const appData = getAppData();
-	const list = appData.lists.find(l => l.id === listId);
-	const currentUser = getCurrentUser();
+function removeContributor(listId, userId) {
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
 
-	if (!list) return;
+    if (!list || userId === list.ownerId) {
+        console.error("Cannot remove the list owner");
+        return;
+    }
 
-	if (!list.contributors) {
-		list.contributors = [];
-	}
+    if (!list.contributors) {
+        list.contributors = [];
+    }
 
-	if (isContributor) {
-		// Add as contributor if not already
-		const user = getAllUsers().find(u => u.id === userId);
-		if (user && !list.contributors.some(c => c.id === userId)) {
-			list.contributors.push({
-				id: user.id,
-				name: user.displayName,
-				avatarColor: user.avatarColor,
-				initialLetter: user.displayName.charAt(0).toUpperCase()
-			});
-		}
-	} else {
-		// Remove contributor
-		list.contributors = list.contributors.filter(c => c.id !== userId);
-	}
-
-	localStorage.setItem('todoAppData', JSON.stringify(appData));
+    list.contributors = list.contributors.filter(c => c.id !== userId);
+    localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
 function sendCollaborationInvite(listId, userId, listName) {
-	const currentUser = getCurrentUser();
-	const allUsers = JSON.parse(localStorage.getItem('users')) || [];
-	const targetUser = allUsers.find(u => u.id === userId);
+    console.log(`Sending collaboration invite to user ${userId} for list ${listId}`);
+    
+    const currentUser = getCurrentUser();
+    const allUsers = getAllUsers();
+    const targetUser = allUsers.find(u => u.id === userId) || 
+                       availableAccounts.find(u => u.id === userId);
 
-	if (!targetUser) return;
+    if (!targetUser) {
+        console.error("Target user not found");
+        return;
+    }
 
-	// Get or create collaboration requests for target user
-	const collaborationRequests = JSON.parse(localStorage.getItem(`collaborationRequests_${userId}`)) || [];
+    const collaborationRequests = JSON.parse(localStorage.getItem(`collaborationRequests_${userId}`)) || [];
 
-	// Add new request
-	collaborationRequests.push({
-		id: Date.now().toString(),
-		listId: listId,
-		listName: listName,
-		fromUserId: currentUser.id,
-		fromUserName: currentUser.displayName,
-		fromUserAvatarColor: currentUser.avatarColor,
-		fromUserInitialLetter: currentUser.displayName.charAt(0).toUpperCase(),
-		timestamp: Date.now()
-	});
+    const newInvitation = {
+        id: Date.now().toString(),
+        listId: listId,
+        listName: listName,
+        fromUserId: currentUser.id,
+        fromUserName: currentUser.displayName,
+        fromUserAvatarColor: currentUser.avatarColor,
+        fromUserInitialLetter: currentUser.displayName.charAt(0).toUpperCase(),
+        timestamp: Date.now()
+    };
 
-	localStorage.setItem(`collaborationRequests_${userId}`, JSON.stringify(collaborationRequests));
+    collaborationRequests.push(newInvitation);
+    localStorage.setItem(`collaborationRequests_${userId}`, JSON.stringify(collaborationRequests));
 
-	// Show confirmation
-	const confirmation = document.createElement('div');
-	confirmation.className = 'confirmation-msg';
-	confirmation.textContent = `Invitation sent to ${targetUser.displayName}`;
-	document.querySelector('.friend-list').appendChild(confirmation);
+    scheduleAutoAccept(userId, newInvitation.id, AUTO_ACCEPT_DELAY);
+    
+    showDebugToast(`Invitation sent to ${targetUser.displayName}. Will auto-accept in ${AUTO_ACCEPT_DELAY} seconds.`);
+}
 
-	setTimeout(() => {
-		confirmation.remove();
-	}, 2000);
+function cancelInvitation(userId, invitationId) {
+    console.log(`Cancelling invitation ${invitationId} for user ${userId}`);
+    
+    const collaborationRequests = JSON.parse(localStorage.getItem(`collaborationRequests_${userId}`)) || [];
+    
+    const updatedRequests = collaborationRequests.filter(req => req.id !== invitationId);
+    
+    localStorage.setItem(`collaborationRequests_${userId}`, JSON.stringify(updatedRequests));
+    
+    clearAutoAcceptTimer(userId, invitationId);
+}
+
+function getRecentlyAdded() {
+    const data = localStorage.getItem(RECENTLY_ADDED_KEY);
+    return data ? JSON.parse(data) : [];
+}
+
+function addToRecentlyAdded(userId, listId) {
+    console.log(`Adding user ${userId} to recently added for list ${listId}`);
+    
+    const recentlyAdded = getRecentlyAdded();
+    
+    recentlyAdded.push({
+        userId,
+        listId,
+        timestamp: Date.now()
+    });
+    
+    localStorage.setItem(RECENTLY_ADDED_KEY, JSON.stringify(recentlyAdded));
+}
+
+function clearRecentlyAdded() {
+    localStorage.setItem(RECENTLY_ADDED_KEY, JSON.stringify([]));
+}
+
+function acceptInvitation(userId, invitationId) {
+    console.log(`Accepting invitation ${invitationId} for user ${userId}`);
+    
+    const user = availableAccounts.find(u => u.id === userId);
+    
+    if (!user) {
+        console.error("User not found");
+        return false;
+    }
+    
+    const collaborationRequests = JSON.parse(localStorage.getItem(`collaborationRequests_${userId}`)) || [];
+    
+    const invitation = collaborationRequests.find(req => req.id === invitationId);
+    
+    if (!invitation) {
+        console.error("Invitation not found");
+        return false;
+    }
+    
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === invitation.listId);
+    
+    if (!list) {
+        console.error("List not found");
+        return false;
+    }
+    
+    if (!list.contributors) {
+        list.contributors = [];
+    }
+    
+    if (!list.contributors.some(c => c.id === userId)) {
+        list.contributors.push({
+            id: user.id,
+            name: user.displayName,
+            avatarColor: user.avatarColor || "#cccccc",
+            initialLetter: user.displayName.charAt(0).toUpperCase()
+        });
+        
+        localStorage.setItem('todoAppData', JSON.stringify(appData));
+        
+        const updatedRequests = collaborationRequests.filter(req => req.id !== invitationId);
+        localStorage.setItem(`collaborationRequests_${userId}`, JSON.stringify(updatedRequests));
+        
+        clearAutoAcceptTimer(userId, invitationId);
+        
+        console.log(`User ${user.displayName} added as contributor to list "${list.title}"`);
+        
+        addToRecentlyAdded(userId, list.id);
+        
+        const invitationElement = document.getElementById(`invitation-${userId}-${invitationId}`);
+        if (invitationElement) {
+            invitationElement.remove();
+        }
+        
+        showDebugToast(`Auto-accepted invitation for ${user.displayName}`);
+        
+        if (currentListId === list.id) {
+            renderContributorsPage(list.id);
+        }
+        
+        return true;
+    } else {
+        console.log(`User ${user.displayName} is already a contributor to list "${list.title}"`);
+        return false;
+    }
+}
+
+window.acceptInvitation = acceptInvitation;
+
+function getAutoAcceptData() {
+    const data = localStorage.getItem(AUTO_ACCEPT_STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+}
+
+function saveAutoAcceptData(data) {
+    localStorage.setItem(AUTO_ACCEPT_STORAGE_KEY, JSON.stringify(data));
+}
+
+function scheduleAutoAccept(userId, invitationId, delayInSeconds) {
+    console.log(`Scheduling auto-accept for user ${userId}, invitation ${invitationId} in ${delayInSeconds} seconds`);
+    
+    const acceptTime = Date.now() + (delayInSeconds * 1000);
+    
+    const autoAcceptData = getAutoAcceptData();
+    
+    const filteredData = autoAcceptData.filter(
+        item => !(item.userId === userId && item.invitationId === invitationId)
+    );
+    
+    filteredData.push({
+        userId,
+        invitationId,
+        acceptTime
+    });
+    
+    saveAutoAcceptData(filteredData);
+    
+    clearAutoAcceptTimer(userId, invitationId);
+    
+    const timerId = setTimeout(() => {
+        console.log(`Auto-accept timer fired for user ${userId}, invitation ${invitationId}`);
+        acceptInvitation(userId, invitationId);
+    }, delayInSeconds * 1000);
+    
+    autoAcceptTimers[`${userId}-${invitationId}`] = timerId;
+}
+
+function clearAutoAcceptTimer(userId, invitationId) {
+    const key = `${userId}-${invitationId}`;
+    if (autoAcceptTimers[key]) {
+        console.log(`Clearing auto-accept timer for ${key}`);
+        clearTimeout(autoAcceptTimers[key]);
+        delete autoAcceptTimers[key];
+    }
+    
+    const autoAcceptData = getAutoAcceptData();
+    const updatedData = autoAcceptData.filter(
+        item => !(item.userId === userId && item.invitationId === invitationId)
+    );
+    saveAutoAcceptData(updatedData);
+}
+
+function setupAutoAcceptTimers() {
+    console.log("Setting up auto-accept timers");
+    
+    const autoAcceptData = getAutoAcceptData();
+    const now = Date.now();
+    
+    const validItems = autoAcceptData.filter(item => item.acceptTime > now);
+    
+    validItems.forEach(item => {
+        const remainingTime = Math.max(0, Math.ceil((item.acceptTime - now) / 1000));
+        
+        console.log(`Setting up timer for user ${item.userId}, invitation ${item.invitationId}, remaining time: ${remainingTime}s`);
+        
+        if (remainingTime > 0) {
+            const timerId = setTimeout(() => {
+                console.log(`Auto-accept timer fired for user ${item.userId}, invitation ${item.invitationId}`);
+                acceptInvitation(item.userId, item.invitationId);
+            }, remainingTime * 1000);
+            
+            autoAcceptTimers[`${item.userId}-${item.invitationId}`] = timerId;
+        } else {
+            console.log(`Auto-accept time already passed for user ${item.userId}, invitation ${item.invitationId}`);
+            acceptInvitation(item.userId, item.invitationId);
+        }
+    });
+    
+    const cleanedData = validItems.length < autoAcceptData.length ? validItems : autoAcceptData;
+    saveAutoAcceptData(cleanedData);
+    
+    if (validItems.length > 0) {
+        showDebugToast(`Set up ${validItems.length} auto-accept timers`);
+    }
 }
