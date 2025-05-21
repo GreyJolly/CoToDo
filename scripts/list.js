@@ -102,7 +102,7 @@ function renderListPage(listId) {
 		const emptyMessage = document.createElement('div');
 		emptyMessage.className = 'no-results-msg';
 		emptyMessage.innerHTML = `
-            <p>No tasks for this list, press on the "+" to add one</p>
+            <p>No tasks for this list, press on the "+" button to add one</p>
         `;
 		incompleteContainer.appendChild(emptyMessage);
 

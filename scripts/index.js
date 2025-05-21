@@ -52,7 +52,7 @@ function renderHomepage() {
 	if (appData.lists.length === 0) {
 		mainContent.innerHTML = `
             <div class="empty-state">
-                <p>No lists saved press on the "+" icon to create one</p>
+                <p>No lists saved press on the "+" button to create one</p>
             </div>
         `;
 		return;
@@ -74,7 +74,7 @@ function renderHomepage() {
 			// Show empty state message for this list
 			html += `
                 <div class="task-item" style="pointer-events: none; color: #666;">
-                    No tasks for this list, press on the "+" to add one
+                    No tasks for this list, press on the "+" button to add one
                 </div>
             `;
 		} else {
