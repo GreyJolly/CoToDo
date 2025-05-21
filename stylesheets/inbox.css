@@ -180,10 +180,19 @@ body {
 .no-results-msg,
 .more-results-msg,
 .confirmation-msg {
-	padding: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 50vh; 
+    height: auto;
 	text-align: center;
 	color: #666;
 	font-size: 16px;
+	padding: 20px;
+	border-radius: 10px;
+	margin: 20px 0;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .confirmation-msg {

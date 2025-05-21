@@ -156,13 +156,16 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 200px;
+	min-height: 55vh; 
+    height: auto;
 	text-align: center;
 	color: #666;
 	font-size: 16px;
 	padding: 20px;
 	border-radius: 10px;
 	margin: 20px 0;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .empty-state p {
