@@ -126,46 +126,40 @@ function setupSearch(listId) {
 }
 
 function renderUserList(listId, searchTerm = '', currentContributors = [], ownerId) {
-	const userListContainer = document.querySelector('.friend-list');
-	userListContainer.innerHTML = '';
-	const allUsers = getAllUsers();
-	const appData = getAppData();
-	const list = appData.lists.find(l => l.id === listId);
+    const userListContainer = document.querySelector('.friend-list');
+    userListContainer.innerHTML = '';
+    const allUsers = getAllUsers();
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
 
-	// Show owner first
-	const owner = currentContributors.find(c => c.id === ownerId);
-	if (owner) {
-		const ownerItem = document.createElement('div');
-		ownerItem.className = 'friend-item owner';
-		ownerItem.innerHTML = `
+    // Create sections
+    const currentSection = document.createElement('div');
+    currentSection.className = 'contributors-section';
+    currentSection.innerHTML = '<div class="section-title">Current Contributors</div>';
+    
+    const searchSection = document.createElement('div');
+    searchSection.className = 'search-section';
+    
+    // Show owner first
+    const owner = currentContributors.find(c => c.id === ownerId);
+    if (owner) {
+        const ownerItem = document.createElement('div');
+        ownerItem.className = 'friend-item owner';
+        ownerItem.innerHTML = `
             <div class="friend-avatar" style="background-color: ${owner.avatarColor}">${owner.initialLetter}</div>
             <div class="friend-name">${owner.name}</div>
             <div class="contributor-status">Owner</div>
         `;
-		userListContainer.appendChild(ownerItem);
-	}
+        currentSection.appendChild(ownerItem);
+    }
 
-	// Filter users based on search term
-	const filteredUsers = allUsers.filter(user =>
-		user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-		user.id !== ownerId // Don't show owner in regular list
-	);
-
-	if (filteredUsers.length === 0 && searchTerm) {
-		const noResultsMsg = document.createElement('div');
-		noResultsMsg.className = 'no-results-msg';
-		noResultsMsg.textContent = 'No matching users found';
-		userListContainer.appendChild(noResultsMsg);
-		return;
-	}
-
-	// Add current contributors first
-	currentContributors
-		.filter(c => c.id !== ownerId) // Exclude owner
-		.forEach(contributor => {
-			const contributorItem = document.createElement('div');
-			contributorItem.className = 'friend-item contributor';
-			contributorItem.innerHTML = `
+    // Add current contributors (excluding owner)
+    currentContributors
+        .filter(c => c.id !== ownerId)
+        .forEach(contributor => {
+            const contributorItem = document.createElement('div');
+            contributorItem.className = 'friend-item contributor';
+            contributorItem.innerHTML = `
                 <div class="friend-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>
                 <div class="friend-name">${contributor.name}</div>
                 <div class="contributor-toggle">
@@ -176,36 +170,59 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
                 </div>
             `;
 
-			// Add toggle event
-			const toggle = contributorItem.querySelector('input[type="checkbox"]');
-			toggle.addEventListener('change', () => toggleContributor(listId, contributor.id, toggle.checked));
+            const toggle = contributorItem.querySelector('input[type="checkbox"]');
+            toggle.addEventListener('change', () => toggleContributor(listId, contributor.id, toggle.checked));
+            currentSection.appendChild(contributorItem);
+        });
 
-			userListContainer.appendChild(contributorItem);
-		});
+    userListContainer.appendChild(currentSection);
 
-	// Add other users that match search
-	filteredUsers
-		.filter(user => !currentContributors.some(c => c.id === user.id)) // Exclude existing contributors
-		.forEach(user => {
-			const userItem = document.createElement('div');
-			userItem.className = 'friend-item';
-			userItem.innerHTML = `
-                <div class="friend-avatar" style="background-color: ${user.avatarColor};">${user.displayName.charAt(0)}</div>
-                <div class="friend-name">${user.displayName}</div>
-                <div class="contributor-actions">
-                    <button class="invite-btn" data-user-id="${user.id}">Invite to collaborate</button>
-                </div>
-            `;
+    // Only show search section if there's a search term
+    if (searchTerm && searchTerm !== 'search users') {
+        searchSection.innerHTML = '<div class="section-title">Search Results</div>';
+        
+        // Filter users based on search term
+        const filteredUsers = allUsers.filter(user =>
+            user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            user.id !== ownerId && // Don't show owner
+            !currentContributors.some(c => c.id === user.id) // Don't show existing contributors
+        );
 
-			// Add invite event
-			const inviteBtn = userItem.querySelector('.invite-btn');
-			inviteBtn.addEventListener('click', () => {
-				sendCollaborationInvite(listId, user.id, list.title || 'Untitled List');
-				userItem.remove();
-			});
+        if (filteredUsers.length === 0) {
+            const noResultsMsg = document.createElement('div');
+            noResultsMsg.className = 'no-results-msg';
+            noResultsMsg.textContent = 'No matching users found';
+            searchSection.appendChild(noResultsMsg);
+        } else {
+            filteredUsers.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'friend-item';
+                userItem.innerHTML = `
+                    <div class="friend-avatar" style="background-color: ${user.avatarColor};">${user.displayName.charAt(0)}</div>
+                    <div class="friend-name">${user.displayName}</div>
+                    <div class="contributor-actions">
+                        <button class="invite-btn" data-user-id="${user.id}"><i class="fa-solid fa-envelope"></i>Invite to collaborate</button>
+                    </div>
+                `;
 
-			userListContainer.appendChild(userItem);
-		});
+                const inviteBtn = userItem.querySelector('.invite-btn');
+                inviteBtn.addEventListener('click', () => {
+                    sendCollaborationInvite(listId, user.id, list.title || 'Untitled List');
+                    userItem.remove();
+                });
+
+                searchSection.appendChild(userItem);
+            });
+        }
+        
+        userListContainer.appendChild(searchSection);
+    } else if (!searchTerm) {
+        // Show prompt when no search is active
+        const prompt = document.createElement('div');
+        prompt.className = 'friends-prompt';
+        prompt.textContent = 'Search for users to invite as collaborators';
+        userListContainer.appendChild(prompt);
+    }
 }
 
 function toggleContributor(listId, userId, isContributor) {
