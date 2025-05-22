@@ -14,7 +14,16 @@ function getAppData() {
 
 	return appData;
 }
-// Add this to your list.js file or script section
+
+function getCurrentUser() {
+    return {
+        id: 0,
+        displayName: "Current User",
+        avatarColor: "#4285F4",
+        initialLetter: "C"
+    };
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	const completeContainer = document.querySelector('.complete-container');
 	const toggleButton = document.querySelector('.toggle-complete');
@@ -24,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (e.target.closest('h3')) {
 				completeContainer.classList.toggle('collapsed');
 
-				// Update the icon
 				const icon = completeContainer.querySelector('.toggle-complete');
 				icon.classList.toggle('fa-chevron-right');
 				icon.classList.toggle('fa-chevron-down');
@@ -32,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 	renderListPage(getCurrentListId());
+	setupOwnershipBasedUI(getCurrentListId());
 
 	const titleInput = document.querySelector('.list-title');
 	if (titleInput.value == '') {
@@ -43,6 +52,109 @@ document.addEventListener('DOMContentLoaded', function () {
 function getCurrentListId() {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get('id') || 'list1';
+}
+
+function setupOwnershipBasedUI(listId) {
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+	const currentUser = getCurrentUser();
+	
+	if (!list) return;
+	
+	const isOwner = list.ownerId === currentUser.id;
+	const deleteListButton = document.getElementById('delete-list-button');
+	
+	if (isOwner) {
+		deleteListButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+		deleteListButton.onclick = deleteList;
+		deleteListButton.style.color = 'red';
+	} else {
+		deleteListButton.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i>';
+		deleteListButton.onclick = leaveCurrentList;
+		deleteListButton.style.color = '#ff9800';
+	}
+}
+
+function leaveCurrentList() {
+	const listId = getCurrentListId();
+	const currentUser = getCurrentUser();
+	
+	const popup = document.getElementById('leave-confirm-popup');
+	if (!popup) {
+		createLeaveConfirmPopup();
+	}
+	
+	const leavePopup = document.getElementById('leave-confirm-popup');
+	leavePopup.style.display = 'flex';
+	
+	leavePopup.querySelector('.cancel-button').onclick = function () {
+		leavePopup.style.display = 'none';
+	};
+
+	leavePopup.querySelector('.confirm-button').onclick = function () {
+		leaveList(listId, currentUser.id);
+		leavePopup.style.display = 'none';
+	};
+
+	leavePopup.onclick = function (e) {
+		if (e.target === leavePopup) {
+			leavePopup.style.display = 'none';
+		}
+	};
+}
+
+function createLeaveConfirmPopup() {
+	const popup = document.createElement('div');
+	popup.id = 'leave-confirm-popup';
+	popup.className = 'popup';
+	popup.style.display = 'none';
+	popup.innerHTML = `
+		<div class="popup-content">
+			<p>Are you sure you want to leave this list? You will no longer have access to it.</p>
+			<div class="popup-buttons">
+				<button class="popup-button cancel-button">Cancel</button>
+				<button class="popup-button confirm-button" style="background-color: #ff9800;">Leave</button>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(popup);
+}
+
+function leaveList(listId, userId) {
+	console.log(`User ${userId} leaving list ${listId}`);
+	
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+	const currentUser = getCurrentUser();
+
+	if (!list) {
+		console.error("List not found");
+		return;
+	}
+
+	if (userId === list.ownerId) {
+		console.error("Owner cannot leave their own list");
+		return;
+	}
+
+	if (list.contributors) {
+		list.contributors = list.contributors.filter(c => c.id !== userId);
+	}
+
+	if (userId === currentUser.id) {
+		const leftLists = JSON.parse(localStorage.getItem('leftLists')) || [];
+		
+		if (!leftLists.includes(listId)) {
+			leftLists.push(listId);
+			localStorage.setItem('leftLists', JSON.stringify(leftLists));
+		}
+		
+		setTimeout(() => {
+			window.location.href = 'index.html';
+		}, 1000);
+	}
+
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
 function updateParentTaskCompletion(taskId, listId) {
@@ -428,214 +540,6 @@ function setupDragAndDrop(listId) {
 	});
 }
 
-function setupDragAndDrop(listId) {
-	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
-	const completeContainer = document.querySelector('.complete-container .todo-list');
-
-	// Make containers drop zones with type checking
-	[incompleteContainer, completeContainer].forEach(container => {
-		container.addEventListener('dragover', e => {
-			e.preventDefault();
-			const draggable = document.querySelector('.dragging');
-			if (!draggable) return;
-
-			const isDraggingComplete = draggable.querySelector('input').checked;
-			const isTargetComplete = container === completeContainer;
-
-			// Only allow drop if completion status matches
-			if (isDraggingComplete === isTargetComplete) {
-				const afterElement = getDragAfterElement(container, e.clientY);
-
-				// If dragging a task with subtasks, we need to move the entire container
-				const taskContainer = draggable.closest('.task-container');
-				const elementToMove = taskContainer || draggable;
-
-				if (afterElement == null) {
-					container.appendChild(elementToMove);
-				} else {
-					const afterTaskContainer = afterElement.closest('.task-container');
-					const referenceElement = afterTaskContainer || afterElement;
-					container.insertBefore(elementToMove, referenceElement);
-				}
-
-				// Visual feedback
-				const taskItems = container.querySelectorAll('.task-item:not(.dragging)');
-				taskItems.forEach(item => item.classList.remove('over'));
-
-				if (afterElement) {
-					afterElement.classList.add('over');
-				}
-			}
-		});
-
-		container.addEventListener('dragleave', () => {
-			const taskItems = container.querySelectorAll('.task-item');
-			taskItems.forEach(item => item.classList.remove('over'));
-		});
-	});
-
-	// Make tasks draggable
-	document.querySelectorAll('.task-item').forEach(task => {
-		task.setAttribute('draggable', true);
-
-		task.addEventListener('dragstart', () => {
-			task.classList.add('dragging');
-
-			// If this task has subtasks, we need to hide the subtasks while dragging
-			const taskContainer = task.closest('.task-container');
-			if (taskContainer && taskContainer.querySelector('.subtasks-container')) {
-				taskContainer.style.opacity = '0.5';
-			}
-		});
-
-		task.addEventListener('dragend', () => {
-			task.classList.remove('dragging');
-			document.querySelectorAll('.task-item.over').forEach(item => {
-				item.classList.remove('over');
-			});
-
-			// Restore subtasks visibility
-			const taskContainer = task.closest('.task-container');
-			if (taskContainer) {
-				taskContainer.style.opacity = '';
-			}
-
-			updateTaskOrder(listId);
-		});
-	});
-}
-
-function getDragAfterElement(container, y) {
-	// Get all draggable elements (either task-items or task-containers)
-	const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging), .task-container:not(.dragging)')];
-
-	return draggableElements.reduce((closest, child) => {
-		const box = child.getBoundingClientRect();
-		const offset = y - box.top - box.height / 2;
-
-		if (offset < 0 && offset > closest.offset) {
-			return { offset: offset, element: child };
-		} else {
-			return closest;
-		}
-	}, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-function updateTaskOrder(listId) {
-	const appData = getAppData();
-	const list = appData.lists.find(l => l.id === listId);
-
-	if (!list) return;
-
-	// Get all tasks in their current DOM order
-	const incompleteTasks = Array.from(document.querySelector('.incomplete-container .todo-list').children);
-	const completeTasks = Array.from(document.querySelector('.complete-container .todo-list').children);
-
-	// Rebuild the tasks array in the new order
-	const newTasks = [];
-
-	// Helper function to extract task ID from either a task-item or task-container
-	const getTaskId = (element) => {
-		const taskItem = element.classList.contains('task-item') ? element : element.querySelector('.task-item');
-		return taskItem?.querySelector('input')?.id;
-	};
-
-	incompleteTasks.forEach(element => {
-		const taskId = getTaskId(element);
-		if (!taskId) return;
-
-		const task = list.tasks.find(t => t.id === taskId);
-		if (task) newTasks.push(task);
-	});
-
-	completeTasks.forEach(element => {
-		const taskId = getTaskId(element);
-		if (!taskId) return;
-
-		const task = list.tasks.find(t => t.id === taskId);
-		if (task) newTasks.push({ ...task, completed: true });
-	});
-
-	// Update the list and save
-	list.tasks = newTasks;
-	localStorage.setItem('todoAppData', JSON.stringify(appData));
-} function setupDragAndDrop(listId) {
-	const incompleteContainer = document.querySelector('.incomplete-container .todo-list');
-	const completeContainer = document.querySelector('.complete-container .todo-list');
-
-	// Make containers drop zones with type checking
-	[incompleteContainer, completeContainer].forEach(container => {
-		container.addEventListener('dragover', e => {
-			e.preventDefault();
-			const draggable = document.querySelector('.dragging');
-			if (!draggable) return;
-
-			const isDraggingComplete = draggable.querySelector('input').checked;
-			const isTargetComplete = container === completeContainer;
-
-			// Only allow drop if completion status matches
-			if (isDraggingComplete === isTargetComplete) {
-				const afterElement = getDragAfterElement(container, e.clientY);
-
-				// If dragging a task with subtasks, we need to move the entire container
-				const taskContainer = draggable.closest('.task-container');
-				const elementToMove = taskContainer || draggable;
-
-				if (afterElement == null) {
-					container.appendChild(elementToMove);
-				} else {
-					const afterTaskContainer = afterElement.closest('.task-container');
-					const referenceElement = afterTaskContainer || afterElement;
-					container.insertBefore(elementToMove, referenceElement);
-				}
-
-				// Visual feedback
-				const taskItems = container.querySelectorAll('.task-item:not(.dragging)');
-				taskItems.forEach(item => item.classList.remove('over'));
-
-				if (afterElement) {
-					afterElement.classList.add('over');
-				}
-			}
-		});
-
-		container.addEventListener('dragleave', () => {
-			const taskItems = container.querySelectorAll('.task-item');
-			taskItems.forEach(item => item.classList.remove('over'));
-		});
-	});
-
-	// Make tasks draggable
-	document.querySelectorAll('.task-item').forEach(task => {
-		task.setAttribute('draggable', true);
-
-		task.addEventListener('dragstart', () => {
-			task.classList.add('dragging');
-
-			// If this task has subtasks, we need to hide the subtasks while dragging
-			const taskContainer = task.closest('.task-container');
-			if (taskContainer && taskContainer.querySelector('.subtasks-container')) {
-				taskContainer.style.opacity = '0.5';
-			}
-		});
-
-		task.addEventListener('dragend', () => {
-			task.classList.remove('dragging');
-			document.querySelectorAll('.task-item.over').forEach(item => {
-				item.classList.remove('over');
-			});
-
-			// Restore subtasks visibility
-			const taskContainer = task.closest('.task-container');
-			if (taskContainer) {
-				taskContainer.style.opacity = '';
-			}
-
-			updateTaskOrder(listId);
-		});
-	});
-}
-
 function getDragAfterElement(container, y) {
 	// Get all draggable elements (either task-items or task-containers)
 	const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging), .task-container:not(.dragging)')];
@@ -699,11 +603,6 @@ function deleteList() {
 	// Show the confirmation popup
 	const popup = document.getElementById('delete-confirm-popup');
 	popup.style.display = 'flex';
-
-	// Close any other popups (if you have any)
-	// document.querySelectorAll('.popup').forEach(p => {
-	//     if (p.id !== 'delete-confirm-popup') p.style.display = 'none';
-	// });
 
 	// Setup event listeners for the buttons
 	popup.querySelector('.cancel-button').onclick = function () {

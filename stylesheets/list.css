@@ -549,6 +549,19 @@ body>.footer {
 	background-color: rgba(0, 0, 0, 0) !important;
 }
 
+.footer #delete-list-button {
+	font-size: 30px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	padding: 0;
+	transition: transform 0.2s ease;
+}
+
+.footer #delete-list-button:hover {
+	transform: scale(1.1);
+}
+
 @media (max-width: 400px) {
 	.list-title {
         max-width: 65%;

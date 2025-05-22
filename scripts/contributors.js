@@ -11,29 +11,18 @@ const availableAccounts = [
     { id: 10, displayName: "John", avatarColor: "#92c1ff", initialLetter: "J" }
 ];
 
-const AUTO_ACCEPT_DELAY = 50;
+const AUTO_ACCEPT_DELAY = 10;
 const AUTO_ACCEPT_STORAGE_KEY = 'todoApp_autoAccept';
 const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
 const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
 const autoAcceptTimers = {};
 let currentListId = '';
 
-function showDebugToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'auto-accept-toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        document.body.removeChild(toast);
-    }, 5000);
-}
-
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Contributors page initialized");
+    
     
     currentListId = getCurrentListId();
-    console.log("Current list ID:", currentListId);
+    
     
     document.querySelector('.backto-list')?.addEventListener('click', function (e) {
         e.preventDefault();
@@ -82,7 +71,7 @@ function getAllUsers() {
 }
 
 function processOfflineAutoAccepts() {
-    console.log("Processing offline auto-accepts");
+    
     
     const autoAcceptData = getAutoAcceptData();
     const now = Date.now();
@@ -91,17 +80,16 @@ function processOfflineAutoAccepts() {
     const expiredItems = autoAcceptData.filter(item => item.acceptTime <= now && item.acceptTime > lastCheckTime);
     
     if (expiredItems.length > 0) {
-        console.log(`Found ${expiredItems.length} expired auto-accepts to process`);
+        
         
         expiredItems.forEach(item => {
-            console.log(`Processing auto-accept for user ${item.userId}, invitation ${item.invitationId}`);
+            
             acceptInvitation(item.userId, item.invitationId);
         });
         
         const remainingItems = autoAcceptData.filter(item => item.acceptTime > now);
         saveAutoAcceptData(remainingItems);
         
-        showDebugToast(`Processed ${expiredItems.length} pending auto-accepts`);
     }
 }
 
@@ -109,7 +97,7 @@ function checkForAutoAccepts() {
     const recentlyAdded = getRecentlyAdded();
     
     if (recentlyAdded.length > 0 && recentlyAdded.some(item => item.listId === currentListId)) {
-        console.log("Found recently added contributors, refreshing view");
+        
         
         renderContributorsPage(currentListId);
         
@@ -118,7 +106,7 @@ function checkForAutoAccepts() {
 }
 
 function renderContributorsPage(listId) {
-    console.log("Rendering contributors page for list:", listId);
+    
     
     const appData = getAppData();
     const list = appData.lists.find(l => l.id === listId);
@@ -137,7 +125,7 @@ function renderContributorsPage(listId) {
 
     const isOwnerInContributors = list.contributors.some(c => c.id === list.ownerId);
     if (!isOwnerInContributors && list.ownerId) {
-        console.log("Adding owner to contributors list");
+        
         
         const owner = {
             id: list.ownerId,
@@ -249,21 +237,49 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
             contributorItem.className = 'friend-item contributor';
         }
         
+        const isCurrentUser = contributor.id === currentUser.id;
+        const isOwner = currentUser.id === ownerId;
+        const isContributorOwner = contributor.id === ownerId;
+        
+        let actionButtonHtml = '';
+        if (isCurrentUser && !isOwner) {
+            actionButtonHtml = `
+                <button class="leave-btn" data-user-id="${contributor.id}">
+                    <i class="fa-solid fa-sign-out-alt"></i> Leave List
+                </button>
+            `;
+        } else if (!isCurrentUser && !isContributorOwner) {
+            actionButtonHtml = `
+                <button class="remove-btn" data-user-id="${contributor.id}">
+                    <i class="fa-solid fa-user-minus"></i> Remove
+                </button>
+            `;
+        }
+        
         contributorItem.innerHTML = `
             <div class="friend-avatar" style="background-color: ${contributor.avatarColor};">${contributor.initialLetter}</div>
             <div class="friend-name">${contributor.name}</div>
             <div class="contributor-toggle">
-                <button class="remove-btn" data-user-id="${contributor.id}">
-                    <i class="fa-solid fa-user-minus"></i> Remove
-                </button>
+                ${actionButtonHtml}
             </div>
         `;
 
         const removeBtn = contributorItem.querySelector('.remove-btn');
-        removeBtn.addEventListener('click', () => {
-            removeContributor(listId, contributor.id);
-            contributorItem.remove();
-        });
+        const leaveBtn = contributorItem.querySelector('.leave-btn');
+        
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                removeContributor(listId, contributor.id);
+                contributorItem.remove();
+            });
+        }
+        
+        if (leaveBtn) {
+            leaveBtn.addEventListener('click', () => {
+                leaveList(listId, contributor.id);
+            });
+        }
+        
         currentSection.appendChild(contributorItem);
     });
     
@@ -410,8 +426,45 @@ function removeContributor(listId, userId) {
     localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
+function leaveList(listId, userId) {
+    const appData = getAppData();
+    const list = appData.lists.find(l => l.id === listId);
+    const currentUser = getCurrentUser();
+
+    if (!list) {
+        console.error("List not found");
+        return;
+    }
+
+    if (userId === list.ownerId) {
+        console.error("Owner cannot leave their own list");
+        return;
+    }
+
+    // Remove the user from contributors
+    if (list.contributors) {
+        list.contributors = list.contributors.filter(c => c.id !== userId);
+    }
+
+    // If the current user is leaving, mark the list as left
+    if (userId === currentUser.id) {
+        const leftLists = JSON.parse(localStorage.getItem('leftLists')) || [];
+        
+        if (!leftLists.includes(listId)) {
+            leftLists.push(listId);
+            localStorage.setItem('leftLists', JSON.stringify(leftLists));
+        }
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
+    }
+
+    localStorage.setItem('todoAppData', JSON.stringify(appData));
+}
+
 function sendCollaborationInvite(listId, userId, listName) {
-    console.log(`Sending collaboration invite to user ${userId} for list ${listId}`);
+    
     
     const currentUser = getCurrentUser();
     const allUsers = getAllUsers();
@@ -441,11 +494,10 @@ function sendCollaborationInvite(listId, userId, listName) {
 
     scheduleAutoAccept(userId, newInvitation.id, AUTO_ACCEPT_DELAY);
     
-    showDebugToast(`Invitation sent to ${targetUser.displayName}. Will auto-accept in ${AUTO_ACCEPT_DELAY} seconds.`);
 }
 
 function cancelInvitation(userId, invitationId) {
-    console.log(`Cancelling invitation ${invitationId} for user ${userId}`);
+    
     
     const collaborationRequests = JSON.parse(localStorage.getItem(`collaborationRequests_${userId}`)) || [];
     
@@ -462,7 +514,7 @@ function getRecentlyAdded() {
 }
 
 function addToRecentlyAdded(userId, listId) {
-    console.log(`Adding user ${userId} to recently added for list ${listId}`);
+    
     
     const recentlyAdded = getRecentlyAdded();
     
@@ -480,7 +532,7 @@ function clearRecentlyAdded() {
 }
 
 function acceptInvitation(userId, invitationId) {
-    console.log(`Accepting invitation ${invitationId} for user ${userId}`);
+    
     
     const user = availableAccounts.find(u => u.id === userId);
     
@@ -525,7 +577,7 @@ function acceptInvitation(userId, invitationId) {
         
         clearAutoAcceptTimer(userId, invitationId);
         
-        console.log(`User ${user.displayName} added as contributor to list "${list.title}"`);
+        
         
         addToRecentlyAdded(userId, list.id);
         
@@ -534,7 +586,6 @@ function acceptInvitation(userId, invitationId) {
             invitationElement.remove();
         }
         
-        showDebugToast(`Auto-accepted invitation for ${user.displayName}`);
         
         if (currentListId === list.id) {
             renderContributorsPage(list.id);
@@ -542,7 +593,7 @@ function acceptInvitation(userId, invitationId) {
         
         return true;
     } else {
-        console.log(`User ${user.displayName} is already a contributor to list "${list.title}"`);
+        
         return false;
     }
 }
@@ -559,7 +610,7 @@ function saveAutoAcceptData(data) {
 }
 
 function scheduleAutoAccept(userId, invitationId, delayInSeconds) {
-    console.log(`Scheduling auto-accept for user ${userId}, invitation ${invitationId} in ${delayInSeconds} seconds`);
+    
     
     const acceptTime = Date.now() + (delayInSeconds * 1000);
     
@@ -580,7 +631,7 @@ function scheduleAutoAccept(userId, invitationId, delayInSeconds) {
     clearAutoAcceptTimer(userId, invitationId);
     
     const timerId = setTimeout(() => {
-        console.log(`Auto-accept timer fired for user ${userId}, invitation ${invitationId}`);
+        
         acceptInvitation(userId, invitationId);
     }, delayInSeconds * 1000);
     
@@ -590,7 +641,7 @@ function scheduleAutoAccept(userId, invitationId, delayInSeconds) {
 function clearAutoAcceptTimer(userId, invitationId) {
     const key = `${userId}-${invitationId}`;
     if (autoAcceptTimers[key]) {
-        console.log(`Clearing auto-accept timer for ${key}`);
+        
         clearTimeout(autoAcceptTimers[key]);
         delete autoAcceptTimers[key];
     }
@@ -603,7 +654,7 @@ function clearAutoAcceptTimer(userId, invitationId) {
 }
 
 function setupAutoAcceptTimers() {
-    console.log("Setting up auto-accept timers");
+    
     
     const autoAcceptData = getAutoAcceptData();
     const now = Date.now();
@@ -613,17 +664,17 @@ function setupAutoAcceptTimers() {
     validItems.forEach(item => {
         const remainingTime = Math.max(0, Math.ceil((item.acceptTime - now) / 1000));
         
-        console.log(`Setting up timer for user ${item.userId}, invitation ${item.invitationId}, remaining time: ${remainingTime}s`);
+        
         
         if (remainingTime > 0) {
             const timerId = setTimeout(() => {
-                console.log(`Auto-accept timer fired for user ${item.userId}, invitation ${item.invitationId}`);
+                
                 acceptInvitation(item.userId, item.invitationId);
             }, remainingTime * 1000);
             
             autoAcceptTimers[`${item.userId}-${item.invitationId}`] = timerId;
         } else {
-            console.log(`Auto-accept time already passed for user ${item.userId}, invitation ${item.invitationId}`);
+            
             acceptInvitation(item.userId, item.invitationId);
         }
     });
@@ -632,6 +683,5 @@ function setupAutoAcceptTimers() {
     saveAutoAcceptData(cleanedData);
     
     if (validItems.length > 0) {
-        showDebugToast(`Set up ${validItems.length} auto-accept timers`);
     }
 }
