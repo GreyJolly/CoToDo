@@ -169,13 +169,34 @@ function displayRequests(requests, container) {
 		});
 
 		rejectBtn.addEventListener('click', () => {
-			// Remove from requests
-			const updatedRequests = requests.filter(r => r.id !== request.id);
-			localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
+            // Show the rejection confirmation popup
+            const popup = document.getElementById('reject-popup');
+            if (popup) {
+                popup.style.display = 'flex';
+                
+                // Setup event listeners for the buttons
+                popup.querySelector('.cancel-popup-button').onclick = function () {
+                    popup.style.display = 'none';
+                };
 
-			// Reload
-			loadCollaborationRequests();
-		});
+                popup.querySelector('.confirm-button').onclick = function () {
+                    // Remove from requests
+                    const updatedRequests = requests.filter(r => r.id !== request.id);
+                    localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
+                    
+                    // Close popup and reload
+                    popup.style.display = 'none';
+                    loadCollaborationRequests();
+                };
+
+                // Close popup when clicking outside
+                popup.onclick = function (e) {
+                    if (e.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                };
+            }
+        });
 	});
 }
 
