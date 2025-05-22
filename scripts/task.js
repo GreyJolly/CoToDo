@@ -251,6 +251,33 @@ function setupTaskEvents() {
             }
         }
     });
+
+	const editIcon = document.querySelector('.edit-icon');
+	if (editIcon) {
+		editIcon.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const taskTitleElement = document.querySelector('.task-title');
+			if (taskTitleElement) {
+				taskTitleElement.focus();
+				taskTitleElement.select();
+			}
+		});
+	}
+
+	document.addEventListener('click', function(e) {
+		if (e.target.closest('.edit-icon')) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const taskTitleElement = document.querySelector('.task-title');
+			if (taskTitleElement) {
+				taskTitleElement.focus();
+				taskTitleElement.select();
+			}
+		}
+	});
 }
 function saveTaskChanges() {
 	const taskData = loadTaskData();
