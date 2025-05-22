@@ -72,8 +72,7 @@ function loginUser(identifier, password) {
 // Logout user
 function logoutUser() {
 	localStorage.removeItem(CURRENT_USER_KEY);
-}
-
+} 
 
 // Get current user
 function getCurrentUser() {
@@ -83,6 +82,99 @@ function getCurrentUser() {
 
 function getRandomColor() {
 	return "#ee7300";
+}
+
+// Update user email
+function updateUserEmail(userId, newEmail, password) {
+	initializeUsers();
+	const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
+	
+	const userIndex = users.findIndex(user => user.id === userId);
+	if (userIndex === -1) {
+		throw new Error('User not found');
+	}
+	
+	const user = users[userIndex];
+	
+	if (user.password !== password) {
+		throw new Error('Invalid password');
+	}
+	
+	const emailTaken = users.some(u => u.id !== userId && u.email.toLowerCase() === newEmail.toLowerCase());
+	if (emailTaken) {
+		throw new Error('Email already taken by another user');
+	}
+
+	users[userIndex].email = newEmail;
+	
+	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+	
+	const currentUser = getCurrentUser();
+	if (currentUser && currentUser.id === userId) {
+		currentUser.email = newEmail;
+		localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+	}
+	
+	return true;
+}
+
+// Update user password
+function updateUserPassword(userId, currentPassword, newPassword) {
+	initializeUsers();
+	const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
+	
+	const userIndex = users.findIndex(user => user.id === userId);
+	if (userIndex === -1) {
+		throw new Error('User not found');
+	}
+	
+	const user = users[userIndex];
+	
+	if (user.password !== currentPassword) {
+		throw new Error('Current password is incorrect');
+	}
+	
+	users[userIndex].password = newPassword;
+	
+	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+	
+	return true;
+}
+
+// Update username
+function updateUserUsername(userId, newUsername, password) {
+	initializeUsers();
+	const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
+	
+	const userIndex = users.findIndex(user => user.id === userId);
+	if (userIndex === -1) {
+		throw new Error('User not found');
+	}
+	
+	const user = users[userIndex];
+	
+	if (user.password !== password) {
+		throw new Error('Invalid password');
+	}
+	
+	const usernameTaken = users.some(u => u.id !== userId && u.username.toLowerCase() === newUsername.toLowerCase());
+	if (usernameTaken) {
+		throw new Error('Username already taken by another user');
+	}
+	
+	users[userIndex].username = newUsername;
+	users[userIndex].displayName = newUsername.charAt(0).toUpperCase() + newUsername.slice(1);
+	
+	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+	
+	const currentUser = getCurrentUser();
+	if (currentUser && currentUser.id === userId) {
+		currentUser.username = newUsername;
+		currentUser.displayName = newUsername.charAt(0).toUpperCase() + newUsername.slice(1);
+		localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+	}
+	
+	return true;
 }
 
 // Delete user account
@@ -112,7 +204,7 @@ function deleteUserAccount(userId) {
 // Delete all user data (lists, tasks, etc.)
 function deleteAllUserData(userId) {
 	// Get the app data
-	const appData = JSON.parse(localStorage.getItem('todoAppData') || { lists: [] });
+	const appData = JSON.parse(localStorage.getItem('todoAppData') || '{"lists": []}');
 
 	// Filter out lists owned by this user
 	appData.lists = appData.lists.filter(list => {
@@ -127,6 +219,30 @@ function deleteAllUserData(userId) {
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
+// Delete user account
+function deleteUserAccount(userId) {
+    initializeUsers();
+    const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
+
+    // Find user index
+    const userIndex = users.findIndex(user => user.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+
+    // Remove user from storage
+    users.splice(userIndex, 1);
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+
+    // If deleted user is currently logged in, log them out
+    const currentUser = getCurrentUser();
+    if (currentUser && currentUser.id === userId) {
+        logoutUser();
+    }
+
+    return true;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 	// Check if user is logged in and redirect if not
 	const isLoginPage = window.location.pathname.includes('login.html');
@@ -136,4 +252,3 @@ document.addEventListener("DOMContentLoaded", function () {
 		window.location.href = 'login.html';
 	}
 });
-
