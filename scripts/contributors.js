@@ -11,7 +11,7 @@ const availableAccounts = [
     { id: 10, displayName: "John", avatarColor: "#92c1ff", initialLetter: "J" }
 ];
 
-const AUTO_ACCEPT_DELAY = 4;
+const AUTO_ACCEPT_DELAY = 10;
 const AUTO_ACCEPT_STORAGE_KEY = 'todoApp_autoAccept';
 const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
 const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
@@ -268,9 +268,33 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
         const leaveBtn = contributorItem.querySelector('.leave-btn');
         
         if (removeBtn) {
-            removeBtn.addEventListener('click', () => {
-                removeContributor(listId, contributor.id);
-                contributorItem.remove();
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const userId = removeBtn.getAttribute('data-user-id');
+                
+                // Show the removal confirmation popup
+                const popup = document.getElementById('remove-popup');
+                if (popup) {
+                    popup.style.display = 'flex';
+                    
+                    // Setup event listeners for the buttons
+                    popup.querySelector('.cancel-popup-button').onclick = function() {
+                        popup.style.display = 'none';
+                    };
+
+                    popup.querySelector('.confirm-button').onclick = function() {
+                        removeContributor(listId, userId);
+                        contributorItem.remove();
+                        popup.style.display = 'none';
+                    };
+
+                    // Close popup when clicking outside
+                    popup.onclick = function(e) {
+                        if (e.target === popup) {
+                            popup.style.display = 'none';
+                        }
+                    };
+                }
             });
         }
         
