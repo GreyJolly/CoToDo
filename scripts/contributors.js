@@ -17,6 +17,9 @@ const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
 const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
 const autoAcceptTimers = {};
 let currentListId = '';
+let pendingLeaveUserId = null;
+let pendingLeaveListId = null;
+let pendingLeaveElement = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -28,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         window.location.href = `list.html?id=${currentListId}`;
     });
+
+    setupPopupEventListeners();
 
     processOfflineAutoAccepts();
     
@@ -41,6 +46,102 @@ document.addEventListener('DOMContentLoaded', function () {
     
     localStorage.setItem(LAST_CHECK_TIME_KEY, Date.now().toString());
 });
+
+function setupPopupEventListeners() {
+    const popup = document.getElementById('remove-popup');
+    const cancelButton = popup.querySelector('.cancel-popup-button');
+    const confirmButton = popup.querySelector('.confirm-button');
+
+    // Cancel button - hide popup and reset pending removal data
+    cancelButton.addEventListener('click', function() {
+        hideRemovePopup();
+        resetPendingRemoval();
+    });
+
+    // Confirm button - proceed with removal
+    confirmButton.addEventListener('click', function() {
+        if (pendingRemovalUserId && pendingRemovalListId) {
+            removeContributor(pendingRemovalListId, pendingRemovalUserId);
+            if (pendingRemovalElement) {
+                pendingRemovalElement.remove();
+            }
+        }
+        hideRemovePopup();
+        resetPendingRemoval();
+    });
+
+    // Close popup when clicking outside of it
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+            hideRemovePopup();
+            resetPendingRemoval();
+        }
+    });
+
+    // Leave popup setup 
+    const leavePopup = document.getElementById('leave-popup');
+    const leaveCancelButton = leavePopup.querySelector('.cancel-leave-popup-button');
+    const leaveConfirmButton = leavePopup.querySelector('.confirm-leave-button');
+
+    leaveCancelButton.addEventListener('click', function() {
+        hideLeavePopup();
+        resetPendingLeave();
+    });
+
+    leaveConfirmButton.addEventListener('click', function() {
+        if (pendingLeaveUserId && pendingLeaveListId) {
+            leaveList(pendingLeaveListId, pendingLeaveUserId);
+            if (pendingLeaveElement) {
+                pendingLeaveElement.remove();
+            }
+            // Redirect after leaving
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+        hideLeavePopup();
+        resetPendingLeave();
+    });
+
+    leavePopup.addEventListener('click', function(e) {
+        if (e.target === leavePopup) {
+            hideLeavePopup();
+            resetPendingLeave();
+        }
+    });
+}
+
+function showRemovePopup() {
+    const popup = document.getElementById('remove-popup');
+    popup.style.display = 'flex';
+}
+
+function hideRemovePopup() {
+    const popup = document.getElementById('remove-popup');
+    popup.style.display = 'none';
+}
+
+function showLeavePopup() {
+    const popup = document.getElementById('leave-popup');
+    popup.style.display = 'flex';
+}
+
+function hideLeavePopup() {
+    const popup = document.getElementById('leave-popup');
+    popup.style.display = 'none';
+}
+
+function resetPendingRemoval() {
+    pendingRemovalUserId = null;
+    pendingRemovalListId = null;
+    pendingRemovalElement = null;
+}
+
+function resetPendingLeave() {
+    pendingLeaveUserId = null;
+    pendingLeaveListId = null;
+    pendingLeaveElement = null;
+}
 
 function getCurrentListId() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -268,39 +369,26 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
         const leaveBtn = contributorItem.querySelector('.leave-btn');
         
         if (removeBtn) {
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const userId = removeBtn.getAttribute('data-user-id');
+            removeBtn.addEventListener('click', () => {
+                // Store the pending removal data
+                pendingRemovalUserId = contributor.id;
+                pendingRemovalListId = listId;
+                pendingRemovalElement = contributorItem;
                 
-                // Show the removal confirmation popup
-                const popup = document.getElementById('remove-popup');
-                if (popup) {
-                    popup.style.display = 'flex';
-                    
-                    // Setup event listeners for the buttons
-                    popup.querySelector('.cancel-popup-button').onclick = function() {
-                        popup.style.display = 'none';
-                    };
-
-                    popup.querySelector('.confirm-button').onclick = function() {
-                        removeContributor(listId, userId);
-                        contributorItem.remove();
-                        popup.style.display = 'none';
-                    };
-
-                    // Close popup when clicking outside
-                    popup.onclick = function(e) {
-                        if (e.target === popup) {
-                            popup.style.display = 'none';
-                        }
-                    };
-                }
+                // Show the confirmation popup
+                showRemovePopup();
             });
         }
-        
+
         if (leaveBtn) {
             leaveBtn.addEventListener('click', () => {
-                leaveList(listId, contributor.id);
+                // Store the pending leave data
+                pendingLeaveUserId = contributor.id;
+                pendingLeaveListId = listId;
+                pendingLeaveElement = contributorItem;
+                
+                // Show the confirmation popup
+                showLeavePopup();
             });
         }
         

@@ -442,6 +442,35 @@ function setupListPageEvents(listId) {
 			window.location.href = 'index.html';
 		}
 	});
+
+	const editIcon = document.querySelector('.edit-icon');
+	if (editIcon) {
+		editIcon.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const listTitleElement = document.querySelector('.list-title');
+			if (listTitleElement) {
+				listTitleElement.focus();
+				// Seleziona tutto il testo per facilitare la modifica
+				listTitleElement.select();
+			}
+		});
+	}
+
+	// Aggiungi anche un event listener delegato per gestire icone dinamiche
+	document.addEventListener('click', function(e) {
+		if (e.target.closest('.edit-icon')) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const listTitleElement = document.querySelector('.list-title');
+			if (listTitleElement) {
+				listTitleElement.focus();
+				listTitleElement.select();
+			}
+		}
+	});
 }
 
 // Add this debounce function if not already present
