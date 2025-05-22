@@ -292,6 +292,7 @@ function openAssignMembers() {
 	if (!taskData) return;
 
 	const { list, task } = taskData;
+	const currentUser = getCurrentUser();
 
 	// Add "None" option
 	const noneOption = document.createElement('div');
@@ -320,6 +321,9 @@ function openAssignMembers() {
 	// Add contributors from the list
 	if (list.contributors && list.contributors.length > 0) {
 		list.contributors.forEach(contributor => {
+			if (contributor.id === currentUser.id) {
+				return;
+			}
 			const memberOption = document.createElement('div');
 			memberOption.className = 'member-option';
 			memberOption.onclick = () => selectMember(contributor.id);
