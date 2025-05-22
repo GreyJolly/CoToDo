@@ -209,6 +209,8 @@ function renderListPage(listId) {
 	incompleteContainer.innerHTML = '';
 	completeContainer.innerHTML = '';
 
+	setupListPageEvents(listId);
+
 	// Check if there are no tasks
 	if (list.tasks.length === 0) {
 		const emptyMessage = document.createElement('div');
@@ -319,7 +321,6 @@ function renderListPage(listId) {
 		}
 	});
 
-	setupListPageEvents(listId);
 	setupDragAndDrop(listId);
 }
 
@@ -381,6 +382,19 @@ function setupListPageEvents(listId) {
 
 	// Focus handler to select all text when editing
 	listTitleElement.addEventListener('focus', function () {
+		// Blur handler to ensure title is saved even if debounce doesn't run
+		listTitleElement.addEventListener('blur', function () {
+			let newTitle = this.value.trim();
+
+			if (newTitle.length > MAX_TITLE_LENGTH) {
+				newTitle = newTitle.substring(0, MAX_TITLE_LENGTH);
+				this.value = newTitle;
+			}
+
+			list.title = newTitle;
+			localStorage.setItem('todoAppData', JSON.stringify(appData));
+		});
+
 		this.select();
 	});
 
