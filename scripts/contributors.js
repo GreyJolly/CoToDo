@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `list.html?id=${currentListId}`;
     });
 
+    setupPopupEventListeners();
+
     processOfflineAutoAccepts();
     
     setupAutoAcceptTimers();
@@ -41,6 +43,54 @@ document.addEventListener('DOMContentLoaded', function () {
     
     localStorage.setItem(LAST_CHECK_TIME_KEY, Date.now().toString());
 });
+
+function setupPopupEventListeners() {
+    const popup = document.getElementById('remove-popup');
+    const cancelButton = popup.querySelector('.cancel-popup-button');
+    const confirmButton = popup.querySelector('.confirm-button');
+
+    // Cancel button - hide popup and reset pending removal data
+    cancelButton.addEventListener('click', function() {
+        hideRemovePopup();
+        resetPendingRemoval();
+    });
+
+    // Confirm button - proceed with removal
+    confirmButton.addEventListener('click', function() {
+        if (pendingRemovalUserId && pendingRemovalListId) {
+            removeContributor(pendingRemovalListId, pendingRemovalUserId);
+            if (pendingRemovalElement) {
+                pendingRemovalElement.remove();
+            }
+        }
+        hideRemovePopup();
+        resetPendingRemoval();
+    });
+
+    // Close popup when clicking outside of it
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+            hideRemovePopup();
+            resetPendingRemoval();
+        }
+    });
+}
+
+function showRemovePopup() {
+    const popup = document.getElementById('remove-popup');
+    popup.style.display = 'flex';
+}
+
+function hideRemovePopup() {
+    const popup = document.getElementById('remove-popup');
+    popup.style.display = 'none';
+}
+
+function resetPendingRemoval() {
+    pendingRemovalUserId = null;
+    pendingRemovalListId = null;
+    pendingRemovalElement = null;
+}
 
 function getCurrentListId() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -268,36 +318,17 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
         const leaveBtn = contributorItem.querySelector('.leave-btn');
         
         if (removeBtn) {
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const userId = removeBtn.getAttribute('data-user-id');
+            removeBtn.addEventListener('click', () => {
+                // Store the pending removal data
+                pendingRemovalUserId = contributor.id;
+                pendingRemovalListId = listId;
+                pendingRemovalElement = contributorItem;
                 
-                // Show the removal confirmation popup
-                const popup = document.getElementById('remove-popup');
-                if (popup) {
-                    popup.style.display = 'flex';
-                    
-                    // Setup event listeners for the buttons
-                    popup.querySelector('.cancel-popup-button').onclick = function() {
-                        popup.style.display = 'none';
-                    };
-
-                    popup.querySelector('.confirm-button').onclick = function() {
-                        removeContributor(listId, userId);
-                        contributorItem.remove();
-                        popup.style.display = 'none';
-                    };
-
-                    // Close popup when clicking outside
-                    popup.onclick = function(e) {
-                        if (e.target === popup) {
-                            popup.style.display = 'none';
-                        }
-                    };
-                }
+                // Show the confirmation popup
+                showRemovePopup();
             });
         }
-        
+
         if (leaveBtn) {
             leaveBtn.addEventListener('click', () => {
                 leaveList(listId, contributor.id);
