@@ -2,7 +2,7 @@ if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('./sw.js', { scope: './' })
 			.then(registration => console.log('SW registered'))
-			.catch(err => console.log('SW registration failed: ', err));
+			.catch(err => console.error('SW registration failed: ', err));
 	});
 }
 
@@ -20,6 +20,17 @@ function initializeAppData() {
 		const emptyData = { lists: [] }
 		return emptyData
 	}
+}
+
+// Get lists that the current user has left
+function getLeftLists() {
+	return JSON.parse(localStorage.getItem('leftLists')) || [];
+}
+
+// Filter out lists that the user has left
+function getVisibleLists() {
+	const leftLists = getLeftLists();
+	return appData.lists.filter(list => !leftLists.includes(list.id));
 }
 
 let appData = initializeAppData();
@@ -49,7 +60,9 @@ function renderHomepage() {
 	const notesContainer = document.querySelector('.notes-container');
 	notesContainer.innerHTML = '';
 
-	if (appData.lists.length === 0) {
+	const visibleLists = getVisibleLists();
+
+	if (visibleLists.length === 0) {
 		mainContent.innerHTML = `
             <div class="empty-state">
                 <p>No lists saved press on the "+" button to create one</p>
@@ -58,7 +71,7 @@ function renderHomepage() {
 		return;
 	}
 
-	appData.lists.forEach(list => {
+	visibleLists.forEach(list => {
 		const noteCard = document.createElement('div');
 		noteCard.className = 'note-card';
 		noteCard.dataset.listId = list.id;
@@ -211,8 +224,8 @@ function setupSearch() {
 			return;
 		}
 
-		// Filter lists that match search term
-		const filteredLists = appData.lists.filter(list => {
+		const visibleLists = getVisibleLists();
+		const filteredLists = visibleLists.filter(list => {
 			// Check if list title matches
 			const titleMatch = list.title.toLowerCase().includes(searchTerm);
 

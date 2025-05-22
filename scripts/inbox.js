@@ -32,6 +32,108 @@ function initializeCollaborationRequests() {
 	}
 }
 
+// Shared lists that can be accepted
+function createDefaultSharedLists() {
+	return {
+		"shared-list-1": {
+			id: "shared-list-1",
+			title: "Groceries",
+			tasks: [
+				{
+					id: "task-grocery-1",
+					text: "Buy milk",
+					completed: false,
+					priority: "medium"
+				},
+				{
+					id: "task-grocery-2",
+					text: "Get fresh vegetables",
+					completed: false,
+					priority: "high"
+				},
+				{
+					id: "task-grocery-3",
+					text: "Pick up bread",
+					completed: false,
+					priority: "low"
+				},
+				{
+					id: "task-grocery-4",
+					text: "Buy olive oil",
+					completed: false,
+					priority: "medium"
+				}
+			],
+			contributors: [
+				{
+					id: 7,
+					name: "Hazel",
+					avatarColor: "#5df7ff",
+					initialLetter: "H"
+				},
+				{
+					id: getCurrentUser().id,
+					name: getCurrentUser().displayName,
+					avatarColor: getCurrentUser().avatarColor,
+					initialLetter: getCurrentUser().displayName.charAt(0).toUpperCase()
+				}
+			],
+			ownerId: 7
+		},
+		"shared-list-2": {
+			id: "shared-list-2",
+			title: "Project Tasks",
+			tasks: [
+				{
+					id: "task-project-1",
+					text: "Review design mockups",
+					completed: false,
+					priority: "high"
+				},
+				{
+					id: "task-project-2",
+					text: "Update project documentation",
+					completed: false,
+					priority: "medium"
+				},
+				{
+					id: "task-project-3",
+					text: "Schedule team meeting",
+					completed: false,
+					priority: "high"
+				},
+				{
+					id: "task-project-4",
+					text: "Test new features",
+					completed: false,
+					priority: "medium"
+				},
+				{
+					id: "task-project-5",
+					text: "Prepare presentation slides",
+					completed: false,
+					priority: "low"
+				}
+			],
+			contributors: [
+				{
+					id: 6,
+					name: "Mary",
+					avatarColor: "#b0ff30",
+					initialLetter: "M"
+				},
+				{
+					id: getCurrentUser().id,
+					name: getCurrentUser().displayName,
+					avatarColor: getCurrentUser().avatarColor,
+					initialLetter: getCurrentUser().displayName.charAt(0).toUpperCase()
+				}
+			],
+			ownerId: 6
+		}
+	};
+}
+
 function loadCollaborationRequests() {
 	const collaborationRequests = JSON.parse(localStorage.getItem('collaborationRequests')) || [];
 	const requestList = document.querySelector('.friend-list');
@@ -139,26 +241,37 @@ function displayRequests(requests, container) {
 		const rejectBtn = requestItem.querySelector('.reject-btn');
 
 		acceptBtn.addEventListener('click', () => {
-			// Add user as contributor to the list
+			// Get app data
 			const appData = JSON.parse(localStorage.getItem('todoAppData')) || { lists: [] };
-			const list = appData.lists.find(l => l.id === request.listId);
 			const currentUser = getCurrentUser();
+			const defaultSharedLists = createDefaultSharedLists();
 
-			if (list) {
-				if (!list.contributors) {
-					list.contributors = [];
+			let sharedList = appData.lists.find(l => l.id === request.listId);
+
+			if (!sharedList) {
+				sharedList = defaultSharedLists[request.listId];
+				if (sharedList) {
+					const newList = JSON.parse(JSON.stringify(sharedList));
+					appData.lists.push(newList);
 				}
-
-				// Add current user as contributor
-				list.contributors.push({
-					id: currentUser.id,
-					name: currentUser.displayName,
-					avatarColor: currentUser.avatarColor,
-					initialLetter: currentUser.displayName.charAt(0).toUpperCase()
-				});
-
-				localStorage.setItem('todoAppData', JSON.stringify(appData));
 			}
+
+			if (sharedList) {
+				if (!sharedList.contributors) {
+					sharedList.contributors = [];
+				}
+				const isAlreadyContributor = sharedList.contributors.some(c => c.id === currentUser.id);
+
+				if (!isAlreadyContributor) {
+					sharedList.contributors.push({
+						id: currentUser.id,
+						name: currentUser.displayName,
+						avatarColor: currentUser.avatarColor,
+						initialLetter: currentUser.displayName.charAt(0).toUpperCase()
+					});
+				}
+			}
+			localStorage.setItem('todoAppData', JSON.stringify(appData));
 
 			// Remove from requests
 			const updatedRequests = requests.filter(r => r.id !== request.id);
@@ -179,50 +292,39 @@ function displayRequests(requests, container) {
 	});
 }
 
-/*
 function formatTimestamp(timestamp) {
+	const now = new Date();
 	const date = new Date(timestamp);
-	return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-}
-*/
+	const seconds = Math.floor((now - date) / 1000);
 
-function formatTimestamp(timestamp) {
-    const now = new Date();
-    const date = new Date(timestamp);
-    const seconds = Math.floor((now - date) / 1000);
-    
-    // Calculate time differences
-    const intervals = {
-        year: 31536000,
-        month: 2592000,
-        week: 604800,
-        day: 86400,
-        hour: 3600,
-        minute: 60
-    };
-    
-    // If more than a week ago, show date
-    if (seconds > intervals.week) {
-        return date.toLocaleDateString();
-    }
-    
-    // Calculate time ago
-    if (seconds > intervals.day * 2) {
-        const days = Math.floor(seconds / intervals.day);
-        return `${days} days ago`;
-    } else if (seconds > intervals.day) {
-        return 'Yesterday';
-    } else if (seconds > intervals.hour) {
-        const hours = Math.floor(seconds / intervals.hour);
-        return hours === 1 ? 'An hour ago' : `${hours} hours ago`;
-    } else if (seconds > intervals.minute) {
-        const minutes = Math.floor(seconds / intervals.minute);
-        return minutes === 1 ? 'A minute ago' : `${minutes} minutes ago`;
-    } else {
-        return 'Just now';
-    }
-}
+	const intervals = {
+		year: 31536000,
+		month: 2592000,
+		week: 604800,
+		day: 86400,
+		hour: 3600,
+		minute: 60
+	};
 
+	if (seconds > intervals.week) {
+		return date.toLocaleDateString();
+	}
+	
+	if (seconds > intervals.day * 2) {
+		const days = Math.floor(seconds / intervals.day);
+		return `${days} days ago`;
+	} else if (seconds > intervals.day) {
+		return 'Yesterday';
+	} else if (seconds > intervals.hour) {
+		const hours = Math.floor(seconds / intervals.hour);
+		return hours === 1 ? 'An hour ago' : `${hours} hours ago`;
+	} else if (seconds > intervals.minute) {
+		const minutes = Math.floor(seconds / intervals.minute);
+		return minutes === 1 ? 'A minute ago' : `${minutes} minutes ago`;
+	} else {
+		return 'Just now';
+	}
+}
 
 function highlightCurrentPage() {
 	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
