@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    // Handle form submission
+    // Handle email form submission with real updates
     if (changeEmailForm) {
         changeEmailForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -122,14 +122,22 @@ document.addEventListener('DOMContentLoaded', function () {
             const password = document.getElementById('password').value;
             
             try {
-                const successMessage = document.querySelector('.form-success-message');
-                if (successMessage) successMessage.style.display = 'block';
+                // Update email in user data
+                const success = updateUserEmail(currentUser.id, newEmail, password);
                 
-                if (changeEmailForm) changeEmailForm.reset();
-                
-                setTimeout(closeModal, 3000);
+                if (success) {
+                    const successMessage = document.querySelector('.form-success-message');
+                    if (successMessage) successMessage.style.display = 'block';
+                    
+                    if (changeEmailForm) changeEmailForm.reset();
+                    
+                    setTimeout(closeModal, 3000);
+                } else {
+                    alert('Failed to update email. Please check your password.');
+                }
             } catch (error) {
                 console.error('Failed to update email:', error);
+                alert('Error updating email: ' + error.message);
             }
         });
     }
@@ -263,23 +271,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Please choose a stronger password');
                 return;
             }
-            try {
-                const successMessage = passwordModal.querySelector('.form-success-message');
-                if (successMessage) successMessage.style.display = 'block';
-                
-                if (changePasswordForm) changePasswordForm.reset();
             
-                if (strengthProgress) {
-                    strengthProgress.className = 'strength-progress';
-                    strengthProgress.style.width = '0%';
-                }
-                if (strengthText) {
-                    strengthText.textContent = 'Weak';
-                }
+            try {
+                // Update password in user data
+                const success = updateUserPassword(currentUser.id, currentPassword, newPassword);
                 
-                setTimeout(closePasswordModal, 3000);
+                if (success) {
+                    const successMessage = passwordModal.querySelector('.form-success-message');
+                    if (successMessage) successMessage.style.display = 'block';
+                    
+                    if (changePasswordForm) changePasswordForm.reset();
+                
+                    if (strengthProgress) {
+                        strengthProgress.className = 'strength-progress';
+                        strengthProgress.style.width = '0%';
+                    }
+                    if (strengthText) {
+                        strengthText.textContent = 'Weak';
+                    }
+                    
+                    setTimeout(closePasswordModal, 3000);
+                } else {
+                    alert('Failed to update password. Please check your current password.');
+                }
             } catch (error) {
                 console.error('Failed to update password:', error);
+                alert('Error updating password: ' + error.message);
             }
         });
     }
@@ -359,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    // Handle username form submission
+    // Handle username form submission with real updates
     if (changeUsernameForm) {
         changeUsernameForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -372,22 +389,29 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             try {
-                const profileName = document.querySelector('.profile-name');
-                const avatarElement = document.querySelector('.account-avatar');
+                const success = updateUserUsername(currentUser.id, newUsername, password);
                 
-                if (profileName) profileName.textContent = newUsername;
-                if (avatarElement) avatarElement.textContent = newUsername.charAt(0);
-                
-                const successMessage = usernameModal.querySelector('.form-success-message');
-                if (successMessage) successMessage.style.display = 'block';
-                
-                if (newUsernameInput) newUsernameInput.value = '';
-                const passwordInput = document.getElementById('username-password');
-                if (passwordInput) passwordInput.value = '';
-                
-                setTimeout(closeUsernameModal, 3000);
+                if (success) {
+                    const profileName = document.querySelector('.profile-name');
+                    const avatarElement = document.querySelector('.account-avatar');
+                    
+                    if (profileName) profileName.textContent = newUsername;
+                    if (avatarElement) avatarElement.textContent = newUsername.charAt(0);
+                    
+                    const successMessage = usernameModal.querySelector('.form-success-message');
+                    if (successMessage) successMessage.style.display = 'block';
+                    
+                    if (newUsernameInput) newUsernameInput.value = '';
+                    const passwordInput = document.getElementById('username-password');
+                    if (passwordInput) passwordInput.value = '';
+                    
+                    setTimeout(closeUsernameModal, 3000);
+                } else {
+                    alert('Failed to update username. Please check your password or try a different username.');
+                }
             } catch (error) {
                 console.error('Failed to update username:', error);
+                alert('Error updating username: ' + error.message);
             }
         });
     }
@@ -428,6 +452,40 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    document.getElementById('delete-profile-button')?.addEventListener('click', function () {
+    if (!currentUser) return;
+
+    // Show the confirmation popup
+    const popup = document.getElementById('delete-confirm-popup');
+        if (popup) {
+            popup.style.display = 'flex';
+            
+            popup.querySelector('.cancel-popup-button').onclick = function () {
+                popup.style.display = 'none';
+            };
+
+            popup.querySelector('.confirm-button').onclick = function () {
+                try {
+                    deleteAllUserData(currentUser.id);
+                    deleteUserAccount(currentUser.id);
+                    popup.style.display = 'none';
+                    alert('Your account has been deleted successfully.');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Account deletion failed:', error);
+                    alert('Failed to delete account. Please try again.');
+                    popup.style.display = 'none';
+                }
+            };
+
+            popup.onclick = function (e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            };
+        }
+    });
+
     // Toggle password visibility
     document.querySelectorAll('.toggle-password').forEach(icon => {
         icon.addEventListener('click', function() {
@@ -438,7 +496,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 
-                // Cambia l'icona
                 this.classList.toggle('fa-eye');
                 this.classList.toggle('fa-eye-slash');
             }
