@@ -11,7 +11,7 @@ const availableAccounts = [
     { id: 10, displayName: "John", avatarColor: "#92c1ff", initialLetter: "J" }
 ];
 
-const AUTO_ACCEPT_DELAY = 10;
+const AUTO_ACCEPT_DELAY = 4;
 const AUTO_ACCEPT_STORAGE_KEY = 'todoApp_autoAccept';
 const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
 const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
