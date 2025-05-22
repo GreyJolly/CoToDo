@@ -17,6 +17,9 @@ const RECENTLY_ADDED_KEY = 'todoApp_recentlyAdded';
 const LAST_CHECK_TIME_KEY = 'todoApp_lastCheckTime';
 const autoAcceptTimers = {};
 let currentListId = '';
+let pendingLeaveUserId = null;
+let pendingLeaveListId = null;
+let pendingLeaveElement = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -74,6 +77,38 @@ function setupPopupEventListeners() {
             resetPendingRemoval();
         }
     });
+
+    // Leave popup setup 
+    const leavePopup = document.getElementById('leave-popup');
+    const leaveCancelButton = leavePopup.querySelector('.cancel-leave-popup-button');
+    const leaveConfirmButton = leavePopup.querySelector('.confirm-leave-button');
+
+    leaveCancelButton.addEventListener('click', function() {
+        hideLeavePopup();
+        resetPendingLeave();
+    });
+
+    leaveConfirmButton.addEventListener('click', function() {
+        if (pendingLeaveUserId && pendingLeaveListId) {
+            leaveList(pendingLeaveListId, pendingLeaveUserId);
+            if (pendingLeaveElement) {
+                pendingLeaveElement.remove();
+            }
+            // Redirect after leaving
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+        hideLeavePopup();
+        resetPendingLeave();
+    });
+
+    leavePopup.addEventListener('click', function(e) {
+        if (e.target === leavePopup) {
+            hideLeavePopup();
+            resetPendingLeave();
+        }
+    });
 }
 
 function showRemovePopup() {
@@ -86,10 +121,26 @@ function hideRemovePopup() {
     popup.style.display = 'none';
 }
 
+function showLeavePopup() {
+    const popup = document.getElementById('leave-popup');
+    popup.style.display = 'flex';
+}
+
+function hideLeavePopup() {
+    const popup = document.getElementById('leave-popup');
+    popup.style.display = 'none';
+}
+
 function resetPendingRemoval() {
     pendingRemovalUserId = null;
     pendingRemovalListId = null;
     pendingRemovalElement = null;
+}
+
+function resetPendingLeave() {
+    pendingLeaveUserId = null;
+    pendingLeaveListId = null;
+    pendingLeaveElement = null;
 }
 
 function getCurrentListId() {
@@ -331,7 +382,13 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
 
         if (leaveBtn) {
             leaveBtn.addEventListener('click', () => {
-                leaveList(listId, contributor.id);
+                // Store the pending leave data
+                pendingLeaveUserId = contributor.id;
+                pendingLeaveListId = listId;
+                pendingLeaveElement = contributorItem;
+                
+                // Show the confirmation popup
+                showLeavePopup();
             });
         }
         
