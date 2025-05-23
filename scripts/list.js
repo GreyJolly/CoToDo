@@ -71,7 +71,7 @@ function setupOwnershipBasedUI(listId) {
 	} else {
 		deleteListButton.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i>';
 		deleteListButton.onclick = leaveCurrentList;
-		deleteListButton.style.color = '#ff9800';
+		deleteListButton.style.color = '#f44336';
 	}
 }
 
@@ -113,7 +113,7 @@ function createLeaveConfirmPopup() {
 			<p>Are you sure you want to leave this list? You will no longer have access to it.</p>
 			<div class="popup-buttons">
 				<button class="popup-button cancel-button">Cancel</button>
-				<button class="popup-button confirm-button" style="background-color:#ff0000;">Leave</button>
+				<button class="popup-button confirm-button" style="background-color: #f44336;">Leave</button>
 			</div>
 		</div>
 	`;
