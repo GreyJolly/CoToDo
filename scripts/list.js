@@ -16,12 +16,12 @@ function getAppData() {
 }
 
 function getCurrentUser() {
-    return {
-        id: 0,
-        displayName: "Current User",
-        avatarColor: "#4285F4",
-        initialLetter: "C"
-    };
+	return {
+		id: 0,
+		displayName: "Current User",
+		avatarColor: "#4285F4",
+		initialLetter: "C"
+	};
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -58,12 +58,12 @@ function setupOwnershipBasedUI(listId) {
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
 	const currentUser = getCurrentUser();
-	
+
 	if (!list) return;
-	
+
 	const isOwner = list.ownerId === currentUser.id;
 	const deleteListButton = document.getElementById('delete-list-button');
-	
+
 	if (isOwner) {
 		deleteListButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
 		deleteListButton.onclick = deleteList;
@@ -78,15 +78,15 @@ function setupOwnershipBasedUI(listId) {
 function leaveCurrentList() {
 	const listId = getCurrentListId();
 	const currentUser = getCurrentUser();
-	
+
 	const popup = document.getElementById('leave-confirm-popup');
 	if (!popup) {
 		createLeaveConfirmPopup();
 	}
-	
+
 	const leavePopup = document.getElementById('leave-confirm-popup');
 	leavePopup.style.display = 'flex';
-	
+
 	leavePopup.querySelector('.cancel-button').onclick = function () {
 		leavePopup.style.display = 'none';
 	};
@@ -122,7 +122,7 @@ function createLeaveConfirmPopup() {
 
 function leaveList(listId, userId) {
 	console.log(`User ${userId} leaving list ${listId}`);
-	
+
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
 	const currentUser = getCurrentUser();
@@ -143,12 +143,12 @@ function leaveList(listId, userId) {
 
 	if (userId === currentUser.id) {
 		const leftLists = JSON.parse(localStorage.getItem('leftLists')) || [];
-		
+
 		if (!leftLists.includes(listId)) {
 			leftLists.push(listId);
 			localStorage.setItem('leftLists', JSON.stringify(leftLists));
 		}
-		
+
 		setTimeout(() => {
 			window.location.href = 'index.html';
 		}, 1000);
@@ -303,6 +303,7 @@ function renderListPage(listId) {
 			// Append main task and subtasks to a container
 			const taskContainer = document.createElement('div');
 			taskContainer.className = 'task-container';
+			taskContainer.setAttribute('data-task-id', task.id);
 			taskContainer.appendChild(taskItem);
 			taskContainer.appendChild(subtasksContainer);
 
@@ -399,30 +400,24 @@ function setupListPageEvents(listId) {
 		document.querySelector('.list-title').focus();
 	});
 
-	// Task item click - just navigate to task editor
-	document.querySelectorAll('.task-item').forEach(taskItem => {
-		const taskId = taskItem.querySelector('input').id;
+	// Task click - just navigate to task editor
+	document.addEventListener('click', function (e) {
 		const listId = getCurrentListId();
-		taskItem.addEventListener('click', function (e) {
-			// Don't navigate if clicking the checkbox
-			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
-				return;
-			}
-			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
-		});
-	});
 
-	// Task container click, for handling subtasks - just navigate to task editor
-	document.querySelectorAll('.task-container').forEach(taskContainer => {
-		const taskId = taskContainer.querySelector('input').id;
-		const listId = getCurrentListId();
-		taskContainer.addEventListener('click', function (e) {
-			// Don't navigate if clicking the checkbox
-			if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
-				return;
-			}
+		// Handle clicks on task items
+		const taskItem = e.target.closest('.task-item');
+		if (taskItem && !e.target.closest('input[type="checkbox"]')) {
+			const taskId = taskItem.querySelector('input').id;
 			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
-		});
+			return;
+		}
+
+		// Handle clicks on task containers (for subtasks)
+		const taskContainer = e.target.closest('.task-container');
+		if (taskContainer && !e.target.closest('input[type="checkbox"]')) {
+			const taskId = taskContainer.getAttribute('data-task-id');
+			window.location.href = `task.html?listId=${listId}&taskId=${taskId}`;
+		}
 	});
 
 	// Back button
@@ -446,10 +441,10 @@ function setupListPageEvents(listId) {
 
 	const editIcon = document.querySelector('.edit-icon');
 	if (editIcon) {
-		editIcon.addEventListener('click', function(e) {
+		editIcon.addEventListener('click', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const listTitleElement = document.querySelector('.list-title');
 			if (listTitleElement) {
 				listTitleElement.focus();
@@ -460,11 +455,11 @@ function setupListPageEvents(listId) {
 	}
 
 	// Aggiungi anche un event listener delegato per gestire icone dinamiche
-	document.addEventListener('click', function(e) {
+	document.addEventListener('click', function (e) {
 		if (e.target.closest('.edit-icon')) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const listTitleElement = document.querySelector('.list-title');
 			if (listTitleElement) {
 				listTitleElement.focus();
