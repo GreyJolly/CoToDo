@@ -15,8 +15,6 @@ function getAppData() {
 	return appData;
 }
 
-<<<<<<< HEAD
-=======
 function getCurrentUser() {
     return {
         id: 0,
@@ -26,7 +24,6 @@ function getCurrentUser() {
     };
 }
 
->>>>>>> 0bfbbf8ccf07534c45238853007f40531920bc03
 document.addEventListener('DOMContentLoaded', function () {
 	const completeContainer = document.querySelector('.complete-container');
 	const toggleButton = document.querySelector('.toggle-complete');
