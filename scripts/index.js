@@ -2,7 +2,7 @@ if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('./sw.js', { scope: './' })
 			.then(registration => console.log('SW registered'))
-			.catch(err => console.log('SW registration failed: ', err));
+			.catch(err => console.error('SW registration failed: ', err));
 	});
 }
 
@@ -20,6 +20,17 @@ function initializeAppData() {
 		const emptyData = { lists: [] }
 		return emptyData
 	}
+}
+
+// Get lists that the current user has left
+function getLeftLists() {
+	return JSON.parse(localStorage.getItem('leftLists')) || [];
+}
+
+// Filter out lists that the user has left
+function getVisibleLists() {
+	const leftLists = getLeftLists();
+	return appData.lists.filter(list => !leftLists.includes(list.id));
 }
 
 let appData = initializeAppData();
@@ -49,16 +60,18 @@ function renderHomepage() {
 	const notesContainer = document.querySelector('.notes-container');
 	notesContainer.innerHTML = '';
 
-	if (appData.lists.length === 0) {
+	const visibleLists = getVisibleLists();
+
+	if (visibleLists.length === 0) {
 		mainContent.innerHTML = `
             <div class="empty-state">
-                <p>No lists saved press on the "+" icon to create one</p>
+                <p>No lists saved press on the "+" button to create one</p>
             </div>
         `;
 		return;
 	}
 
-	appData.lists.forEach(list => {
+	visibleLists.forEach(list => {
 		const noteCard = document.createElement('div');
 		noteCard.className = 'note-card';
 		noteCard.dataset.listId = list.id;
@@ -74,7 +87,7 @@ function renderHomepage() {
 			// Show empty state message for this list
 			html += `
                 <div class="task-item" style="pointer-events: none; color: #666;">
-                    No tasks for this list, press on the "+" to add one
+                    No tasks for this list, press on the "+" button to add one
                 </div>
             `;
 		} else {
@@ -184,7 +197,8 @@ function setupHomepageEvents() {
 		const newList = {
 			id: newListId,
 			title: '',
-			tasks: []
+			tasks: [],
+			ownerId: getCurrentUser().id
 		};
 		appData.lists.push(newList);
 		saveAppData();
@@ -210,8 +224,8 @@ function setupSearch() {
 			return;
 		}
 
-		// Filter lists that match search term
-		const filteredLists = appData.lists.filter(list => {
+		const visibleLists = getVisibleLists();
+		const filteredLists = visibleLists.filter(list => {
 			// Check if list title matches
 			const titleMatch = list.title.toLowerCase().includes(searchTerm);
 
@@ -370,9 +384,7 @@ function highlightCurrentPage() {
 		document.getElementById('list-button').classList.add('active');
 	} else if (currentPage === 'calendar.html') {
 		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'friends.html') {
-		document.getElementById('friends-button').classList.add('active');
-	} else if (currentPage === 'friend_requests.html') {
+	} else if (currentPage === 'inbox.html') {
 		document.getElementById('inbox-button1').classList.add('active');
 	}
 }

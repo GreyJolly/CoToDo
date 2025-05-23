@@ -251,6 +251,33 @@ function setupTaskEvents() {
             }
         }
     });
+
+	const editIcon = document.querySelector('.edit-icon');
+	if (editIcon) {
+		editIcon.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const taskTitleElement = document.querySelector('.task-title');
+			if (taskTitleElement) {
+				taskTitleElement.focus();
+				taskTitleElement.select();
+			}
+		});
+	}
+
+	document.addEventListener('click', function(e) {
+		if (e.target.closest('.edit-icon')) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const taskTitleElement = document.querySelector('.task-title');
+			if (taskTitleElement) {
+				taskTitleElement.focus();
+				taskTitleElement.select();
+			}
+		}
+	});
 }
 function saveTaskChanges() {
 	const taskData = loadTaskData();
@@ -292,6 +319,7 @@ function openAssignMembers() {
 	if (!taskData) return;
 
 	const { list, task } = taskData;
+	const currentUser = getCurrentUser();
 
 	// Add "None" option
 	const noneOption = document.createElement('div');
@@ -320,6 +348,9 @@ function openAssignMembers() {
 	// Add contributors from the list
 	if (list.contributors && list.contributors.length > 0) {
 		list.contributors.forEach(contributor => {
+			if (contributor.id === currentUser.id) {
+				return;
+			}
 			const memberOption = document.createElement('div');
 			memberOption.className = 'member-option';
 			memberOption.onclick = () => selectMember(contributor.id);

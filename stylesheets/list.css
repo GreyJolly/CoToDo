@@ -16,25 +16,21 @@ body {
 	cursor: pointer;
 }
 
-/* Remove or modify these existing styles */
 .list-title {
     background-color: white;
     padding: 2px;
     border-radius: 5px;
-    /* Remove these absolute positioning properties */
-    /* position: absolute; */
-    /* left: 50%; */
-    /* transform: translateX(-50%); */
     text-align: center;
     color: #000000;
     font-size: 26px;
-    max-width: 70%;
+    max-width: 65%;
     overflow-wrap: break-word;
     white-space: normal;
     color: inherit;
     outline: none;
     border: none;
-    flex-grow: 1;
+    flex-grow: 0; 
+    margin: 0 auto;
 }
 
 .title-container {
@@ -43,13 +39,15 @@ body {
     justify-content: center;
     width: 100%;
     position: relative;
+	margin-left: 0;
 }
 
 .edit-icon {
-    margin-left: 8px;
     color: #666;
     cursor: pointer;
     font-size: 20px;
+	position: absolute; /* Position absolutely relative to title-container */
+    left: calc(50% + (min(70%, 300px)/2) + 8px);
 }
 
 .wrapper {
@@ -63,8 +61,9 @@ body {
 }
 
 .backto-index {
+	position: absolute;
+    z-index: 1;
     flex-shrink: 0;
-	z-index: 10;
 }
 
 .list-title:focus {
@@ -74,7 +73,6 @@ body {
 
 .placeholder {
 	color: #999;
-	font-style: italic;
 }
 
 .main-content {
@@ -550,63 +548,27 @@ body>.footer {
 	background-color: rgba(0, 0, 0, 0) !important;
 }
 
-@media (max-width: 450px) {
-    .wrapper {
-        gap: 5px; 
-    }
-    
-    .list-title {
-        max-width: 65%;
-    }
-    
-    .edit-icon {
-        margin-left: 6px; 
-    }
+.footer #delete-list-button {
+	font-size: 30px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	padding: 0;
+	transition: transform 0.2s ease;
 }
 
-@media (max-width: 430px) {
-    .wrapper {
-        gap: 2px; 
-    }
-
-	.title-container {
-        margin-left: -15px; 
-        padding: 0; 
-    }
-    
-    .edit-icon {
-        margin-left: 4px; 
-    }
+.footer #delete-list-button:hover {
+	transform: scale(1.1);
 }
 
 @media (max-width: 400px) {
-	.title-container {
-        margin-left: -20px; 
-        padding: 0; 
-    }
-    
-    .edit-icon {
-        margin-left: 4px; 
+	.list-title {
+        max-width: 65%;
     }
 }
 
-@media (max-width: 390px) {
-	.title-container {
-        margin-left: -25px; 
-        padding: 0; 
-    }
-}
-
-@media (max-width: 380px) {
-	.title-container {
-        margin-left: -30px; 
-        padding: 0; 
-    }
-}
-
-@media (max-width: 360px) {
-	.title-container {
-        margin-left: -35px; 
-        padding: 0; 
+@media (max-width: 350px) {
+	.list-title {
+        max-width: 60%;
     }
 }

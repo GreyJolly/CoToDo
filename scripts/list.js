@@ -15,6 +15,18 @@ function getAppData() {
 	return appData;
 }
 
+<<<<<<< HEAD
+=======
+function getCurrentUser() {
+    return {
+        id: 0,
+        displayName: "Current User",
+        avatarColor: "#4285F4",
+        initialLetter: "C"
+    };
+}
+
+>>>>>>> 0bfbbf8ccf07534c45238853007f40531920bc03
 document.addEventListener('DOMContentLoaded', function () {
 	const completeContainer = document.querySelector('.complete-container');
 	const toggleButton = document.querySelector('.toggle-complete');
@@ -24,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (e.target.closest('h3')) {
 				completeContainer.classList.toggle('collapsed');
 
-				// Update the icon
 				const icon = completeContainer.querySelector('.toggle-complete');
 				icon.classList.toggle('fa-chevron-right');
 				icon.classList.toggle('fa-chevron-down');
@@ -32,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 	renderListPage(getCurrentListId());
+	setupOwnershipBasedUI(getCurrentListId());
 
 	const titleInput = document.querySelector('.list-title');
 	if (titleInput.value == '') {
@@ -43,6 +55,109 @@ document.addEventListener('DOMContentLoaded', function () {
 function getCurrentListId() {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get('id') || 'list1';
+}
+
+function setupOwnershipBasedUI(listId) {
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+	const currentUser = getCurrentUser();
+	
+	if (!list) return;
+	
+	const isOwner = list.ownerId === currentUser.id;
+	const deleteListButton = document.getElementById('delete-list-button');
+	
+	if (isOwner) {
+		deleteListButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+		deleteListButton.onclick = deleteList;
+		deleteListButton.style.color = 'red';
+	} else {
+		deleteListButton.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i>';
+		deleteListButton.onclick = leaveCurrentList;
+		deleteListButton.style.color = '#f44336';
+	}
+}
+
+function leaveCurrentList() {
+	const listId = getCurrentListId();
+	const currentUser = getCurrentUser();
+	
+	const popup = document.getElementById('leave-confirm-popup');
+	if (!popup) {
+		createLeaveConfirmPopup();
+	}
+	
+	const leavePopup = document.getElementById('leave-confirm-popup');
+	leavePopup.style.display = 'flex';
+	
+	leavePopup.querySelector('.cancel-button').onclick = function () {
+		leavePopup.style.display = 'none';
+	};
+
+	leavePopup.querySelector('.confirm-button').onclick = function () {
+		leaveList(listId, currentUser.id);
+		leavePopup.style.display = 'none';
+	};
+
+	leavePopup.onclick = function (e) {
+		if (e.target === leavePopup) {
+			leavePopup.style.display = 'none';
+		}
+	};
+}
+
+function createLeaveConfirmPopup() {
+	const popup = document.createElement('div');
+	popup.id = 'leave-confirm-popup';
+	popup.className = 'popup';
+	popup.style.display = 'none';
+	popup.innerHTML = `
+		<div class="popup-content">
+			<p>Are you sure you want to leave this list? You will no longer have access to it.</p>
+			<div class="popup-buttons">
+				<button class="popup-button cancel-button">Cancel</button>
+				<button class="popup-button confirm-button" style="background-color: #f44336;">Leave</button>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(popup);
+}
+
+function leaveList(listId, userId) {
+	console.log(`User ${userId} leaving list ${listId}`);
+	
+	const appData = getAppData();
+	const list = appData.lists.find(l => l.id === listId);
+	const currentUser = getCurrentUser();
+
+	if (!list) {
+		console.error("List not found");
+		return;
+	}
+
+	if (userId === list.ownerId) {
+		console.error("Owner cannot leave their own list");
+		return;
+	}
+
+	if (list.contributors) {
+		list.contributors = list.contributors.filter(c => c.id !== userId);
+	}
+
+	if (userId === currentUser.id) {
+		const leftLists = JSON.parse(localStorage.getItem('leftLists')) || [];
+		
+		if (!leftLists.includes(listId)) {
+			leftLists.push(listId);
+			localStorage.setItem('leftLists', JSON.stringify(leftLists));
+		}
+		
+		setTimeout(() => {
+			window.location.href = 'index.html';
+		}, 1000);
+	}
+
+	localStorage.setItem('todoAppData', JSON.stringify(appData));
 }
 
 function updateParentTaskCompletion(taskId, listId) {
@@ -97,12 +212,14 @@ function renderListPage(listId) {
 	incompleteContainer.innerHTML = '';
 	completeContainer.innerHTML = '';
 
+	setupListPageEvents(listId);
+
 	// Check if there are no tasks
 	if (list.tasks.length === 0) {
 		const emptyMessage = document.createElement('div');
 		emptyMessage.className = 'no-results-msg';
 		emptyMessage.innerHTML = `
-            <p>No tasks for this list, press on the "+" to add one</p>
+            <p>No tasks for this list, press on the "+" button to add one</p>
         `;
 		incompleteContainer.appendChild(emptyMessage);
 
@@ -207,7 +324,6 @@ function renderListPage(listId) {
 		}
 	});
 
-	setupListPageEvents(listId);
 	setupDragAndDrop(listId);
 }
 
@@ -265,6 +381,19 @@ function setupListPageEvents(listId) {
 
 	// Focus handler to select all text when editing
 	listTitleElement.addEventListener('focus', function () {
+		// Blur handler to ensure title is saved even if debounce doesn't run
+		listTitleElement.addEventListener('blur', function () {
+			let newTitle = this.value.trim();
+
+			if (newTitle.length > MAX_TITLE_LENGTH) {
+				newTitle = newTitle.substring(0, MAX_TITLE_LENGTH);
+				this.value = newTitle;
+			}
+
+			list.title = newTitle;
+			localStorage.setItem('todoAppData', JSON.stringify(appData));
+		});
+
 		this.select();
 	});
 
@@ -315,6 +444,35 @@ function setupListPageEvents(listId) {
 			window.location.href = `calendar.html?date=${lastCalendarDate}`;
 		} else {
 			window.location.href = 'index.html';
+		}
+	});
+
+	const editIcon = document.querySelector('.edit-icon');
+	if (editIcon) {
+		editIcon.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const listTitleElement = document.querySelector('.list-title');
+			if (listTitleElement) {
+				listTitleElement.focus();
+				// Seleziona tutto il testo per facilitare la modifica
+				listTitleElement.select();
+			}
+		});
+	}
+
+	// Aggiungi anche un event listener delegato per gestire icone dinamiche
+	document.addEventListener('click', function(e) {
+		if (e.target.closest('.edit-icon')) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const listTitleElement = document.querySelector('.list-title');
+			if (listTitleElement) {
+				listTitleElement.focus();
+				listTitleElement.select();
+			}
 		}
 	});
 }
@@ -491,11 +649,6 @@ function deleteList() {
 	// Show the confirmation popup
 	const popup = document.getElementById('delete-confirm-popup');
 	popup.style.display = 'flex';
-
-	// Close any other popups (if you have any)
-	// document.querySelectorAll('.popup').forEach(p => {
-	//     if (p.id !== 'delete-confirm-popup') p.style.display = 'none';
-	// });
 
 	// Setup event listeners for the buttons
 	popup.querySelector('.cancel-button').onclick = function () {
