@@ -123,6 +123,7 @@ body {
 	gap: 8px;
 	width: 100%;
 	padding-right: 5px;
+	min-width: 0;
 }
 
 .task-item.dragging {
@@ -140,6 +141,14 @@ body {
 	width: 18px;
 	height: 18px;
 	background-color: white;
+}
+
+.task-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    min-width: 0;
 }
 
 .task-item label {
