@@ -326,16 +326,18 @@ function renderListPage(listId) {
 }
 
 function setupListPageEvents(listId) {
-	// Checkbox functionality
-	document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
-		checkbox.addEventListener('change', function () {
+	// Checkbox functionality using event delegation
+	document.addEventListener('change', function (e) {
+		// Check if the changed element is a task checkbox (not subtask)
+		if (e.target.type === 'checkbox' && e.target.closest('.task-item') && !e.target.closest('.subtask-item')) {
+			const listId = getCurrentListId();
 			const appData = getAppData();
-			const taskId = this.id;
+			const taskId = e.target.id;
 			const list = appData.lists.find(l => l.id === listId);
 			const task = list.tasks.find(t => t.id === taskId);
 
 			if (task) {
-				const newCompletedState = this.checked;
+				const newCompletedState = e.target.checked;
 				task.completed = newCompletedState;
 
 				// Update all subtasks to match parent task state
@@ -348,7 +350,7 @@ function setupListPageEvents(listId) {
 				localStorage.setItem('todoAppData', JSON.stringify(appData));
 				renderListPage(listId);
 			}
-		});
+		}
 	});
 
 	const listTitleElement = document.querySelector('.list-title');
