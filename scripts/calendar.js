@@ -239,7 +239,7 @@ function updateCalendar() {
 	const todayBtn = document.querySelector('.today-btn');
 
 	const options = { day: 'numeric', month: 'long', year: 'numeric' };
-	monthElement.textContent = currentDate.toLocaleDateString(undefined, options);
+	monthElement.textContent = currentDate.toLocaleDateString('en-GB', options);
 	const tasks = getTasksForDate(new Date(currentDate));
 	renderTasksForDate(tasks);
 
