@@ -30,7 +30,8 @@ function getLeftLists() {
 // Filter out lists that the user has left
 function getVisibleLists() {
 	const leftLists = getLeftLists();
-	return appData.lists.filter(list => !leftLists.includes(list.id));
+	const freshAppData = initializeAppData(); // Get fresh data from localStorage
+	return freshAppData.lists.filter(list => !leftLists.includes(list.id));
 }
 
 let appData = initializeAppData();

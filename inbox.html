@@ -6,9 +6,11 @@
 	<link rel="manifest" href="./manifest.json">
 	<link rel="stylesheet" href="./stylesheets/inbox.css">
 	<link rel="stylesheet" href="./stylesheets/footer.css">
+	<link rel="stylesheet" href="./stylesheets/undo.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/inbox.js"></script>
 	<script src="./scripts/auth.js"></script>
+	<script src="./scripts/undo.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,7 +26,7 @@
 
 	<div id="reject-popup" class="popup" style="display: none;">
 		<div class="popup-content">
-			<p>Are you sure you want to decline this invite?</p>
+			<p>Are you sure you want to decline this invite? This action cannot be undone.</p>
 			<div class="popup-buttons">
 				<button class="popup-button cancel-popup-button">Cancel</button>
 				<button class="popup-button confirm-button">Confirm</button>

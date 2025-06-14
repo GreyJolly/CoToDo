@@ -92,7 +92,29 @@ function leaveCurrentList() {
 	};
 
 	leavePopup.querySelector('.confirm-button').onclick = function () {
-		leaveList(listId, currentUser.id);
+		const appData = getAppData();
+		const list = appData.lists.find(l => l.id === listId);
+
+		if (list && currentUser.id !== list.ownerId) {
+			// Find user's contributor data before removing
+			const userContributorData = list.contributors?.find(c => c.id === currentUser.id);
+
+			// Store data for undo
+			const leaveData = {
+				listId: listId,
+				list: { ...list }, // Store list info for display
+				userContributorData: userContributorData ? { ...userContributorData } : null
+			};
+
+			// Store for undo system
+			if (window.undoSystem) {
+				window.undoSystem.storeDeletedItem('leave', leaveData);
+			}
+
+			// Proceed with leaving
+			leaveList(listId, currentUser.id);
+		}
+
 		leavePopup.style.display = 'none';
 	};
 
@@ -650,9 +672,29 @@ function deleteList() {
 	};
 
 	popup.querySelector('.confirm-button').onclick = function () {
+		// Find the list and its original index for potential restoration
+		const listIndex = appData.lists.findIndex(list => list.id === listId);
+		const listToDelete = appData.lists.find(list => list.id === listId);
+
+		if (listToDelete) {
+			// Store deleted list data for undo
+			const deletedListData = {
+				list: { ...listToDelete },
+				originalIndex: listIndex
+			};
+
+			// Store for undo system
+			if (window.undoSystem) {
+				window.undoSystem.storeDeletedItem('list', deletedListData);
+			}
+		}
+
+		// Remove list from app data
 		appData.lists = appData.lists.filter(list => list.id !== listId);
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 		popup.style.display = 'none';
+
+		// Navigate to index page
 		window.location.href = 'index.html';
 	};
 

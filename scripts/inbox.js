@@ -282,34 +282,52 @@ function displayRequests(requests, container) {
 		});
 
 		rejectBtn.addEventListener('click', () => {
-            // Show the rejection confirmation popup
-            const popup = document.getElementById('reject-popup');
-            if (popup) {
-                popup.style.display = 'flex';
-                
-                // Setup event listeners for the buttons
-                popup.querySelector('.cancel-popup-button').onclick = function () {
-                    popup.style.display = 'none';
-                };
+			// Show the rejection confirmation popup
+			const popup = document.getElementById('reject-popup');
+			if (popup) {
+				popup.style.display = 'flex';
 
-                popup.querySelector('.confirm-button').onclick = function () {
-                    // Remove from requests
-                    const updatedRequests = requests.filter(r => r.id !== request.id);
-                    localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
-                    
-                    // Close popup and reload
-                    popup.style.display = 'none';
-                    loadCollaborationRequests();
-                };
+				// Setup event listeners for the buttons
+				popup.querySelector('.cancel-popup-button').onclick = function () {
+					popup.style.display = 'none';
+				};
 
-                // Close popup when clicking outside
-                popup.onclick = function (e) {
-                    if (e.target === popup) {
-                        popup.style.display = 'none';
-                    }
-                };
-            }
-        });
+				popup.querySelector('.confirm-button').onclick = function () {
+					// Store rejected request data for undo
+					const rejectedRequestData = {
+						request: { ...request }
+					};
+
+					// Store for undo system
+					if (window.undoSystem) {
+						window.undoSystem.storeDeletedItem('request', rejectedRequestData);
+					}
+
+					// Remove from requests
+					const updatedRequests = requests.filter(r => r.id !== request.id);
+					localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
+
+					// Close popup and reload
+					popup.style.display = 'none';
+					loadCollaborationRequests();
+
+					// Show undo popup
+					if (window.undoSystem) {
+						window.undoSystem.showUndoPopup(
+							`Rejected request from ${request.fromUserName}`,
+							() => window.undoSystem.undoRequestRejection(rejectedRequestData)
+						);
+					}
+				};
+
+				// Close popup when clicking outside
+				popup.onclick = function (e) {
+					if (e.target === popup) {
+						popup.style.display = 'none';
+					}
+				};
+			}
+		});
 	});
 }
 
@@ -330,7 +348,7 @@ function formatTimestamp(timestamp) {
 	if (seconds > intervals.week) {
 		return date.toLocaleDateString();
 	}
-	
+
 	if (seconds > intervals.day * 2) {
 		const days = Math.floor(seconds / intervals.day);
 		return `${days} days ago`;

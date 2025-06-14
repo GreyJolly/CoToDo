@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cotodo-cache-10';
+const CACHE_NAME = 'cotodo-cache-11';
 
 const urlsToCache = [
 	'./',
@@ -21,6 +21,7 @@ const urlsToCache = [
 	'./stylesheets/login.css',
 	'./stylesheets/signup.css',
 	'./stylesheets/task.css',
+	'./stylesheets/undo.css',
 	'.scripts/auth.js',
 	'./scripts/index.js',
 	'./scripts/calendar.js',
@@ -32,6 +33,7 @@ const urlsToCache = [
 	'./scripts/task.js',
 	'./scripts/login.js',
 	'./scripts/signup.js',
+	'./scripts/undo.js',
 	'./images/icon-512.png',
 	'./images/icon-192.png'
 ];

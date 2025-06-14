@@ -1,0 +1,142 @@
+.undo-popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: #323232;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 90%;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.undo-popup.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.undo-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+.undo-message {
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 1.4;
+    color: white;
+}
+
+.undo-button {
+    background: none;
+    border: none;
+    color: #4285f4;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.undo-button:hover {
+    background-color: rgba(66, 133, 244, 0.1);
+}
+
+.undo-close {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: color 0.2s;
+}
+
+.undo-close:hover {
+    color: white;
+}
+
+.undo-progress-bar {
+    height: 2px;
+    background-color: #4285f4;
+    width: 100%;
+    transform-origin: left;
+}
+
+@keyframes undoProgress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Success popup variant */
+.undo-popup.success-popup {
+    background-color: #2e7d32;
+}
+
+.undo-popup.success-popup .undo-content {
+    justify-content: center;
+    gap: 8px;
+}
+
+.undo-popup.success-popup .fa-check-circle {
+    color: white;
+    font-size: 16px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .undo-popup {
+        left: 10px;
+        right: 10px;
+        transform: translateY(100px);
+        min-width: auto;
+        max-width: none;
+    }
+    
+    .undo-popup.visible {
+        transform: translateY(0);
+    }
+    
+    .undo-content {
+        padding: 14px 16px;
+    }
+    
+    .undo-message {
+        font-size: 13px;
+    }
+    
+    .undo-button {
+        font-size: 13px;
+    }
+}
+
+/* Animation for slide-in effect */
+@media (prefers-reduced-motion: no-preference) {
+    .undo-popup {
+        animation-duration: 0.3s;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}

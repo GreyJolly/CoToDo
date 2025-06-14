@@ -952,9 +952,27 @@ function deleteTask() {
 	};
 
 	popup.querySelector('.confirm-button').onclick = function () {
+		// Find the task's original index for potential restoration
+		const originalIndex = list.tasks.findIndex(t => t.id === taskId);
+		
+		// Store deleted task data for undo
+		const deletedTaskData = {
+			task: { ...task },
+			listId: listId,
+			originalIndex: originalIndex
+		};
+		
+		// Store for undo system
+		if (window.undoSystem) {
+			window.undoSystem.storeDeletedItem('task', deletedTaskData);
+		}
+		
+		// Remove task from list
 		list.tasks = list.tasks.filter(t => t.id !== taskId);
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 		popup.style.display = 'none';
+		
+		// Navigate to list page
 		window.location.href = `list.html?id=${listId}`;
 	};
 
