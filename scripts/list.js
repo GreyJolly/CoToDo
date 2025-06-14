@@ -132,7 +132,7 @@ function createLeaveConfirmPopup() {
 	popup.style.display = 'none';
 	popup.innerHTML = `
 		<div class="popup-content">
-			<p>Are you sure you want to leave this list? You will no longer have access to it.</p>
+			<p>Are you sure you want to leave this list? <br> You will no longer have access to it.</p>
 			<div class="popup-buttons">
 				<button class="popup-button cancel-button">Cancel</button>
 				<button class="popup-button confirm-button" style="background-color: #f44336;">Leave</button>
