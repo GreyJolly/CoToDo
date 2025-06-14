@@ -36,7 +36,7 @@
 						<span>Due:</span><br>
 						<span class="task-due-date">No date</span>
 					</div>
-				</div> 
+				</div>
 				<div class="flag-container">
 					<i class="flag-icon fa-regular fa-flag" id="flag-icon"></i>
 					<span class="priority-label">Priority</span>
@@ -68,14 +68,18 @@
 						<button class="calendar-next" onclick="navigateCalendar(1)"><i
 								class="fa-solid fa-chevron-right"></i></button>
 					</div>
+					<div class="date-input-container">
+						<input type="date" id="dateInput" class="date-input">
+						<button class="go-to-date-btn" onclick="goToSelectedDate()">Go</button>
+					</div>
 					<div class="calendar-divider"></div>
 				</div>
 				<div class="calendar-days"></div>
-				<div class="calendar-bottom-bar"></div>
 				<div class="date-selection-mode">
 					<input id="radio-start" type="radio" name="dateType" value="start" hidden>
 					<input id="radio-due" type="radio" name="dateType" value="due" checked="checked" hidden>
 				</div>
+				<div class="calendar-bottom-bar"></div>
 			</div>
 
 			<div class="enter-hint-container" id="enterHintContainer" hidden>

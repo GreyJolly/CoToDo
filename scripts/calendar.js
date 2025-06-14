@@ -71,6 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	updateCalendar();
 	highlightCurrentPage();
+
+	const dateInput = document.getElementById('dateInput');
+	if (dateInput) {
+		dateInput.addEventListener('keypress', function (e) {
+			if (e.key === 'Enter') {
+				goToSelectedDate();
+			}
+		});
+	}
 });
 
 function formatDate(date) {
@@ -255,6 +264,15 @@ function openCalendar() {
 	currentCalendarMonth = currentDate.getMonth();
 	currentCalendarYear = currentDate.getFullYear();
 
+	// Set the current date in the input field
+	const dateInput = document.getElementById('dateInput');
+	if (dateInput) {
+		const year = currentDate.getFullYear();
+		const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+		const day = String(currentDate.getDate()).padStart(2, '0');
+		dateInput.value = `${year}-${month}-${day}`;
+	}
+
 	calendarPopup.hidden = false;
 	calendarPopup.classList.add("visible");
 	calendarOpen = true;
@@ -389,4 +407,20 @@ function highlightCurrentPage() {
 	} else if (currentPage === 'inbox.html') {
 		document.getElementById('inbox-button1').classList.add('active');
 	}
+}
+
+function goToSelectedDate() {
+	const dateInput = document.getElementById('dateInput');
+	if (!dateInput.value) return;
+
+	const selectedDate = new Date(dateInput.value);
+	if (isNaN(selectedDate.getTime())) return;
+
+	// Update the calendar view to show the selected month
+	currentCalendarMonth = selectedDate.getMonth();
+	currentCalendarYear = selectedDate.getFullYear();
+	generateCalendar();
+
+	// Select the date
+	selectDate(selectedDate);
 }

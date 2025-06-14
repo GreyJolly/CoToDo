@@ -796,3 +796,33 @@ body {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.date-input-container {
+    display: flex;
+    gap: 8px;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.date-input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.go-to-date-btn {
+    background-color: #5a5fd2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.go-to-date-btn:hover {
+    background-color: #4a4fb2;
+}

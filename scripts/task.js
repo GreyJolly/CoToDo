@@ -238,26 +238,26 @@ function setupTaskEvents() {
 		}
 	});
 
-	document.querySelector('.fa-plus')?.addEventListener('click', function() {
-        const addSubtaskInput = document.getElementById("addSubtaskInput");
-        if (addSubtaskInput) {
-            addSubtaskInput.focus();
-            
-            // Show the hint if you have one
-            const hint = document.getElementById("enterHintContainer");
-            if (hint) {
-                hint.classList.add("visible");
-                hint.hidden = false;
-            }
-        }
-    });
+	document.querySelector('.fa-plus')?.addEventListener('click', function () {
+		const addSubtaskInput = document.getElementById("addSubtaskInput");
+		if (addSubtaskInput) {
+			addSubtaskInput.focus();
+
+			// Show the hint if you have one
+			const hint = document.getElementById("enterHintContainer");
+			if (hint) {
+				hint.classList.add("visible");
+				hint.hidden = false;
+			}
+		}
+	});
 
 	const editIcon = document.querySelector('.edit-icon');
 	if (editIcon) {
-		editIcon.addEventListener('click', function(e) {
+		editIcon.addEventListener('click', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const taskTitleElement = document.querySelector('.task-title');
 			if (taskTitleElement) {
 				taskTitleElement.focus();
@@ -266,11 +266,11 @@ function setupTaskEvents() {
 		});
 	}
 
-	document.addEventListener('click', function(e) {
+	document.addEventListener('click', function (e) {
 		if (e.target.closest('.edit-icon')) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const taskTitleElement = document.querySelector('.task-title');
 			if (taskTitleElement) {
 				taskTitleElement.focus();
@@ -370,14 +370,29 @@ function openAssignMembers() {
 	closeOtherPopups(assignPopup);
 }
 
+function goToSelectedDate() {
+	const dateInput = document.getElementById('dateInput');
+	if (!dateInput.value) return;
+
+	const selectedDate = new Date(dateInput.value);
+	if (isNaN(selectedDate.getTime())) return;
+
+	// Update the calendar view to show the selected month
+	currentCalendarMonth = selectedDate.getMonth();
+	currentCalendarYear = selectedDate.getFullYear();
+	generateCalendar();
+
+	// Select the date
+	selectDate(selectedDate);
+}
+
 function openCalendar(start_or_due) {
 	const calendarPopup = document.getElementById("calendarPopup");
 	if (!calendarPopup) return;
 
 	if (start_or_due == "start") {
 		document.getElementById('radio-start').click();
-	}
-	else {
+	} else {
 		document.getElementById('radio-due').click();
 	}
 
@@ -389,6 +404,15 @@ function openCalendar(start_or_due) {
 		document.getElementById("task-date-item-start").classList.remove("selecting");
 	}
 
+	// Set the current date in the input field
+	const dateInput = document.getElementById('dateInput');
+	if (dateInput) {
+		const year = new Date().getFullYear();
+		const month = String(new Date().getMonth() + 1).padStart(2, '0');
+		const day = String(new Date().getDate()).padStart(2, '0');
+		dateInput.value = `${year}-${month}-${day}`;
+	}
+
 	// Do not proceed with the rendering if the calendar is already visible
 	if (calendarPopup.classList.contains("visible")) { return; }
 
@@ -398,7 +422,6 @@ function openCalendar(start_or_due) {
 
 	loadExistingDates();
 	generateCalendar();
-
 }
 
 function closeCalendar() {
@@ -595,13 +618,44 @@ function selectDate(date) {
 	generateCalendar();
 }
 
+function selectDate(date) {
+	const selectionMode = getDateSelectionMode();
+
+	if (selectionMode === 'start') {
+		if (!tempStartDate || tempStartDate.getTime() !== date.getTime()) {
+			tempStartDate = date;
+		} else {
+			tempStartDate = null;
+		}
+
+		// Automatically switch to due date selection after choosing start date
+		if (tempStartDate) {
+			document.getElementById('radio-due').click();
+			document.getElementById("task-date-item-start").classList.remove("selecting");
+			document.getElementById("task-date-item-due").classList.add("selecting");
+		}
+	} else {
+		if (!tempDueDate || tempDueDate.getTime() !== date.getTime()) {
+			tempDueDate = date;
+		} else {
+			tempDueDate = null;
+		}
+	}
+
+	// Swap dates if start is after due
+	if (tempStartDate && tempDueDate && tempStartDate > tempDueDate) {
+		[tempStartDate, tempDueDate] = [tempDueDate, tempStartDate];
+	}
+
+	saveSelectedDates();
+
+}
+
 function saveSelectedDates() {
 	const taskData = loadTaskData();
 	if (!taskData) return;
 
 	const { appData, task } = taskData;
-
-	// Format dates as "Month Day, Year" (e.g., "May 15, 2025")
 
 	if (tempStartDate) {
 		const formattedStartDate = `${monthNamesAbbrv[tempStartDate.getMonth()]} ${tempStartDate.getDate()}, ${tempStartDate.getFullYear()}`;
@@ -617,10 +671,7 @@ function saveSelectedDates() {
 		delete task.dueDate;
 	}
 
-	// Save changes
 	localStorage.setItem('todoAppData', JSON.stringify(appData));
-
-	// Update date displays
 	updateDateDisplays();
 }
 
@@ -1004,4 +1055,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		titleInput.focus();
 	}
 
+	const dateInput = document.getElementById('dateInput');
+	if (dateInput) {
+		dateInput.addEventListener('keypress', function (e) {
+			if (e.key === 'Enter') {
+				goToSelectedDate();
+			}
+		});
+	}
 });
