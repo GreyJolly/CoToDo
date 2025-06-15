@@ -233,15 +233,14 @@ body {
 	border-radius: 10px;
 	color: #333;
 	width: 90%;
-	position: absolute;
-	top: 220px;
-	bottom: 130px;
+	position: fixed;
+	top: 200px;
+	bottom: 60px;
 	left: 50%;
 	transform: translateX(-50%);
-	z-index: 100;
+	z-index: 2000;
 	display: none;
-	overflow: hidden;
-	height: 350px;
+	height: 400px;
 }
 
 .calendar-popup.visible {
@@ -250,6 +249,7 @@ body {
 
 .calendar-header {
 	padding: 15px;
+	border-radius: 10px;
 	background-color: #ffffff;
 }
 
@@ -368,7 +368,6 @@ body {
 }
 
 .date-selection-mode {
-	margin: 10px 0;
 	display: flex;
 	gap: 15px;
 	justify-content: center;
@@ -817,7 +816,8 @@ body {
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 8px 15px;
+    padding: 8px 10px;
+	margin-right: 5px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.2s;
@@ -825,4 +825,12 @@ body {
 
 .go-to-date-btn:hover {
     background-color: #4a4fb2;
+}
+
+.calendar-header,
+.calendar-nav,
+.calendar-days,
+.date-selection-mode {
+	position: relative;
+	z-index: 2001;
 }
