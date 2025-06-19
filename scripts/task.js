@@ -593,32 +593,6 @@ function navigateCalendar(direction) {
 }
 
 function selectDate(date) {
-	if (getDateSelectionMode() == 'start') {
-		if (!tempStartDate || tempStartDate.getTime() != date.getTime()) {
-			tempStartDate = date;
-		} else {
-			tempStartDate = null;
-		}
-	} else {
-		if (!tempDueDate || tempDueDate.getTime() != date.getTime()) {
-			tempDueDate = date;
-		} else {
-			tempDueDate = null;
-		}
-	}
-	if (tempStartDate && tempDueDate && tempStartDate > tempDueDate) {
-		date = tempDueDate
-		tempDueDate = tempStartDate;
-		tempStartDate = date;
-	}
-
-	saveSelectedDates();
-
-	// Regenerate calendar to update highlights
-	generateCalendar();
-}
-
-function selectDate(date) {
 	const selectionMode = getDateSelectionMode();
 
 	if (selectionMode === 'start') {
@@ -648,6 +622,7 @@ function selectDate(date) {
 	}
 
 	saveSelectedDates();
+	generateCalendar(); // Regenerate calendar to update the visual display
 
 }
 
