@@ -603,7 +603,7 @@ function selectDate(date) {
 		}
 
 		// Automatically switch to due date selection after choosing start date
-		if (tempStartDate) {
+		if (tempStartDate && !tempDueDate) {
 			document.getElementById('radio-due').click();
 			document.getElementById("task-date-item-start").classList.remove("selecting");
 			document.getElementById("task-date-item-due").classList.add("selecting");
