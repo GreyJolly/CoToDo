@@ -6,6 +6,7 @@
 	<link rel="manifest" href="./manifest.json">
 	<link rel="stylesheet" href="./stylesheets/profile.css">
 	<link rel="stylesheet" href="./stylesheets/footer.css">
+	<link rel="stylesheet" href="./stylesheets/auto-accept.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/profile.js"></script>
 	<script src="./scripts/auth.js"></script>
@@ -104,7 +105,7 @@
 					</div>
 					<div class="form-group password-group">
 						<label for="password">Password</label>
-						<input type="password" id="password" name="password" class="form-control" 
+						<input type="password" id="password" name="password" class="form-control"
 							autocomplete="current-password" required>
 						<i class="fa-solid fa-eye toggle-password" data-target="password"></i>
 					</div>
@@ -131,7 +132,8 @@
 				<form id="change-password-form">
 					<div class="form-group">
 						<label for="current-password">Current password</label>
-						<input type="password" id="current-password" name="current-password" class="form-control" required>
+						<input type="password" id="current-password" name="current-password" class="form-control"
+							required>
 						<i class="fa-solid fa-eye toggle-password" data-target="current-password"></i>
 					</div>
 					<div class="form-group">
@@ -147,12 +149,14 @@
 					</div>
 					<div class="form-group">
 						<label for="confirm-password">Confirm new password</label>
-						<input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+						<input type="password" id="confirm-password" name="confirm-password" class="form-control"
+							required>
 						<i class="fa-solid fa-eye toggle-password" data-target="confirm-password"></i>
 						<div class="error-message" id="password-match-error">Passwords do not match</div>
 					</div>
 					<div class="form-actions">
-						<button type="submit" id="change-password-button" class="change-password-button">Update password</button>
+						<button type="submit" id="change-password-button" class="change-password-button">Update
+							password</button>
 					</div>
 				</form>
 				<div class="form-success-message">
@@ -179,16 +183,18 @@
 					<div class="form-group">
 						<label for="new-username">New username</label>
 						<input type="text" id="new-username" name="new-username" class="form-control" required>
-						<div class="error-message" id="username-error">Username must be 3-20 characters and contain only letters, numbers, and underscores</div>
+						<div class="error-message" id="username-error">Username must be 3-20 characters and contain only
+							letters, numbers, and underscores</div>
 					</div>
 					<div class="form-group password-group">
 						<label for="username-password">Password</label>
-						<input type="password" id="username-password" name="username-password" class="form-control" 
+						<input type="password" id="username-password" name="username-password" class="form-control"
 							autocomplete="current-password" required>
 						<i class="fa-solid fa-eye toggle-password" data-target="username-password"></i>
 					</div>
 					<div class="form-actions">
-						<button type="submit" id="change-username-button" class="change-username-button">Update username</button>
+						<button type="submit" id="change-username-button" class="change-username-button">Update
+							username</button>
 					</div>
 				</form>
 				<div class="form-success-message">

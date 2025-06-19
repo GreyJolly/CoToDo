@@ -1,0 +1,119 @@
+.auto-accept-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #2e7d32;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.auto-accept-notification.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+.notification-content .fa-user-check {
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 1.4;
+    color: white;
+}
+
+.notification-message strong {
+    font-weight: 600;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Timer display in invitation items */
+.auto-accept-timer {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    margin-left: 4px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .auto-accept-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+    
+    .auto-accept-notification.visible {
+        transform: translateY(0);
+    }
+    
+    .notification-content {
+        padding: 14px 16px;
+    }
+    
+    .notification-message {
+        font-size: 13px;
+    }
+    
+    .notification-content .fa-user-check {
+        font-size: 18px;
+    }
+}
+
+/* Tablet adjustments */
+@media (max-width: 768px) {
+    .auto-accept-notification {
+        right: 10px;
+        max-width: calc(100vw - 20px);
+    }
+}
+
+/* Animation for slide-in effect */
+@media (prefers-reduced-motion: no-preference) {
+    .auto-accept-notification {
+        animation-duration: 0.3s;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
