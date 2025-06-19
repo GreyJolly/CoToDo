@@ -496,7 +496,13 @@ function renderUserList(listId, searchTerm = '', currentContributors = [], owner
 				inviteBtn.addEventListener('click', () => {
 					sendCollaborationInvite(listId, user.id, list.title || 'Untitled List');
 					userItem.remove();
-					renderUserList(listId, '', list.contributors, list.ownerId);
+
+					// Get the current search term from the search input
+					const searchTextElement = document.querySelector('.search-friends-text');
+					const currentSearchTerm = searchTextElement.textContent === 'Search users' ? '' : searchTextElement.textContent.toLowerCase().trim();
+
+					// Pass the current search term to maintain the search results
+					renderUserList(listId, currentSearchTerm, list.contributors, list.ownerId);
 				});
 
 				searchSection.appendChild(userItem);
