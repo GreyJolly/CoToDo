@@ -111,6 +111,10 @@ body {
 	color: #000;
 }
 
+.task-dates.above-overlay {
+	z-index: 1001;
+}
+
 #task-date-item-start,
 #task-date-item-due {
 	padding: 10px;

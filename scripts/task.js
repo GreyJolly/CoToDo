@@ -433,6 +433,7 @@ function openCalendar(start_or_due) {
 
 	calendarPopup.classList.toggle("visible");
 	calendarPopup.hidden = false;
+	document.querySelector('.task-dates')?.classList.add('above-overlay');
 	closeOtherPopups(calendarPopup);
 	toggleOverlay();
 
@@ -448,6 +449,7 @@ function closeCalendar() {
 	}
 	document.getElementById("task-date-item-start").classList.remove("selecting");
 	document.getElementById("task-date-item-due").classList.remove("selecting");
+	document.querySelector('.task-dates')?.classList.remove('above-overlay');
 	toggleOverlay();
 
 }
