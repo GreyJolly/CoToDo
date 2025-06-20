@@ -117,31 +117,6 @@ body {
     max-width: 80%;
 }
 
-.account {
-	display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    margin-left: 10px;
-}
-
-.account-avatar {
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	background-color: #ee7300;
-	color: white;
-	font-size: 16px;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 1px solid #000000;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	line-height: 1;
-	text-align: center;
-	flex-shrink: 0;
-}
-
 /* Main content area */
 .main-content {
 	flex: 1;

@@ -365,24 +365,7 @@ function formatTimestamp(timestamp) {
 	}
 }
 
-function highlightCurrentPage() {
-	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-	document.querySelectorAll('.footer button').forEach(button => {
-		button.classList.remove('active');
-	});
-
-	if (currentPage === 'index.html') {
-		document.getElementById('list-button').classList.add('active');
-	} else if (currentPage === 'calendar.html') {
-		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'inbox.html') {
-		document.getElementById('inbox-button1').classList.add('active');
-	}
-}
-
 document.addEventListener('DOMContentLoaded', function () {
 	initializeCollaborationRequests();
 	loadCollaborationRequests();
-	highlightCurrentPage();
 });

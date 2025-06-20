@@ -27,9 +27,6 @@
 			<i class="fa-solid fa-magnifying-glass"></i>
 			<input type="text" class="search-input" placeholder="Search your notes">
 			<i class="fa-solid fa-xmark search-clear" style="display: none;"></i>
-			<div class="account" onclick="window.location.href='profile.html'">
-				<div class="account-avatar" id="user-avatar"></div>
-			</div>
 		</div>
 	</div>
 
@@ -46,7 +43,7 @@
 		</div>
 		<footer class="footer">
 			<div class="footer-button">
-				<button id="list-button" onclick="window.location.href='index.html'"><i
+				<button id="list-button" onclick="window.location.href='index.html'" class="active"><i
 						class="fa-solid fa-list"></i></button>
 				<span>Lists</span>
 			</div>
@@ -59,6 +56,11 @@
 				<button id="inbox-button1" onclick="window.location.href='inbox.html'"><i
 						class="fa-solid fa-inbox"></i></button>
 				<span>Inbox</span>
+			</div>
+			<div class="footer-button">
+				<button id="profile-button" onclick="window.location.href='profile.html'"><i
+						class="fa-solid fa-user"></i></button>
+				<span>Profile</span>
 			</div>
 		</footer>
 </body>
