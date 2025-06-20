@@ -122,6 +122,18 @@ function setPriorityFlag(priority) {
 	}
 }
 
+function toggleOverlay() {
+	const overlay = document.getElementById('overlay');
+	const isCalendarOpen = document.getElementById('calendarPopup')?.classList.contains('visible');
+	const isAssignOpen = document.getElementById('assignMembersPopup')?.classList.contains('visible');
+
+	if (isCalendarOpen || isAssignOpen) {
+		overlay.style.display = 'block';
+	} else {
+		overlay.style.display = 'none';
+	}
+}
+
 function setupTaskEvents() {
 	// Save changes when leaving the page
 	window.addEventListener('beforeunload', saveTaskChanges);
@@ -197,9 +209,9 @@ function setupTaskEvents() {
 		if (!e.target.closest('.calendar-header') &&
 			!e.target.closest('.calendar-days') &&
 			!e.target.closest('.calendar-day') &&
-			!e.target.closest('.task-dates') &&
 			!e.target.closest('.task-date-item')) {
 			closeCalendar();
+			toggleOverlay();
 		}
 		if (!e.target.closest('.enter-hint-container') && !e.target.closest('#bullet-list-button') && !e.target.closest('.task-date-item')) {
 			const hint = document.getElementById("enterHintContainer");
@@ -216,6 +228,7 @@ function setupTaskEvents() {
 			if (assign) {
 				assign.classList.remove("visible");
 				assign.hidden = true;
+				toggleOverlay();
 			}
 		}
 	});
@@ -235,6 +248,7 @@ function setupTaskEvents() {
 				assign.classList.remove("visible");
 				assign.hidden = true;
 			}
+			toggleOverlay();
 		}
 	});
 
@@ -368,6 +382,7 @@ function openAssignMembers() {
 	assignPopup.classList.toggle("visible");
 	assignPopup.hidden = !assignPopup.hidden;
 	closeOtherPopups(assignPopup);
+	toggleOverlay();
 }
 
 function goToSelectedDate() {
@@ -419,6 +434,7 @@ function openCalendar(start_or_due) {
 	calendarPopup.classList.toggle("visible");
 	calendarPopup.hidden = false;
 	closeOtherPopups(calendarPopup);
+	toggleOverlay();
 
 	loadExistingDates();
 	generateCalendar();
@@ -432,6 +448,7 @@ function closeCalendar() {
 	}
 	document.getElementById("task-date-item-start").classList.remove("selecting");
 	document.getElementById("task-date-item-due").classList.remove("selecting");
+	toggleOverlay();
 
 }
 
