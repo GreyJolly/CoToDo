@@ -601,13 +601,6 @@ function selectDate(date) {
 		} else {
 			tempStartDate = null;
 		}
-
-		// Automatically switch to due date selection after choosing start date
-		if (tempStartDate && !tempDueDate) {
-			document.getElementById('radio-due').click();
-			document.getElementById("task-date-item-start").classList.remove("selecting");
-			document.getElementById("task-date-item-due").classList.add("selecting");
-		}
 	} else {
 		if (!tempDueDate || tempDueDate.getTime() !== date.getTime()) {
 			tempDueDate = date;
