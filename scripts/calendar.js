@@ -277,18 +277,16 @@ function openCalendar() {
 	calendarOpen = true;
 
 	generateCalendar();
+	toggleOverlay();
 }
 
 function closeCalendar() {
 	const calendarPopup = document.getElementById("calendarPopup");
 	if (calendarPopup) {
 		calendarPopup.classList.remove("visible");
-		setTimeout(() => {
-			if (!calendarPopup.classList.contains("visible")) {
-				calendarPopup.hidden = true;
-			}
-		}, 200);
+		calendarPopup.hidden = true;
 		calendarOpen = false;
+		toggleOverlay(); 
 	}
 }
 
@@ -406,4 +404,15 @@ function goToSelectedDate() {
 
 	// Select the date
 	selectDate(selectedDate);
+}
+
+function toggleOverlay() {
+	const overlay = document.getElementById('overlay');
+	const isCalendarOpen = document.getElementById('calendarPopup')?.classList.contains('visible');
+
+	if (isCalendarOpen) {
+		overlay.style.display = 'block';
+	} else {
+		overlay.style.display = 'none';
+	}
 }

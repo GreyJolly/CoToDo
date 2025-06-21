@@ -249,7 +249,7 @@ body {
 	top: 120px;
 	left: 50%;
 	transform: translateX(-50%);
-	z-index: 100;
+	z-index: 1000;
 	display: none;
 	overflow: hidden;
 }
@@ -383,4 +383,16 @@ body {
 
 .go-to-date-btn:hover {
     background-color: #4a4fb2;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	backdrop-filter: blur(2px);
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 999;
+	display: none;
 }
