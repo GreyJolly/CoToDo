@@ -1,37 +1,3 @@
-function initializeCollaborationRequests() {
-	if (!localStorage.getItem('collaborationRequests')) {
-		const currentUser = getCurrentUser();
-		const initialRequests = [
-			{
-				id: "1",
-				listId: "shared-list-1",
-				listName: "Groceries",
-				fromUserId: 7, // Hazel
-				fromUserName: "Hazel",
-				fromUserAvatarColor: "#5df7ff",
-				fromUserInitialLetter: "H",
-				timestamp: Date.now() - 86400000 // 1 day ago
-			},
-			{
-				id: "2",
-				listId: "shared-list-2",
-				listName: "Project Tasks",
-				fromUserId: 6, // Mary
-				fromUserName: "Mary",
-				fromUserAvatarColor: "#b0ff30",
-				fromUserInitialLetter: "M",
-				timestamp: Date.now() - 3600000 // 1 hour ago
-			}
-		];
-
-		// Store requests for current user
-		localStorage.setItem('collaborationRequests', JSON.stringify(initialRequests));
-
-		// Also store them in the user-specific key for future use
-		localStorage.setItem(`collaborationRequests_${currentUser.id}`, JSON.stringify(initialRequests));
-	}
-}
-
 // Shared lists that can be accepted
 function createDefaultSharedLists() {
 	return {
@@ -373,7 +339,6 @@ function formatTimestamp(timestamp) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-	initializeCollaborationRequests();
 	loadCollaborationRequests();
 	// Update badge on page load
 	window.dispatchEvent(new Event('collaborationRequestsUpdated'));
