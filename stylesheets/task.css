@@ -111,6 +111,10 @@ body {
 	color: #000;
 }
 
+.task-dates.above-overlay {
+	z-index: 1001;
+}
+
 #task-date-item-start,
 #task-date-item-due {
 	padding: 10px;
@@ -828,4 +832,16 @@ body {
 .date-selection-mode {
 	position: relative;
 	z-index: 2001;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	backdrop-filter: blur(2px);
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 999;
+	display: none;
 }
