@@ -4,7 +4,7 @@
 #calendar-days-button {
 	background-color: #515CC6;
 	border: none;
-	border-radius: 20px;	
+	border-radius: 20px;
 	color: white;
 	padding: 0;
 	width: 70px;
@@ -24,7 +24,7 @@
 	right: 20px;
 	bottom: 15px;
 	z-index: 1000;
-    pointer-events: auto;
+	pointer-events: auto;
 }
 
 #calendar-days-button {
@@ -32,7 +32,7 @@
 	right: 20px;
 	bottom: 15px;
 	z-index: 1000;
-    pointer-events: auto;
+	pointer-events: auto;
 }
 
 .footer {
@@ -40,7 +40,7 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background-color: #f2f1f6; 
+	background-color: #f2f1f6;
 	min-height: 50px;
 	text-align: center;
 	padding: 20px;
@@ -102,4 +102,48 @@
 .footer button.active+span {
 	color: #515CC6;
 	font-weight: bold;
+}
+
+/* Notification badge styling */
+.notification-badge {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+	background-color: #f4433c;
+	color: white !important;
+	font-size: 11px;
+	font-weight: bold;
+	min-width: 18px;
+	height: 18px;
+	border-radius: 9px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	z-index: 100;
+}
+
+/* Ensure inbox button has relative positioning for badge */
+#inbox-button1 {
+	position: relative;
+}
+
+/* Pulse animation for new notifications */
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.15);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+.notification-badge.pulse {
+	animation: pulse 0.6s ease-in-out;
 }

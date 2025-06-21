@@ -277,6 +277,9 @@ function displayRequests(requests, container) {
 			const updatedRequests = requests.filter(r => r.id !== request.id);
 			localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
 
+			// Dispatch event for badge update
+			window.dispatchEvent(new Event('collaborationRequestsUpdated'));
+
 			// Reload
 			loadCollaborationRequests();
 		});
@@ -315,7 +318,11 @@ function displayRequests(requests, container) {
 					if (window.undoSystem) {
 						window.undoSystem.showUndoPopup(
 							`Rejected request from ${request.fromUserName}`,
-							() => window.undoSystem.undoRequestRejection(rejectedRequestData)
+							() => {
+								window.undoSystem.undoRequestRejection(rejectedRequestData);
+								// Dispatch event for badge update after undo
+								window.dispatchEvent(new Event('collaborationRequestsUpdated'));
+							}
 						);
 					}
 				};
@@ -368,4 +375,6 @@ function formatTimestamp(timestamp) {
 document.addEventListener('DOMContentLoaded', function () {
 	initializeCollaborationRequests();
 	loadCollaborationRequests();
+	// Update badge on page load
+	window.dispatchEvent(new Event('collaborationRequestsUpdated'));
 });
