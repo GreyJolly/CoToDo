@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	renderHomepage();
 	setupHomepageEvents();
 	setupSearch();
-	highlightCurrentPage();
 	setupDragAndDrop();
 });
 
@@ -372,22 +371,6 @@ function highlightText(text, searchTerm) {
 
 	const regex = new RegExp(`(${searchTerm})`, 'gi');
 	return text.replace(regex, '<span class="highlight">$1</span>');
-}
-
-function highlightCurrentPage() {
-	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-	document.querySelectorAll('.footer button').forEach(button => {
-		button.classList.remove('active');
-	});
-
-	if (currentPage === 'index.html') {
-		document.getElementById('list-button').classList.add('active');
-	} else if (currentPage === 'calendar.html') {
-		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'inbox.html') {
-		document.getElementById('inbox-button1').classList.add('active');
-	}
 }
 
 let draggedItem = null;

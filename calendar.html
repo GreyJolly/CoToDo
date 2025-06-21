@@ -11,6 +11,7 @@
 	<script src="./scripts/calendar.js"></script>
 	<script src="./scripts/auth.js"></script>
 	<script src="./scripts/auto-accept.js"></script>
+	<script src="./scripts/footer.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -66,7 +67,7 @@
 			<span>Lists</span>
 		</div>
 		<div class="footer-button">
-			<button id="calendar-button" onclick="window.location.href='calendar.html'"><i
+			<button id="calendar-button" onclick="window.location.href='calendar.html'" class="active"><i
 					class="fa-solid fa-calendar"></i></button>
 			<span>Calendar</span>
 		</div>
@@ -75,8 +76,13 @@
 					class="fa-solid fa-inbox"></i></button>
 			<span>Inbox</span>
 		</div>
+		<div class="footer-button">
+			<button id="profile-button" onclick="window.location.href='profile.html'"><i
+					class="fa-solid fa-user"></i></button>
+			<span>Account</span>
+		</div>
 	</footer>
-
+	<div id="overlay" class="overlay"></div>
 </body>
 
 </html>

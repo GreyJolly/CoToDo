@@ -1,37 +1,3 @@
-function initializeCollaborationRequests() {
-	if (!localStorage.getItem('collaborationRequests')) {
-		const currentUser = getCurrentUser();
-		const initialRequests = [
-			{
-				id: "1",
-				listId: "shared-list-1",
-				listName: "Groceries",
-				fromUserId: 7, // Hazel
-				fromUserName: "Hazel",
-				fromUserAvatarColor: "#5df7ff",
-				fromUserInitialLetter: "H",
-				timestamp: Date.now() - 86400000 // 1 day ago
-			},
-			{
-				id: "2",
-				listId: "shared-list-2",
-				listName: "Project Tasks",
-				fromUserId: 6, // Mary
-				fromUserName: "Mary",
-				fromUserAvatarColor: "#b0ff30",
-				fromUserInitialLetter: "M",
-				timestamp: Date.now() - 3600000 // 1 hour ago
-			}
-		];
-
-		// Store requests for current user
-		localStorage.setItem('collaborationRequests', JSON.stringify(initialRequests));
-
-		// Also store them in the user-specific key for future use
-		localStorage.setItem(`collaborationRequests_${currentUser.id}`, JSON.stringify(initialRequests));
-	}
-}
-
 // Shared lists that can be accepted
 function createDefaultSharedLists() {
 	return {
@@ -277,6 +243,9 @@ function displayRequests(requests, container) {
 			const updatedRequests = requests.filter(r => r.id !== request.id);
 			localStorage.setItem('collaborationRequests', JSON.stringify(updatedRequests));
 
+			// Dispatch event for badge update
+			window.dispatchEvent(new Event('collaborationRequestsUpdated'));
+
 			// Reload
 			loadCollaborationRequests();
 		});
@@ -315,7 +284,11 @@ function displayRequests(requests, container) {
 					if (window.undoSystem) {
 						window.undoSystem.showUndoPopup(
 							`Rejected request from ${request.fromUserName}`,
-							() => window.undoSystem.undoRequestRejection(rejectedRequestData)
+							() => {
+								window.undoSystem.undoRequestRejection(rejectedRequestData);
+								// Dispatch event for badge update after undo
+								window.dispatchEvent(new Event('collaborationRequestsUpdated'));
+							}
 						);
 					}
 				};
@@ -365,24 +338,8 @@ function formatTimestamp(timestamp) {
 	}
 }
 
-function highlightCurrentPage() {
-	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-	document.querySelectorAll('.footer button').forEach(button => {
-		button.classList.remove('active');
-	});
-
-	if (currentPage === 'index.html') {
-		document.getElementById('list-button').classList.add('active');
-	} else if (currentPage === 'calendar.html') {
-		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'inbox.html') {
-		document.getElementById('inbox-button1').classList.add('active');
-	}
-}
-
 document.addEventListener('DOMContentLoaded', function () {
-	initializeCollaborationRequests();
 	loadCollaborationRequests();
-	highlightCurrentPage();
+	// Update badge on page load
+	window.dispatchEvent(new Event('collaborationRequestsUpdated'));
 });

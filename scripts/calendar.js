@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	updateCalendar();
-	highlightCurrentPage();
 
 	const dateInput = document.getElementById('dateInput');
 	if (dateInput) {
@@ -278,18 +277,16 @@ function openCalendar() {
 	calendarOpen = true;
 
 	generateCalendar();
+	toggleOverlay();
 }
 
 function closeCalendar() {
 	const calendarPopup = document.getElementById("calendarPopup");
 	if (calendarPopup) {
 		calendarPopup.classList.remove("visible");
-		setTimeout(() => {
-			if (!calendarPopup.classList.contains("visible")) {
-				calendarPopup.hidden = true;
-			}
-		}, 200);
+		calendarPopup.hidden = true;
 		calendarOpen = false;
+		toggleOverlay(); 
 	}
 }
 
@@ -393,22 +390,6 @@ function selectDate(date) {
 	window.history.pushState({ path: newUrl.href }, '', newUrl.href);
 }
 
-function highlightCurrentPage() {
-	const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-	document.querySelectorAll('.footer button').forEach(button => {
-		button.classList.remove('active');
-	});
-
-	if (currentPage === 'index.html') {
-		document.getElementById('list-button').classList.add('active');
-	} else if (currentPage === 'calendar.html') {
-		document.getElementById('calendar-button').classList.add('active');
-	} else if (currentPage === 'inbox.html') {
-		document.getElementById('inbox-button1').classList.add('active');
-	}
-}
-
 function goToSelectedDate() {
 	const dateInput = document.getElementById('dateInput');
 	if (!dateInput.value) return;
@@ -423,4 +404,15 @@ function goToSelectedDate() {
 
 	// Select the date
 	selectDate(selectedDate);
+}
+
+function toggleOverlay() {
+	const overlay = document.getElementById('overlay');
+	const isCalendarOpen = document.getElementById('calendarPopup')?.classList.contains('visible');
+
+	if (isCalendarOpen) {
+		overlay.style.display = 'block';
+	} else {
+		overlay.style.display = 'none';
+	}
 }

@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="./scripts/profile.js"></script>
 	<script src="./scripts/auth.js"></script>
+	<script src="./scripts/footer.js"></script>
 	<title>CoToDo</title>
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,10 +21,8 @@
 
 <body>
 	<div class="wrapper">
-		<div class="backto-index" onclick="window.location.href='index.html'">
-			<i class="fa-solid fa-arrow-left"></i>
-		</div>
-		<span class="profile-text">Profile</span>
+		<div></div>
+		<span class="profile-text">Account</span>
 		<div class="logout">
 			<i class="fa-solid fa-right-from-bracket"></i>
 			<span class="logout-label">Logout</span>
@@ -205,6 +204,28 @@
 	</div>
 	<div class="fixed-purple-footer"></div>
 
+	<footer class="footer">
+		<div class="footer-button">
+			<button id="list-button" onclick="window.location.href='index.html'"><i
+					class="fa-solid fa-list"></i></button>
+			<span>Lists</span>
+		</div>
+		<div class="footer-button">
+			<button id="calendar-button" onclick="window.location.href='calendar.html'"><i
+					class="fa-solid fa-calendar"></i></button>
+			<span>Calendar</span>
+		</div>
+		<div class="footer-button">
+			<button id="inbox-button1" onclick="window.location.href='inbox.html'"><i
+					class="fa-solid fa-inbox"></i></button>
+			<span>Inbox</span>
+		</div>
+		<div class="footer-button">
+			<button id="profile-button" onclick="window.location.href='profile.html'" class="active"><i
+					class="fa-solid fa-user"></i></button>
+			<span>Account</span>
+		</div>
+	</footer>
 </body>
 
 </html>
