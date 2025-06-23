@@ -90,6 +90,27 @@ function setupPopupEventListeners() {
 
 	leaveConfirmButton.addEventListener('click', function () {
 		if (pendingLeaveUserId && pendingLeaveListId) {
+			const appData = getAppData();
+			const list = appData.lists.find(l => l.id === pendingLeaveListId);
+			const currentUser = getCurrentUser();
+
+			if (list && currentUser.id !== list.ownerId) {
+				// Find user's contributor data before removing
+				const userContributorData = list.contributors?.find(c => c.id === currentUser.id);
+
+				// Store data for undo
+				const leaveData = {
+					listId: pendingLeaveListId,
+					list: { ...list }, // Store list info for display
+					userContributorData: userContributorData ? { ...userContributorData } : null
+				};
+
+				// Store for undo system
+				if (window.undoSystem) {
+					window.undoSystem.storeDeletedItem('leave', leaveData);
+				}
+			}
+
 			leaveList(pendingLeaveListId, pendingLeaveUserId);
 			if (pendingLeaveElement) {
 				pendingLeaveElement.remove();
@@ -103,6 +124,7 @@ function setupPopupEventListeners() {
 		resetPendingLeave();
 	});
 
+	// Close leave popup when clicking outside of it
 	leavePopup.addEventListener('click', function (e) {
 		if (e.target === leavePopup) {
 			hideLeavePopup();
