@@ -246,6 +246,7 @@ function renderContributorsPage(listId) {
 function setupSearch(listId) {
 	const searchTextElement = document.querySelector('.search-friends-text');
 	const searchButton = document.querySelector('.search-button');
+	const searchClear = document.querySelector('.search-clear');
 
 	searchTextElement.contentEditable = true;
 	searchTextElement.setAttribute('placeholder', 'Search users');
@@ -259,6 +260,7 @@ function setupSearch(listId) {
 	searchTextElement.addEventListener('blur', () => {
 		if (searchTextElement.textContent === '') {
 			searchTextElement.textContent = 'Search users';
+			searchClear.style.display = 'none';
 		}
 	});
 
@@ -267,12 +269,24 @@ function setupSearch(listId) {
 		const appData = getAppData();
 		const list = appData.lists.find(l => l.id === listId);
 
+		// Show/hide clear button
+		searchClear.style.display = (searchText !== '' && searchText !== 'search users') ? 'block' : 'none';
+
 		if (searchText === 'search users' || searchText === '') {
 			renderUserList(listId, '', list?.contributors || [], list?.ownerId);
 			return;
 		}
 
 		renderUserList(listId, searchText, list?.contributors || [], list?.ownerId);
+	});
+
+	// Clear search when X is clicked
+	searchClear.addEventListener('click', () => {
+		searchTextElement.textContent = 'Search users';
+		searchClear.style.display = 'none';
+		const appData = getAppData();
+		const list = appData.lists.find(l => l.id === listId);
+		renderUserList(listId, '', list?.contributors || [], list?.ownerId);
 	});
 
 	searchButton.addEventListener('click', () => {
