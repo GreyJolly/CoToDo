@@ -24,6 +24,18 @@ function getCurrentUser() {
 	};
 }
 
+function showTitleUpdateConfirmation() {
+	const confirmation = document.querySelector('.title-update-confirmation');
+	if (confirmation) {
+		confirmation.classList.add('show');
+		
+		// Hide after 2 seconds
+		setTimeout(() => {
+			confirmation.classList.remove('show');
+		}, 2000);
+	}
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	const completeContainer = document.querySelector('.complete-container');
 	const toggleButton = document.querySelector('.toggle-complete');
@@ -378,6 +390,9 @@ function setupListPageEvents(listId) {
 	const listTitleElement = document.querySelector('.list-title');
 	const appData = getAppData();
 	const list = appData.lists.find(l => l.id === listId);
+	
+	// Track initial title to detect changes
+	let initialTitle = list.title || '';
 
 	// Input handler to save changes
 	listTitleElement.addEventListener('input', debounce(function () {
@@ -389,8 +404,13 @@ function setupListPageEvents(listId) {
 			this.value = newTitle;
 		}
 
-		list.title = newTitle;
-		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		// Only show confirmation if title actually changed
+		if (newTitle !== initialTitle) {
+			list.title = newTitle;
+			localStorage.setItem('todoAppData', JSON.stringify(appData));
+			showTitleUpdateConfirmation();
+			initialTitle = newTitle; // Update the reference title
+		}
 	}, 300));
 
 	// Keypress handler for Enter key
@@ -403,6 +423,9 @@ function setupListPageEvents(listId) {
 
 	// Focus handler to select all text when editing
 	listTitleElement.addEventListener('focus', function () {
+		// Store the initial title when focus starts
+		initialTitle = list.title || '';
+		
 		// Blur handler to ensure title is saved even if debounce doesn't run
 		listTitleElement.addEventListener('blur', function () {
 			let newTitle = this.value.trim();
@@ -412,9 +435,14 @@ function setupListPageEvents(listId) {
 				this.value = newTitle;
 			}
 
-			list.title = newTitle;
-			localStorage.setItem('todoAppData', JSON.stringify(appData));
-		});
+			// Only save and show confirmation if title changed
+			if (newTitle !== initialTitle) {
+				list.title = newTitle;
+				localStorage.setItem('todoAppData', JSON.stringify(appData));
+				showTitleUpdateConfirmation();
+				initialTitle = newTitle;
+			}
+		}, { once: true }); // Use once: true to avoid multiple blur listeners
 
 		this.select();
 	});

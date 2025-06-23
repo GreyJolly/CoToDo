@@ -1,6 +1,25 @@
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const monthNamesAbbrv = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+// Variables to track initial values
+let initialTaskTitle = '';
+let initialTaskDescription = '';
+
+function showUpdateConfirmation(message = 'Task updated') {
+	const confirmation = document.querySelector('.update-confirmation');
+	const messageElement = confirmation.querySelector('.update-message');
+
+	if (confirmation && messageElement) {
+		messageElement.textContent = message;
+		confirmation.classList.add('show');
+
+		// Hide after 2 seconds
+		setTimeout(() => {
+			confirmation.classList.remove('show');
+		}, 2000);
+	}
+}
+
 function getAppData() {
 	const data = localStorage.getItem('todoAppData');
 	return data ? JSON.parse(data) : { lists: [] };
@@ -300,8 +319,14 @@ function saveTaskChanges() {
 	const { appData, list, task } = taskData;
 
 	// Update task properties
-	task.text = document.querySelector('.task-title').value;
-	task.description = document.querySelector('.task-description').value;
+	if (task.text != document.querySelector('.task-title').value) {
+		task.text = document.querySelector('.task-title').value;
+		showUpdateConfirmation('Task title updated');
+	}
+	if (task.description != document.querySelector('.task-description').value) {
+		task.description = document.querySelector('.task-description').value;
+		showUpdateConfirmation('Task description updated');
+	}
 	task.completed = document.getElementById('task-complete').checked;
 
 	// Save to localStorage
@@ -904,6 +929,7 @@ function updateSubtaskText(index) {
 	if (task.subtasks && task.subtasks[index]) {
 		task.subtasks[index].text = newText;
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
+		showUpdateConfirmation("Subtask updated");
 		renderSubtasks(); // Re-render to reflect changes
 	}
 }
@@ -941,24 +967,24 @@ function deleteTask() {
 	popup.querySelector('.confirm-button').onclick = function () {
 		// Find the task's original index for potential restoration
 		const originalIndex = list.tasks.findIndex(t => t.id === taskId);
-		
+
 		// Store deleted task data for undo
 		const deletedTaskData = {
 			task: { ...task },
 			listId: listId,
 			originalIndex: originalIndex
 		};
-		
+
 		// Store for undo system
 		if (window.undoSystem) {
 			window.undoSystem.storeDeletedItem('task', deletedTaskData);
 		}
-		
+
 		// Remove task from list
 		list.tasks = list.tasks.filter(t => t.id !== taskId);
 		localStorage.setItem('todoAppData', JSON.stringify(appData));
 		popup.style.display = 'none';
-		
+
 		// Navigate to list page
 		window.location.href = `list.html?id=${listId}`;
 	};
